@@ -1,0 +1,17 @@
+= rh-requests-management
+// GitHub/AsciiDoc Configuration
+ifdef::env-github[]
+:note-caption: :information_source:
+:tip-caption: :bulb:
+endif::[]
+// eXo CI informations
+:ci-url: https://ci.exoplatform.org/job/addons-community/job/
+:project-branch: master
+:ci-job-name: addons-community/addon-rh-requests-management-{project-branch}-ci
+
+Simplify human resource requests (Holidays, sick and leave requests) management
+
+[NOTE]
+--
+image:https://ci.exoplatform.org/buildStatus/icon?job={ci-job-name}["Build Status", link="{ci-url}{ci-job-name}/"]
+--

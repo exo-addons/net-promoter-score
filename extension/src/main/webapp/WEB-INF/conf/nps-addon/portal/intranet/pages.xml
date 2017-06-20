@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page-set
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
+
+
+    <page>
+        <name>nps-administration</name>
+        <title>nps-administration</title>
+        <access-permissions>*:/platform/administrato</access-permissions>
+        <edit-permission>*:/platform/administrators</edit-permission>
+        <show-max-window>false</show-max-window>
+        <portlet-application>
+            <portlet>
+                <application-ref>nps-addon</application-ref>
+                <portlet-ref>NPSAdministrationPortlet</portlet-ref>
+            </portlet>
+            <access-permissions>*:/platform/administrators</access-permissions>
+            <show-info-bar>false</show-info-bar>
+        </portlet-application>
+    </page>
+
+</page-set>

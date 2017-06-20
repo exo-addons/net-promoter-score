@@ -1,0 +1,34 @@
+.npsLoadingBar {
+    background: url("/nps-addon-portlet/skin/images/loading-16x16.gif") no-repeat scroll left center rgba(0, 0, 0, 0);
+    background-size: 25px;
+    padding: 10px 0px 10px 20px;
+    margin: 0 auto;
+    width: 80px;
+    height: 100px;
+}
+
+.npsNumber {
+    position: relative;
+    margin: auto;
+    margin-top: 20px;
+    width: 70px;
+    height: 48px;
+    border-radius: 50%;
+    line-height: 25px;
+    font-size: 25px;
+    padding: 26px 15px;
+    text-align: center;
+    background: #476a9c;
+    color: #FFF;
+}
+.npsStat .alert {
+    font-weight: bold;
+    font-size: 14px;
+}
+.npsStat .alert > span{
+    color: #39c522;
+    float: right;
+    font-size: 20px;
+}
+.npsStat .alert.alert-warning > span{color : #edad00}
+.npsStat .alert.alert-error > span{color : #c72222}

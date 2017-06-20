@@ -1,0 +1,94 @@
+<div id="npsLoadingBar" class="LoadingBar"></div>
+<div id="npsAdmin" class="npsAdmin" style="visibility: hidden;">
+    <div ng-controller="npsAdminCtrl" id="npsAdminCtrl">
+        <div id="resultMessage" ng-show="showAlert"
+             class="result-message userSearch alert {{resultMessageClass}}">
+            <i class="{{resultMessageClassExt}}"></i> {{resultMessage}}
+</div>
+        <div id="npsAdminApplication">
+
+
+
+<div style="padding-bottom: 20px;position: relative">
+<h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsAddon.npsAdmin}}</h4>
+
+<div google-chart chart="gaugeChartObject" style="height:600px; width:100%;"></div>
+<div google-chart chart="pieChartObject" style="height:600px; width:100%;"></div>
+
+<h4 class="titleWithBorder pull-left" style="width: 100%">{{scorsnbr}} Scores</h4>
+<div class="">
+<table id="scoresTable" class="table uiGrid table-hover table-striped">
+<thead>
+<tr>
+<th><a href="#" ng-click="orderByField = 'title'; reverseSort = !reverseSort">{{i18n.userFullName}}
+<img ng-show="orderByField == 'title' && !reverseSort"
+src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueDownArrow.gif">
+<img ng-show="orderByField == 'title' && reverseSort"
+src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
+</a>
+                                </th>
+<th><a href="#" ng-click="orderByField = 'type'; reverseSort = !reverseSort">{{i18n.score}}
+<img ng-show="orderByField == 'type' && !reverseSort"
+src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueDownArrow.gif">
+<img ng-show="orderByField == 'type' && reverseSort"
+src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
+</a>
+                                </th>
+<th><a href="#" ng-click="orderByField = 'severity'; reverseSort = !reverseSort">{{i18n.comment}}
+<img ng-show="orderByField == 'severity' && !reverseSort"
+src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueDownArrow.gif">
+<img ng-show="orderByField == 'severity' && reverseSort"
+src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
+</a>
+                                </th>
+<th><a href="#" ng-click="orderByField = 'startDate'; reverseSort = !reverseSort">{{i18n.responseDate}}
+<img ng-show="orderByField == 'startDate' && !reverseSort"
+src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueDownArrow.gif">
+<img ng-show="orderByField == 'startDate' && reverseSort"
+src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
+</a>
+                                </th>
+</tr>
+</thead>
+<tbody>
+<tr ng-repeat="score in scores| orderBy:orderByField:reverseSort">
+<td>
+<span><a href="/portal/intranet/profile/{{score.userId}}">{{score.userFullName}}</a></span>
+</td>
+<td>
+<span>{{score.score}}</span>
+</td>
+<td>
+<span>{{score.comment}}</span>
+</td>
+<td>
+<span>{{score.postedTime | date:'d MMM y HH:mm:ss'}}</span>
+</td>
+
+</tr>
+</tbody>
+      <tfoot>
+        <td colspan="3">
+          <div class="pagination">
+            <ul>
+              <li ng-class="prevPageDisabled()">
+                <a href ng-click="prevPage()">« Prev</a>
+</li>
+              <li ng-repeat="n in pages" ng-class="{active: n == currentPage}" ng-click="setPage(n)">
+                <a href="#">{{n+1}}</a>
+</li>
+              <li ng-class="nextPageDisabled()">
+                <a href ng-click="nextPage()">Next »</a>
+</li>
+            </ul>
+</div>
+        </td>
+</tfoot>
+</table>
+</div>
+
+</div>
+
+</div>
+</div>
+</div>

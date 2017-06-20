@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	<display-name>cutomer-space-portlet</display-name>
+	<filter>
+		<filter-name>ResourceRequestFilter</filter-name>
+		<filter-class>org.exoplatform.portal.application.ResourceRequestFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ResourceRequestFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<listener>
+		<listener-class>org.exoplatform.container.web.PortalContainerConfigOwner</listener-class>
+	</listener>
+	<context-param>
+		<param-name>juzu.run_mode</param-name>
+    	<param-value>${juzu.run_mode:prod}</param-value>
+	</context-param>
+	<context-param>
+		<param-name>juzu.src_path</param-name>
+    	<param-value>${juzu.src_path}</param-value>
+	</context-param>
+	<context-param>
+		<param-name>juzu.inject</param-name>
+		<param-value>guice</param-value>
+	</context-param>
+	<servlet>
+		<servlet-name>AssetServlet</servlet-name>
+		<servlet-class>juzu.impl.asset.AssetServlet</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AssetServlet</servlet-name>
+		<url-pattern>/assets/*</url-pattern>
+	</servlet-mapping>
+</web-app>

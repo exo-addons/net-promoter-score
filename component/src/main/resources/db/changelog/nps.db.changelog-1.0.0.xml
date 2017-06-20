@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+  <!-- Managing both DB that use sequences and db that use auto increment -->
+  <property name="autoIncrement" value="true" dbms="mysql,mssql,h2,sybase,db2,hsqldb"/>
+  <property name="autoIncrement" value="false" dbms="oracle,postgresql"/>
+
+  <!-- Managing auto generation of timestamp by Database -->
+  <property name="now" value="now()" dbms="mysql,hsqldb,postgresql,h2"/>
+  <property name="now" value="sysdate" dbms="oracle"/>
+  <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
+
+
+  <changeSet author="nps-addon" id="1.0.0-1">
+    <createTable tableName="NPS_SCORE_ENTRY">
+      <column name="ID" type="BIGINT" autoIncrement="${autoIncrement}" startWith="1">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="USER_ID" type="NVARCHAR(50)"></column>
+      <column name="SCORE" type="INT"></column>
+      <column name="POSTED_TIME" type="BIGINT"></column>
+      <column name="LAST_APPEARENCE" type="BIGINT"></column>
+      <column name="COMMENT" type="NVARCHAR(550)"></column>
+    </createTable>
+
+
+    <modifySql dbms="mysql">
+      <append value=" ENGINE=INNODB CHARSET=UTF8 COLLATE utf8_general_ci"/>
+    </modifySql>
+  </changeSet>
+
+
+</databaseChangeLog>

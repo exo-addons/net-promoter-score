@@ -1,0 +1,74 @@
+<div id="npsForm" class="npsForm"  style="visibility: hidden;">
+
+<div ng-controller="npsFormCtrl" id="npsFormCtrl">
+
+<div id="resultMessage" ng-show="showAlert"
+class="result-message alert {{resultMessageClass}}">
+<i class="{{resultMessageClassExt}}"></i>{{resultMessage}}
+</div>
+
+<div id="nps">
+<h4>{{i18n.messageForm}}</h4>
+
+<form id="npsForm">
+<div class="npsRadio">
+<label>
+<input type="radio" class="option-input radio"checked name="npsScore" id="npsScore0" ng-model="newScore.score" value="0">
+<span> 0 </span>
+</label>
+<label>
+<input type="radio" class="option-input radio" name="npsScore" id="npsScore1" ng-model="newScore.score" value="1">
+<span> 1 </span>
+</label>
+<label>
+<input type="radio" class="option-input radio" name="npsScore" id="npsScore2" ng-model="newScore.score" value="2">
+<span> 2 </span>
+</label>
+<label>
+<input type="radio" class="option-input radio" name="npsScore" id="npsScore3" ng-model="newScore.score" value="3">
+<span> 3 </span>
+</label>
+<label>
+<input type="radio" class="option-input radio" name="npsScore" id="npsScore4" ng-model="newScore.score" value="4">
+<span> 4 </span>
+</label>
+<label>
+<input type="radio" class="option-input radio" name="npsScore" id="npsScore5" ng-model="newScore.score" value="5">
+<span> 5 </span>
+</label>
+<label>
+<input type="radio" class="option-input radio" name="npsScore" id="npsScore6" ng-model="newScore.score" value="6">
+<span> 6 </span>
+</label>
+<label>
+<input type="radio" class="option-input radio" name="npsScore" id="npsScore7" ng-model="newScore.score" value="7">
+<span> 7 </span>
+</label>
+<label>
+<input type="radio" class="option-input radio" name="npsScore" id="npsScore8" ng-model="newScore.score" value="8">
+<span> 8 </span>
+</label>
+<label>
+<input type="radio" class="option-input radio" name="npsScore" id="npsScore9" ng-model="newScore.score" value="9">
+<span> 9 </span>
+</label>
+
+<label>
+<input type="radio" class="option-input radio" name="npsScore" id="npsScore9" ng-model="newScore.score" value="10">
+<span> 10 </span>
+</label>
+
+</div>
+<div class="npsComment">
+<textarea ng-model="newScore.comment" placeholder="Speak your mind..."></textarea>
+</div>
+<div class="row-fluid">
+<button type="submit" class="btn btn-block btn-primary span6"  ng-click="saveScore(newScore)">{{i18n.save}}</button>
+<button type="cancel" class="btn btn-block span6"  ng-click="cancel()">{{i18n.cancel}}</button>
+</div>
+<a href="javascript:void(0)" ng-click="disableUser()">Don't ask me again.</a>
+</form>
+</div>
+
+</div>
+</div>
