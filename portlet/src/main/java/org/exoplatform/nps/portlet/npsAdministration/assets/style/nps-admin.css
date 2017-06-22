@@ -32,3 +32,7 @@
 }
 .npsStat .alert.alert-warning > span{color : #edad00}
 .npsStat .alert.alert-error > span{color : #c72222}
+.scoresDiv{
+    margin: 30px;
+    width: initial;
+}

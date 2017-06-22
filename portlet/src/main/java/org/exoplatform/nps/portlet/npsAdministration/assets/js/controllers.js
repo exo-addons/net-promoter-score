@@ -9,6 +9,10 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.scoresSum=0;
         $scope.pieChartObject = {};
         $scope.pieChartObject.options = {
+            backgroundColor: 'transparent',
+            legend:{position: 'bottom'},
+            chartArea:{top:0,width:'85%',height:'85%'},
+            pieSliceText: 'label',
             slices: {
                 0: { color: '#6ccbae' },
                 1: { color: '#ffca7a' },

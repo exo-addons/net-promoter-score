@@ -45,7 +45,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                     var expiresValue = new Date(today);
                     expiresValue.setDate(today.getDate() + 30);
                     $cookies.put("nps_status","responded" , {'expires' : expiresValue});
-                    $('#npsForm').css('visibility', 'hidden');
+                    $('#npsForm').css('display', 'none');
                     $scope.showForm = false;
                 }, function errorCallback(data) {
                     $scope.setResultMessage($scope.i18n.defaultError, "error");
@@ -58,7 +58,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                 var expiresValue = new Date(today);
                 expiresValue.setDate(today.getDate() + 10);
                 $cookies.put("nps_status","enabled" , {'expires' : expiresValue});
-                $('#npsForm').css('visibility', 'hidden');
+                $('#npsForm').css('display', 'block');
         }
 
         $scope.disableUser = function() {
@@ -69,7 +69,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                 var now = new Date();
                 var expiresValue  = new Date(now.getFullYear()+2, now.getMonth(), now.getDate());
                 $cookies.put("nps_status","disabled" , {'expires' : expiresValue});
-                $('#npsForm').css('visibility', 'hidden');
+                $('#npsForm').css('display', 'none');
                 $scope.showAlert = false;
                 deferred.resolve(data);
             }, function errorCallback(data) {
@@ -81,7 +81,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
         $scope.displayForm = function() {
 
             if(typeof $cookies.get("nps_status") != 'undefined'){
-                $('#npsForm').css('visibility', 'hidden');
+                $('#npsForm').css('display', 'none');
             }else{
                 $http({
                     method : 'GET',
@@ -94,9 +94,9 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                     }
 
                     if(data.data.showForm=='true'){
-                        $('#npsForm').css('visibility', 'visible');
+                        $('#npsForm').css('display', 'block');
                     } else{
-                        $('#npsForm').css('visibility', 'hidden');
+                        $('#npsForm').css('display', 'none');
                     }
 
                     $scope.showAlert = false;
@@ -118,7 +118,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                 // No need to display errors in console
             }
         };
-        $('#npsForm').css('visibility', 'visible');
+        $('#npsForm').css('display', 'block');
         $(".npsLoadingBar").remove();
     };
     return npsFormCtrl;

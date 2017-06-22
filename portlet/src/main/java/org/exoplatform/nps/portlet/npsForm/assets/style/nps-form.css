@@ -9,17 +9,20 @@
 	height: 100px;
 }
 div#nps {
-    width: 100%;
+    /*width: 100%;*/
     text-align: center;
     background: #FFF;
-    padding: 10px 8px;
+    padding: 10px 15px;
     border-radius: 5px;
     margin-bottom: 16px;
 }
-#nps h4 {font-size: 16px;    margin: 15px}
+#nps p {
+    text-align: justify;
+    margin-top: 20px;
+}
+#nps textarea{width: 100%}
 .npsRadio {
-    margin: 5px;
-    margin-bottom: 25px;
+    margin: 20px 5px 5px;
 }
 
 #nps .btn-primary{border: solid 2px #578dc9;    float: none;
@@ -32,8 +35,8 @@ div#nps {
 
 @-webkit-keyframes click-wave {
     0% {
-        height: 40px;
-        width: 40px;
+        height: 35px;
+        width: 35px;
         opacity: 0.35;
         position: relative;
     }
@@ -47,8 +50,8 @@ div#nps {
 }
 @-moz-keyframes click-wave {
     0% {
-        height: 40px;
-        width: 40px;
+        height: 35px;
+        width: 35px;
         opacity: 0.35;
         position: relative;
     }
@@ -62,8 +65,8 @@ div#nps {
 }
 @keyframes click-wave {
     0% {
-        height: 40px;
-        width: 40px;
+        height: 35px;
+        width: 35px;
         opacity: 0.35;
         position: relative;
     }
@@ -87,8 +90,8 @@ div#nps {
     right: 0;
     bottom: 0;
     left: 0;
-    height: 40px;
-    width: 40px;
+    height: 35px;
+    width: 35px;
     -webkit-transition: all 0.15s ease-out 0s;
     -moz-transition: all 0.15s ease-out 0s;
     transition: all 0.15s ease-out 0s;
@@ -109,14 +112,14 @@ div#nps {
     background: #476a9c;
 }
 .npsRadio .option-input:checked::before {
-    height: 40px;
-    width: 40px;
+    height: 35px;
+    width: 35px;
     position: absolute;
     /* content: '\2716';*/
     display: inline-block;
     font-size: 26.66667px;
     text-align: center;
-    line-height: 40px;
+    line-height: 35px;
 }
 .npsRadio .option-input:checked::after {
     -webkit-animation: click-wave 0.65s;
@@ -131,7 +134,8 @@ div#nps {
 }
 .npsRadio .option-input.radio {
     border-radius: 50%;
-    width: 40px;
+    width: 35px;
+    padding: 0;
 }
 .npsRadio .option-input.radio::after {
     border-radius: 50%;
@@ -159,17 +163,26 @@ div#nps {
 
 .npsRadio label {
     display: inline-block;
-    line-height: 40px;
+    line-height: 35px;
     position: relative;
-    width: 40px;
+    width: 34px;
+    height: 35px;
+    margin-top: -25px;
+    margin-right: 1px;
 }
 .npsRadio label > span {
-    position: absolute;
-    top: 18px;
-    left: 16px;
+    /*position: absolute;*/
+    /*top: 18px;*/
+    /*left: 16px;*/
     z-index: 2;
     color: #FFF;
     font-weight: bold;
+    position: relative;
+    top: -22px;
+    margin: auto;
+}
+#nps .submitdiv{
+    margin-bottom: 5px;
 }
 
 /**/

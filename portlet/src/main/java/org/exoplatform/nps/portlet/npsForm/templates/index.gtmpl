@@ -1,4 +1,4 @@
-<div id="npsForm" class="npsForm"  style="visibility: hidden;">
+<div id="npsForm" class="npsForm"  style="display: none;">
 
 <div ng-controller="npsFormCtrl" id="npsFormCtrl">
 
@@ -8,7 +8,8 @@ class="result-message alert {{resultMessageClass}}">
 </div>
 
 <div id="nps">
-<h4>{{i18n.messageForm}}</h4>
+<h4>{{i18n.titleForm}}</h4>
+<p>{{i18n.messageForm}}</p>
 
 <form id="npsForm">
 <div class="npsRadio">
@@ -60,10 +61,10 @@ class="result-message alert {{resultMessageClass}}">
 
 </div>
 <div class="npsComment">
-<textarea ng-model="newScore.comment" placeholder="Speak your mind..."></textarea>
+<textarea ng-model="newScore.comment" placeholder="{{i18n.titleForm}}"></textarea>
 </div>
-<div class="row-fluid">
-<button type="submit" class="btn btn-block btn-primary span6"  ng-click="saveScore(newScore)">{{i18n.save}}</button>
+<div class="row-fluid submitdiv">
+<button type="submit" class="btn btn-block btn-primary span5"  ng-click="saveScore(newScore)">{{i18n.save}}</button>
 <button type="cancel" class="btn btn-block span6"  ng-click="cancel()">{{i18n.cancel}}</button>
 </div>
 <a href="javascript:void(0)" ng-click="disableUser()">Don't ask me again.</a>
