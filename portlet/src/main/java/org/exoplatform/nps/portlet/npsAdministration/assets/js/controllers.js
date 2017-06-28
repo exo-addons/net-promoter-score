@@ -168,7 +168,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         };
 
         $scope.setPage = function(n) {
-            if (n > 0 && n < $scope.pageCount()) {
+            if (n >= 0 && n < $scope.pageCount()) {
                 $scope.currentPage = n;
                 $scope.pages=$scope.range();
                 $scope.loadScores(n*$scope.itemsPerPage, $scope.itemsPerPage);

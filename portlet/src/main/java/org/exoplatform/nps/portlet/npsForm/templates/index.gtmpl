@@ -7,7 +7,7 @@ class="result-message alert {{resultMessageClass}}">
 <i class="{{resultMessageClassExt}}"></i>{{resultMessage}}
 </div>
 
-<div id="nps">
+<div id="nps" ng-show="showForm">
 <h4>{{i18n.titleForm}}</h4>
 <p>{{i18n.messageForm}}</p>
 

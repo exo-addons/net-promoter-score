@@ -113,46 +113,6 @@ public class NPSFormController {
     }
   }
 
-  @Ajax
-  @juzu.Resource
-  @MimeType.JSON
-  @Jackson
-  public Response displayForm() {
-    try {
-      JSON data = new JSON();
-      Profile profile=identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, currentUser, false).getProfile();
-      if(profile.getProperty("npsDisabled")!=null){
-        data.set("showForm","false");
-        if(profile.getProperty("npsDisabled").equals("disabled")){
-          data.set("userDisabled","true");
-        }else{
-          data.set("userDisabled","false");
-        }
-      }else{
-        data.set("showForm","true");
-        data.set("userDisabled","false");
-      }
-      return Response.ok(data.toString());
-    } catch (Throwable e) {
-      log.error("error while getting context", e);
-      return Response.status(500);
-    }
-  }
-
-  @Ajax
-  @juzu.Resource
-  @MimeType.JSON
-  @Jackson
-  public void disableUser() {
-    try {
-      Profile profile=identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, currentUser, false).getProfile();
-      profile.setProperty("npsDisabled","disabled");
-      identityManager.saveProfile(profile);
-
-    } catch (Throwable e) {
-      log.error("error while getting context", e);
-    }
-  }
 
   private ResourceBundle getResourceBundle(Locale locale) {
     return bundle = ResourceBundle.getBundle("locale.portlet.nps-addon", locale, this.getClass().getClassLoader());
