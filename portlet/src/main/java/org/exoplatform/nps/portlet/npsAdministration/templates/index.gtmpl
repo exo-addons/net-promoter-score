@@ -73,17 +73,17 @@ src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
 </tr>
 </tbody>
       <tfoot>
-        <td colspan="3">
+        <td colspan="4">
           <div class="pagination">
             <ul>
               <li ng-class="prevPageDisabled()">
-                <a href ng-click="prevPage()">« Prev</a>
+                <a href ng-click="prevPage()"><i class="uiIconArrowLeft"></i> Prev</a>
 </li>
               <li ng-repeat="n in pages" ng-class="{active: n == currentPage}" ng-click="setPage(n)">
                 <a href="#">{{n+1}}</a>
 </li>
               <li ng-class="nextPageDisabled()">
-                <a href ng-click="nextPage()">Next »</a>
+                <a href ng-click="nextPage()">Next <i class="uiIconArrowRight"></i></a>
 </li>
             </ul>
 </div>
