@@ -27,8 +27,12 @@ div#nps {
 
 #nps .btn-primary{border: solid 2px #578dc9;    float: none;
     display: inline-block;}
-#nps .btn-block{    margin-top: 0;    float: none;
-    display: inline-block;}
+#nps .btn-block{
+    margin-top: 0;
+    float: none;
+    display: inline-block;
+    padding: 5px;
+}
 
 /**/
 /**/
