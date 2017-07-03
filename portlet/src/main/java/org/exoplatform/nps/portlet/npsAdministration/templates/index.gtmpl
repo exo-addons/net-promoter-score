@@ -11,7 +11,7 @@
 
 <div style="padding-bottom: 20px;position: relative">
     <div class="scoresDiv">
-        <h4 class="titleWithBorder pull-left" style="width: 100%">Graph Scores</h4>
+        <h4 class="titleWithBorder pull-left" style="width: 100%">NPS-Chart</h4>
     </div>
 <h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsAddon.npsAdmin}}</h4>
 <div class="span10" style="float: none; margin: auto; height: auto">
@@ -20,7 +20,7 @@
 </div>
 </div>
 <div class="scoresDiv">
-<h4 class="titleWithBorder pull-left" style="width: 100%">{{scorsnbr}} Scores</h4>
+<h4 class="titleWithBorder pull-left" style="width: 100%">{{scorsnbr}} Rate </h4>
 
 <table id="scoresTable" class="table uiGrid table-hover table-striped">
 <thead>

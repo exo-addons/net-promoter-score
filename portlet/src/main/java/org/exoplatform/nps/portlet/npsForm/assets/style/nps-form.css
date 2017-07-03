@@ -15,6 +15,7 @@ div#nps {
     padding: 10px 15px;
     border-radius: 5px;
     margin-bottom: 16px;
+    overflow: hidden;
 }
 #nps p {
     text-align: justify;
@@ -22,7 +23,7 @@ div#nps {
 }
 #nps textarea{width: 100%}
 .npsRadio {
-    margin: 20px 5px 5px;
+    margin: 35px 5px 15px;
 }
 
 #nps .btn-primary{border: solid 2px #578dc9;    float: none;
@@ -109,12 +110,27 @@ div#nps {
     position: relative;
     z-index: 1;
 }
+/*.npsRadio .option-input.promoters{background: #6ccbae;}*/
+.npsRadio .option-input.promoters{background: rgba(108, 203, 174, 0.35);}
+/*.npsRadio .option-input.passives{background: #ffca7a;}*/
+.npsRadio .option-input.passives{background: rgba(255, 202, 122, 0.35);}
+/*.npsRadio .option-input.detractor{background: #d07a7a;}*/
+.npsRadio .option-input.detractor{background: rgba(222, 162, 162, 0.35);}
+
 .npsRadio .option-input:hover {
     background: #9faab7;
 }
+.npsRadio .option-input.promoters:hover {  background: rgba(108, 203, 174, 0.7)}
+.npsRadio .option-input.passives:hover {  background: rgba(255, 202, 122, 0.7)}
+.npsRadio .option-input.detractor:hover {  background: rgba(222, 162, 162, 0.7)}
+
 .npsRadio .option-input:checked {
     background: #476a9c;
 }
+.npsRadio .option-input.promoters:checked {  background: #6ccbae;}
+.npsRadio .option-input.passives:checked {  background: #ffca7a;}
+.npsRadio .option-input.detractor:checked {  background: #d07a7a;}
+
 .npsRadio .option-input:checked::before {
     height: 35px;
     width: 35px;
@@ -133,9 +149,14 @@ div#nps {
     content: '';
     display: block;
     position: relative;
-    margin-left: -25x;
+    /*margin-left: -25px;*/
     z-index: 0;
 }
+
+.npsRadio .option-input.promoters:checked::after{background: #6ccbae;}
+.npsRadio .option-input.passives:checked::after{background: #ffca7a;}
+.npsRadio .option-input.detractor:checked::after{background: #d07a7a;}
+
 .npsRadio .option-input.radio {
     border-radius: 50%;
     width: 35px;
@@ -163,6 +184,7 @@ div#nps {
     -ms-flex-align: stretch;
     font-family: "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
     text-align: center;
+    position: relative;
 }
 
 .npsRadio label {
@@ -191,3 +213,26 @@ div#nps {
 
 /**/
 /**/
+.div_indication {
+    display: inline;
+    position: relative;
+}
+.div_indication label.indication {
+    position: absolute;
+    font-size: 12px;
+    text-align: center;
+    font-family: inherit;
+    left: 0;
+    right: 0;
+    width: 100%;
+    top: -33px;
+    font-weight: bold;
+}
+.div_indication label.indication.detractor {
+    color: #d07a7a;
+    text-align: left;
+    width: 100%;
+    white-space: nowrap;
+}
+.div_indication label.indication.passives { color: #ffca7a;top: initial;bottom: -22px;}
+.div_indication label.indication.promoters { color: #6ccbae;top: initial;bottom: -22px;text-align: right;}
