@@ -15,7 +15,6 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.ConversationState;
-import org.exoplatform.social.core.identity.model.Identity;
 import org.exoplatform.social.core.identity.model.Profile;
 import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvider;
 import org.exoplatform.social.core.manager.IdentityManager;
@@ -27,8 +26,7 @@ import java.util.*;
  * Created by exo on 8/3/16.
  */
 public class NPSAdministrationController {
-/*  private static final String SUPPORT_TEAM_NAME_DEFAULT = "support-team";
-  private static final String SUPPORT_GROUP_NAME_CONFIGURATION = "exo.addon.cs.support.group.name";*/
+
   private static Log  LOG = ExoLogger.getLogger(NPSAdministrationController.class);
   private String     bundleString;
   ResourceBundle     bundle;

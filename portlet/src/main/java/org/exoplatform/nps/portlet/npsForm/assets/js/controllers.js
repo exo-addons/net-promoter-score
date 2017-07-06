@@ -7,7 +7,6 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
         $scope.newScore = null;
         $scope.showForm = true;
 
-
         $scope.setResultMessage = function (text, type) {
             $scope.resultMessageClass = "alert-" + type;
             $scope.resultMessageClassExt = "uiIcon" + type.charAt(0).toUpperCase()
@@ -15,6 +14,24 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
             $scope.showAlert = true;
             $scope.resultMessage = text;
         }
+
+        $scope.updateSettings = function() {
+                  console.log("Update portlet settings");
+                  $http({
+                    data : $scope.npsSetting,
+                    method : 'POST',
+                     headers : {
+                       'Content-Type' : 'application/json'
+                    },
+                    url : npsFormContainer.jzURL('NPSFormController.updateSettings')
+                  }).then(function successCallback(data) {
+                    $scope.i18n = data.data;
+                    deferred.resolve(data);
+                   }, function errorCallback(data) {
+                     $scope.setResultMessage($scope.i18n.errorInitForm, "error");
+                   });
+                 }
+
 
 
         $scope.loadBundles = function() {
@@ -43,11 +60,11 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                 }).then(function successCallback(data) {
                     var today = new Date();
                     var expiresValue = new Date(today);
-                    expiresValue.setDate(today.getDate() + 30);
+                    expiresValue.setDate(today.getDate() + parseInt($scope.i18n.respondedCookiesExpiration));
                     $cookies.put("nps_status","responded" , {'expires' : expiresValue});
                    // $('#npsForm').css('display', 'none');
                     $scope.showForm = false;
-                    $scope.setResultMessage("Thank you", "success");
+                    $scope.setResultMessage($scope.i18n.thanks, "success");
                 }, function errorCallback(data) {
                     $scope.setResultMessage($scope.i18n.defaultError, "error");
                 });
@@ -57,7 +74,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
         $scope.cancel = function() {
                 var today = new Date();
                 var expiresValue = new Date(today);
-                expiresValue.setDate(today.getDate() + 10);
+                expiresValue.setDate(today.getDate() + parseInt($scope.i18n.reportedCookiesExpiration));
                 $cookies.put("nps_status","enabled" , {'expires' : expiresValue});
             $('#npsForm').css('display', 'none');
             $scope.showForm = false;

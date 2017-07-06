@@ -13,11 +13,26 @@
 		</init-param>
 		<supports>
 			<mime-type>text/html</mime-type>
+			<portlet-mode>edit</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+			<portlet-mode>view</portlet-mode>
 		</supports>
 		<portlet-info>
 			<title>NPS Form</title>
 			<keywords>nps-addon</keywords>
 		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>exo.nps.addon.respondedCookiesExpiration</name>
+				<value></value>
+				<read-only>false</read-only>
+			</preference>
+			<preference>
+				<name>exo.nps.addon.reportedCookiesExpiration</name>
+				<value></value>
+				<read-only>false</read-only>
+			</preference>
+		</portlet-preferences>
 	</portlet>
 
 

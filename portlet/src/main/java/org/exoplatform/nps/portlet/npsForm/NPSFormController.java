@@ -1,43 +1,24 @@
 package org.exoplatform.nps.portlet.npsForm;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import juzu.*;
+import juzu.bridge.portlet.JuzuPortlet;
+import juzu.impl.bridge.spi.portlet.PortletRequestBridge;
 import juzu.impl.common.JSON;
+import juzu.impl.request.Request;
 import juzu.plugin.jackson.Jackson;
+import juzu.request.RequestContext;
 import juzu.template.Template;
-import org.apache.commons.fileupload.FileItem;
-import org.exoplatform.calendar.model.Calendar;
-import org.exoplatform.calendar.model.Event;
-import org.exoplatform.calendar.model.query.CalendarQuery;
-import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.ExtendedCalendarService;
 import org.exoplatform.commons.juzu.ajax.Ajax;
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.nps.dto.*;
 import org.exoplatform.nps.services.*;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-import org.exoplatform.services.organization.User;
 import org.exoplatform.services.security.ConversationState;
-import org.exoplatform.social.core.identity.model.Identity;
-import org.exoplatform.social.core.identity.model.Profile;
-import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvider;
-import org.exoplatform.social.core.manager.ActivityManager;
-import org.exoplatform.social.core.manager.IdentityManager;
-import org.exoplatform.social.core.space.spi.SpaceService;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javax.inject.Inject;
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Session;
-import java.io.IOException;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
 import java.util.*;
 
 
@@ -53,21 +34,45 @@ public class NPSFormController {
   NpsService npsService;
 
   @Inject
-  IdentityManager identityManager;
+  @Path("index.gtmpl")
+  Template           indexTmpl;
 
 
   @Inject
-  @Path("index.gtmpl")
-  Template           indexTmpl;
+  @Path("edit.gtmpl")
+  Template           editTmpl;
 
   private String     bundleString;
 
   private final String currentUser = ConversationState.getCurrent().getIdentity().getUserId();
 
+  private static String RESP_COOKIES_EXP = "exo.nps.addon.respondedCookiesExpiration";
+  private static String RESP_COOKIES_EXP_DEFAULT_VALUE = "30";
+  private static String REPORTED_COOKIES_EXP_DEFAULT_VALUE = "10";
+  private static String REPORTED_COOKIES_EXP = "exo.nps.addon.reportedCookiesExpiration";
+
   @View
-  public Response.Content index() {
-    return indexTmpl.ok();
+  public Response.Content index(RequestContext requestContext) {
+
+    PortletMode mode = requestContext.getProperty(JuzuPortlet.PORTLET_MODE);
+
+    if(PortletMode.EDIT.equals(mode)) {
+      Request request = Request.getCurrent();
+      PortletRequestBridge bridge = (PortletRequestBridge)request.getBridge();
+      PortletPreferences prefs = bridge.getPortletRequest().getPreferences();
+      String respondedCookiesExpiration = prefs.getValue(RESP_COOKIES_EXP,RESP_COOKIES_EXP_DEFAULT_VALUE);
+      String reportedCookiesExpiration = prefs.getValue(REPORTED_COOKIES_EXP,REPORTED_COOKIES_EXP_DEFAULT_VALUE);
+      if (respondedCookiesExpiration==null || respondedCookiesExpiration.equals(""))respondedCookiesExpiration=RESP_COOKIES_EXP_DEFAULT_VALUE;
+      if (reportedCookiesExpiration==null || reportedCookiesExpiration.equals(""))reportedCookiesExpiration=REPORTED_COOKIES_EXP_DEFAULT_VALUE;
+      Map<String,Object> parameters = new HashMap<>();
+      parameters.put("respondedCookiesExpiration",respondedCookiesExpiration);
+      parameters.put("reportedCookiesExpiration",reportedCookiesExpiration);
+      return editTmpl.with(parameters).ok();
+    } else {
+      return indexTmpl.ok();
+    }
   }
+
 
 
   @Ajax
@@ -90,6 +95,13 @@ public class NPSFormController {
   @Jackson
   public Response getBundle() {
     try {
+      Request request = Request.getCurrent();
+      PortletRequestBridge bridge = (PortletRequestBridge)request.getBridge();
+      PortletPreferences prefs = bridge.getPortletRequest().getPreferences();
+      String respondedCookiesExpiration = prefs.getValue(RESP_COOKIES_EXP,RESP_COOKIES_EXP_DEFAULT_VALUE);
+      String reportedCookiesExpiration = prefs.getValue(REPORTED_COOKIES_EXP,REPORTED_COOKIES_EXP_DEFAULT_VALUE);
+      if (respondedCookiesExpiration==null || respondedCookiesExpiration.equals(""))respondedCookiesExpiration=RESP_COOKIES_EXP_DEFAULT_VALUE;
+      if (reportedCookiesExpiration==null || reportedCookiesExpiration.equals(""))reportedCookiesExpiration=REPORTED_COOKIES_EXP_DEFAULT_VALUE;
       if (!PropertyManager.isDevelopping() && bundleString != null && getResourceBundle().getLocale().equals(PortalRequestContext.getCurrentInstance().getLocale())) {
         return Response.ok(bundleString);
       }
@@ -105,6 +117,8 @@ public class NPSFormController {
         }
       }
       data.set("currentUser",currentUser);
+      data.set("respondedCookiesExpiration",respondedCookiesExpiration);
+      data.set("reportedCookiesExpiration",reportedCookiesExpiration);
       bundleString = data.toString();
       return Response.ok(bundleString);
     } catch (Throwable e) {
@@ -113,6 +127,17 @@ public class NPSFormController {
     }
   }
 
+  @Action
+  @Route("updateSettings")
+  public Response.Content updateSettings(String respondedCookiesExpiration,String reportedCookiesExpiration) throws Exception {
+    Request request = Request.getCurrent();
+    PortletRequestBridge bridge = (PortletRequestBridge)request.getBridge();
+    PortletPreferences prefs = bridge.getPortletRequest().getPreferences();
+    prefs.setValue(RESP_COOKIES_EXP,respondedCookiesExpiration);
+    prefs.setValue(REPORTED_COOKIES_EXP,reportedCookiesExpiration);
+    prefs.store();
+    return indexTmpl.ok();
+  }
 
   private ResourceBundle getResourceBundle(Locale locale) {
     return bundle = ResourceBundle.getBundle("locale.portlet.nps-addon", locale, this.getClass().getClassLoader());

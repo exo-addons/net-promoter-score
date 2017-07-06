@@ -1,0 +1,21 @@
+<div class="settingsContainer" >
+<form name="updateSettingsForm" class="form-horizontal" action="@{updateSettings()}" method="post">
+
+<div class="control-group">
+<label class="control-label" for="respondedCookiesExpiration">Responded Cookies experation periode (days):</label>
+        <div class="controls">
+          <input type="text" name="respondedCookiesExpiration"  value="${respondedCookiesExpiration}">
+        </div>
+</div>
+	  		 <div class="control-group">
+        <label class="control-label" for="reportedCookiesExpiration">Reported Cookies experation periode (days):</label>
+<div class="controls">
+<input type="text" name="reportedCookiesExpiration" value="${reportedCookiesExpiration}">
+</div>
+      </div>
+
+<div class="uiAction">
+<button type="submit" class="btn btn-primary input-large">Save</button>
+        </div>
+</form>
+</div>

@@ -25,11 +25,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.exoplatform.calendar</groupId>
-			<artifactId>calendar-service</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.exoplatform.social</groupId>
 			<artifactId>social-component-notification</artifactId>
 			<scope>provided</scope>
