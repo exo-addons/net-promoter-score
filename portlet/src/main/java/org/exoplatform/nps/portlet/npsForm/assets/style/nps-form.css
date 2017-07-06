@@ -231,3 +231,12 @@ div#nps {
     width: 100%;
 }
 .div_indication .indication.promoters { color: #3caf8c;top: initial;}
+
+#npsComment{
+    display: none;
+    opacity: 0;
+    -webkit-transition-duration: .5s;
+    -moz-transition-duration: .5s;
+    -ms-transition-duration: .5s;
+    transition-duration: .5s;
+}

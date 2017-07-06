@@ -10,6 +10,12 @@ require( ["SHARED/jquery", "npsFormControllers"], function ( $,  npsFormControll
             console.log(e);
         }
 
+        $(".npsRadio .option-input.radio").click(function(){
+            $("#npsComment").css({
+                "display": "block",
+                "opacity" : 1
+            })
+        });
     });
 
 });
