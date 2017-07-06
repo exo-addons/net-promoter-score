@@ -216,7 +216,7 @@ div#nps {
 .div_indication {
     display: inline-block;
     margin-bottom: 20px;
-    float: right;
+    width: 100%;
 }
 .div_indication .indication {
     position: relative;
@@ -225,14 +225,19 @@ div#nps {
     font-family: inherit;
     font-weight: bold;
     text-align: left;
+    color: #476a9c;
 }
 .div_indication .indication.detractor {
-    color: #c14444;
-    width: 100%;
+    /*color: #c14444;*/
+    float: left;
 }
-.div_indication .indication.promoters { color: #3caf8c;top: initial;}
+.div_indication .indication.promoters {
+    /*color: #3caf8c;*/
+    top: initial;
+    float: right;
+}
 
-#npsComment{
+#npsComment, #nps #submit.btn-primary{
     display: none;
     opacity: 0;
     -webkit-transition-duration: .5s;
