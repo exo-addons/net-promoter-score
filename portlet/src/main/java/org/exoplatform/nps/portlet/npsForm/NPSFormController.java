@@ -16,6 +16,10 @@ import org.exoplatform.nps.services.*;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.social.core.identity.model.Profile;
+import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvider;
+import org.exoplatform.social.core.manager.IdentityManager;
+
 import javax.inject.Inject;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
@@ -32,6 +36,9 @@ public class NPSFormController {
 
   @Inject
   NpsService npsService;
+
+  @Inject
+  IdentityManager identityManager;
 
   @Inject
   @Path("index.gtmpl")
@@ -93,7 +100,7 @@ public class NPSFormController {
   @juzu.Resource
   @MimeType.JSON
   @Jackson
-  public Response getBundle() {
+  public Response getContext() {
     try {
       Request request = Request.getCurrent();
       PortletRequestBridge bridge = (PortletRequestBridge)request.getBridge();
@@ -116,7 +123,10 @@ public class NPSFormController {
           // Nothing to do, this happens sometimes
         }
       }
+      Profile profile=identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, currentUser, false).getProfile();
+
       data.set("currentUser",currentUser);
+      data.set("fullName",profile.getFullName());
       data.set("respondedCookiesExpiration",respondedCookiesExpiration);
       data.set("reportedCookiesExpiration",reportedCookiesExpiration);
       bundleString = data.toString();

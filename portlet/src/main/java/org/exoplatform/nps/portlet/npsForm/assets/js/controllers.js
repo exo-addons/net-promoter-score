@@ -34,10 +34,10 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
 
 
 
-        $scope.loadBundles = function() {
+        $scope.loadContext = function() {
             $http({
                 method : 'GET',
-                url : npsFormContainer.jzURL('NPSFormController.getBundle')
+                url : npsFormContainer.jzURL('NPSFormController.getContext')
             }).then(function successCallback(data) {
                 $scope.i18n = data.data;
                 $scope.showAlert = false;
@@ -94,7 +94,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                 $('#npsForm').css('display', 'none');
             }else{
                 $('#npsForm').css('display', 'block');
-                $scope.loadBundles();
+                $scope.loadContext();
                 $scope.showForm = true;
                 $scope.showAlert = false;
             }

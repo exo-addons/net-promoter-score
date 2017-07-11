@@ -8,7 +8,7 @@ class="result-message alert {{resultMessageClass}}">
 </div>
 
 <div id="nps" ng-show="showForm">
-<h4>{{i18n.titleForm}}</h4>
+<h4>{{i18n.hi}} {{i18n.fullName}},<br> {{i18n.titleForm}}</h4>
 <p>{{i18n.messageForm}}</p>
 
 <form id="npsForm">
