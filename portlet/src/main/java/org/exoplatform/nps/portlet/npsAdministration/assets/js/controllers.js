@@ -122,6 +122,65 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         }
 
 
+        $scope.deleteScore = function(score) {
+            $scope.showAlert = false;
+            // $scope.setResultMessage($scope.i18n.savingScore, "info");
+            $http({
+                data : score,
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json'
+                },
+                url : npsAdminContainer.jzURL('NPSAdministrationController.deleteScore')
+            }).then(function successCallback(data) {
+                $scope.loadScores($scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
+                $scope.setResultMessage($scope.i18n.scoreDeleted, "success");
+            }, function errorCallback(data) {
+                $scope.setResultMessage($scope.i18n.defaultError, "error");
+            });
+
+        }
+
+        $scope.disableScore = function(score) {
+            $scope.showAlert = false;
+            // $scope.setResultMessage($scope.i18n.savingScore, "info");
+            $http({
+                data : score,
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json'
+                },
+                url : npsAdminContainer.jzURL('NPSAdministrationController.disableScore')
+            }).then(function successCallback(data) {
+                $scope.loadScores($scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
+                $scope.setResultMessage($scope.i18n.scoreEnabled, "success");
+            }, function errorCallback(data) {
+                $scope.setResultMessage($scope.i18n.defaultError, "error");
+            });
+
+        }
+
+        $scope.enableScore = function(score) {
+            $scope.showAlert = false;
+            // $scope.setResultMessage($scope.i18n.savingScore, "info");
+            $http({
+                data : score,
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json'
+                },
+                url : npsAdminContainer.jzURL('NPSAdministrationController.enableScore')
+            }).then(function successCallback(data) {
+                $scope.loadScores($scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
+                $scope.setResultMessage($scope.i18n.scoreDisabled, "success");
+            }, function errorCallback(data) {
+                $scope.setResultMessage($scope.i18n.defaultError, "error");
+            });
+
+        }
+
+
+
         $scope.range = function() {
             var rangeSize = 10;
             var ret = [];

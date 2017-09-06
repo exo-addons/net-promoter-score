@@ -27,10 +27,15 @@
       <column name="COMMENT" type="NVARCHAR(550)"></column>
     </createTable>
 
-
     <modifySql dbms="mysql">
       <append value=" ENGINE=INNODB CHARSET=UTF8 COLLATE utf8_general_ci"/>
     </modifySql>
+  </changeSet>
+
+  <changeSet author="nps-addon" id="1.0.0-2">
+    <addColumn tableName="NPS_SCORE_ENTRY">
+      <column name="ENABLED" type="BOOLEAN"/>
+    </addColumn>
   </changeSet>
 
 

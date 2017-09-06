@@ -12,15 +12,15 @@
 <div style="padding-bottom: 20px;position: relative">
     <div class="scoresDiv">
         <h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsChart}}</h4>
-    </div>
+</div>
 <h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsAddon.npsAdmin}}</h4>
 <div class="span10" style="float: none; margin: auto; height: auto">
-    <div google-chart class="span4" chart="gaugeChartObject" style="height:450px"></div>
+<div google-chart class="span4" chart="gaugeChartObject" style="height:450px"></div>
     <div google-chart class="span4" chart="pieChartObject" style="height:450px;float: right"></div>
 </div>
 </div>
 <div class="scoresDiv">
-<h4 class="titleWithBorder pull-left" style="width: 100%">{{scorsnbr}} {{i18n.ratesList}} </h4>
+<h4 class="titleWithBorder pull-left" style="width: 100%">{{scorsnbr}} {{i18n.rates}} </h4>
 
 <table id="scoresTable" class="table uiGrid table-hover table-striped">
 <thead>
@@ -53,6 +53,8 @@ src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueDownArrow.gif">
 src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
 </a>
                                 </th>
+<th>{{i18n.actions}}
+</th>
 </tr>
 </thead>
 <tbody>
@@ -69,15 +71,24 @@ src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
 <td>
 <span>{{score.postedTime | date:'d MMM y HH:mm:ss'}}</span>
 </td>
+<td>
+<a ng-if="score.enabled == true" data-placement="right" data-original-title="Disable" ng-click="disableScore(score)">Disable</a>
+<a ng-if="score.enabled == false" data-placement="right" data-original-title="Disable" ng-click="enableScore(score)">Enable</a>
+<a class="actionIconde" data-placement="right"
+data-original-title="Delete "
+ng-click="deleteScore(score)">
+<i class="uiIconDeleteUser uiIconLightGray"></i>
+</a>
+</td>
 
 </tr>
 </tbody>
-      <tfoot>
-        <td colspan="4">
-          <div class="pagination">
-            <ul>
-              <li ng-class="prevPageDisabled()">
-                <a href ng-click="prevPage()"><i class="uiIconArrowLeft"></i> Prev</a>
+<tfoot>
+<td colspan="4">
+<div class="pagination">
+<ul>
+<li ng-class="prevPageDisabled()">
+<a href ng-click="prevPage()"><i class="uiIconArrowLeft"></i> Prev</a>
 </li>
               <li ng-repeat="n in pages" ng-class="{active: n == currentPage}" ng-click="setPage(n)">
                 <a href="#">{{n+1}}</a>
@@ -85,9 +96,9 @@ src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
               <li ng-class="nextPageDisabled()">
                 <a href ng-click="nextPage()">Next <i class="uiIconArrowRight"></i></a>
 </li>
-            </ul>
+</ul>
 </div>
-        </td>
+</td>
 </tfoot>
 </table>
 </div>

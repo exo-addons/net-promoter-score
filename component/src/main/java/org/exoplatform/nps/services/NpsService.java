@@ -75,6 +75,7 @@ public class NpsService {
     List<ScoreEntryEntity> entities = scoreEntryDAO.getScoreEntries(offset, limit);
     List<ScoreEntryDTO> dtos = new ArrayList<ScoreEntryDTO>();
     for (ScoreEntryEntity entity : entities) {
+      if(entity.getEnabled()==null) entity.setEnabled(true);
       dtos.add(convert(entity));
     }
     return dtos;
@@ -98,6 +99,7 @@ public class NpsService {
     List<ScoreEntryEntity> entities = scoreEntryDAO.getScoreEntriesByUserId(userId,offset, limit);
     List<ScoreEntryDTO> dtos = new ArrayList<ScoreEntryDTO>();
     for (ScoreEntryEntity entity : entities) {
+      if(entity.getEnabled()==null) entity.setEnabled(true);
       dtos.add(convert(entity));
     }
     return dtos;
@@ -131,6 +133,7 @@ public class NpsService {
     entity.setPostedTime(dto.getPostedTime());
     entity.setComment(dto.getComment());
     entity.setLastAppereance(dto.getLastAppereance());
+    entity.setEnabled(dto.getEnabled());
 
     return entity;
   }
@@ -143,6 +146,7 @@ public class NpsService {
     dto.setPostedTime(entity.getPostedTime());
     dto.setComment(entity.getComment());
     dto.setLastAppereance(entity.getLastAppereance());
+    dto.setEnabled(entity.getEnabled());
 
     return dto;
   }

@@ -38,6 +38,8 @@ public class ScoreEntryDTO {
 
   private String                userFullName;
 
+  private Boolean           enabled;
+
   /*  public boolean verifySaveConditions() {
     if (StringUtils.isBlank(vacationRequestId) || StringUtils.isBlank(userId) ) {
       return false;

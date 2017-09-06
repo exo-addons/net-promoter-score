@@ -59,4 +59,7 @@ public class ScoreEntryEntity {
   @Column(name = "COMMENT")
   private String comment;
 
+  @Column(name = "ENABLED")
+  private Boolean enabled;
+
 }

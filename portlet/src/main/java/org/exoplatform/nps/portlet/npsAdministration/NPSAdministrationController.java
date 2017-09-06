@@ -1,9 +1,6 @@
 package org.exoplatform.nps.portlet.npsAdministration;
 
-import juzu.MimeType;
-import juzu.Path;
-import juzu.Response;
-import juzu.View;
+import juzu.*;
 import juzu.impl.common.JSON;
 import juzu.plugin.jackson.Jackson;
 import juzu.template.Template;
@@ -143,6 +140,41 @@ public class NPSAdministrationController {
       return Response.status(500);
     }
   }
+
+
+  @Ajax
+  @Resource(method = HttpMethod.POST)
+  @MimeType.JSON
+  @Jackson
+  public void deleteScore(@Jackson ScoreEntryDTO obj) {
+
+    npsService.remove(obj);
+
+  }
+
+
+  @Ajax
+  @Resource(method = HttpMethod.POST)
+  @MimeType.JSON
+  @Jackson
+  public void disableScore(@Jackson ScoreEntryDTO obj) {
+    obj.setEnabled(false);
+    npsService.save(obj,false);
+
+  }
+
+
+
+  @Ajax
+  @Resource(method = HttpMethod.POST)
+  @MimeType.JSON
+  @Jackson
+  public void enableScore(@Jackson ScoreEntryDTO obj) {
+    obj.setEnabled(true);
+    npsService.save(obj,false);
+
+  }
+
 
 
 
