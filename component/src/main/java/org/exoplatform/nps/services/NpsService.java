@@ -120,8 +120,8 @@ public class NpsService {
 
 
 
-  public long getScoreCount() {
-    return scoreEntryDAO.getScoreEntriesCount();
+  public long getScoreCount(boolean enabled) {
+    return scoreEntryDAO.getScoreEntriesCount(enabled);
   }
 
 

@@ -112,7 +112,7 @@ public class NPSAdministrationController {
       }
       data.set("currentUserName",profile.getFullName());
 
-      long scorsnbr= npsService.getScoreCount();
+      long scorsnbr= npsService.getScoreCount(true);
       long detractorsNbr= npsService.getDetractorsCount();
       long promotersNbr= npsService.getPromotersCount();
       long passivesNbr= scorsnbr-(promotersNbr+detractorsNbr);
@@ -124,7 +124,7 @@ public class NPSAdministrationController {
 
       float npScore= promotersPrc-detractorsPrc;
 
-      data.set("scorsnbr",scorsnbr);
+      data.set("scorsnbr",npsService.getScoreCount(false));
       data.set("detractorsNbr",detractorsNbr);
       data.set("promotersNbr",promotersNbr);
       data.set("passivesNbr",passivesNbr);

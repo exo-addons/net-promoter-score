@@ -87,7 +87,7 @@ public class NPSFormController {
   @MimeType.JSON
   @Jackson
   public void saveScore(@Jackson ScoreEntryDTO obj) {
-
+    obj.setEnabled(true);
     obj.setUserId(currentUser);
     npsService.save(obj,true);
 

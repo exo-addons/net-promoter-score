@@ -46,9 +46,14 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
         }
     }
 
-    public  long getScoreEntriesCount() {
+    public  long getScoreEntriesCount(boolean enabled) {
         try {
-            return getEntityManager().createNamedQuery("scoreEntryEntity.count", Long.class).getSingleResult();
+            if(enabled==true){
+                return getEntityManager().createNamedQuery("scoreEntryEntity.countEnabled", Long.class).getSingleResult();
+            }else{
+                return getEntityManager().createNamedQuery("scoreEntryEntity.count", Long.class).getSingleResult();
+            }
+
         } catch (Exception e) {
             LOG.warn("Exception while attempting to get scores count.", e);
             throw e;
