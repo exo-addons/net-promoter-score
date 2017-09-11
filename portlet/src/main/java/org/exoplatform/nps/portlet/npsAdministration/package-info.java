@@ -5,9 +5,6 @@
         @Binding(value = NpsService.class)})
 @Scripts({
     @Script(id = "jQueryUI", value = "js/lib/jquery-ui.js"),
-    @Script(id = "jQueryNPS", value = "js/lib/jquery.js"),
-        /* eXo iphone-style-checkboxes Swicher */
-    @Script(id = "eXoSwicher", value = "js/lib/iphone-style-checkboxes.js", depends = "jQueryNPS"),
     // AngularJS is still global, should be AMDified
     @Script(id = "angularjs", value = "js/lib/angular.min.js"),
     @Script(id = "ngSanitize", value = "js/lib/angular-sanitize.js", depends = "angularjs"),
