@@ -35,6 +35,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.itemsPerPage = 10;
         $scope.currentPage = 0;
         $scope.pages=[];
+
+
         $scope.setResultMessage = function (text, type) {
             $scope.resultMessageClass = "alert-" + type;
             $scope.resultMessageClassExt = "uiIcon" + type.charAt(0).toUpperCase()
@@ -134,6 +136,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 url : npsAdminContainer.jzURL('NPSAdministrationController.deleteScore')
             }).then(function successCallback(data) {
                 $scope.loadScores($scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
+                $scope.loadData();
                 $scope.setResultMessage($scope.i18n.scoreDeleted, "success");
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
@@ -153,6 +156,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 url : npsAdminContainer.jzURL('NPSAdministrationController.disableScore')
             }).then(function successCallback(data) {
                 $scope.loadScores($scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
+                $scope.loadData();
                 $scope.setResultMessage($scope.i18n.scoreEnabled, "success");
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
@@ -172,6 +176,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 url : npsAdminContainer.jzURL('NPSAdministrationController.enableScore')
             }).then(function successCallback(data) {
                 $scope.loadScores($scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
+                $scope.loadData();
                 $scope.setResultMessage($scope.i18n.scoreDisabled, "success");
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
@@ -179,7 +184,9 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 
         }
 
-
+        $scope.checkState = function(score, state) {
+            state ? $scope.enableScore(score) : $scope.disableScore(score);
+        }
 
         $scope.range = function() {
             var rangeSize = 10;

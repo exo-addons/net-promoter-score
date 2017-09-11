@@ -8,7 +8,6 @@
         <div id="npsAdminApplication">
 
 
-
 <div style="padding-bottom: 20px;position: relative">
     <div class="scoresDiv">
         <h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsChart}}</h4>
@@ -72,9 +71,17 @@ src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
 <span>{{score.postedTime | date:'d MMM y HH:mm:ss'}}</span>
 </td>
 <td>
-<a ng-if="score.enabled == true" data-placement="right" data-original-title="Disable" ng-click="disableScore(score)">Disable</a>
-<a ng-if="score.enabled == false" data-placement="right" data-original-title="Disable" ng-click="enableScore(score)">Enable</a>
-<a class="actionIconde" data-placement="right"
+<!--<a ng-if="score.enabled == true" data-placement="right" data-original-title="Disable" ng-click="disableScore(score)">Disable</a>-->
+<!--<a ng-if="score.enabled == false" data-placement="right" data-original-title="Disable" ng-click="enableScore(score)">Enable</a>-->
+
+
+    <label class="switch">
+        <input type="checkbox" ng-model="score.enabled" data-placement="right" data-original-title="Enable / Disable" ng-click="checkState(score, score.enabled)">
+        <span class="slider round"></span>
+    </label>
+
+
+    <a class="actionIconde" data-placement="right"
 data-original-title="Delete "
 ng-click="deleteScore(score)">
 <i class="uiIconDeleteUser uiIconLightGray"></i>
@@ -84,7 +91,7 @@ ng-click="deleteScore(score)">
 </tr>
 </tbody>
 <tfoot>
-<td colspan="4">
+<td colspan="5">
 <div class="pagination">
 <ul>
 <li ng-class="prevPageDisabled()">
