@@ -19,7 +19,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
             setTimeout(function () {
                 $scope.showAlert = false;
                 $("div#npsForm").css("display", "none");
-            }, 5000);
+            }, 2000);
         }
 
         $scope.updateSettings = function() {

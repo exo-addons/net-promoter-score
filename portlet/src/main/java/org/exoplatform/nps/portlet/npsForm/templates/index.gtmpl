@@ -2,15 +2,18 @@
 
 <div ng-controller="npsFormCtrl" id="npsFormCtrl">
 
-<div id="resultMessage" ng-show="showAlert"
-class="result-message alert {{resultMessageClass}}">
-<i class="{{resultMessageClassExt}}"></i>{{resultMessage}}
-</div>
 
-<div id="nps" ng-show="showForm">
+
+<div id="nps" >
 <h4>{{i18n.hi}} {{i18n.fullName}},<br/><br/> {{i18n.messageForm}}</h4>
 <span class="close"><i class="uiIconClose"></i></span>
-<form id="npsForm">
+
+<div id="resultMessage" ng-show="showAlert"
+     class="result-message alert {{resultMessageClass}}">
+    <i class="{{resultMessageClassExt}}"></i>{{resultMessage}}
+</div>
+
+<form id="npsForm" ng-show="showForm">
 <div class="npsRadio">
 <label>
 <input type="radio" class="option-input radio"checked name="npsScore" id="npsScore0" ng-model="newScore.score" value="0">

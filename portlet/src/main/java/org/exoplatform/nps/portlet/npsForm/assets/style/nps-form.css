@@ -20,19 +20,10 @@ div#npsForm #npsFormCtrl {
     -webkit-transition-duration: .5s;
     transition-duration: .5s;
 }
-div#npsForm.thankyou {
-    position: relative;
-    margin-bottom: 10px;
-    margin-top: 20px;
-    background: transparent;
-}
-div#npsForm.thankyou #npsFormCtrl{
-    width: 100%;
-    top: 0;
-}
 div#npsForm.thankyou #resultMessage{
-    margin: 0;
+    margin: 30px auto 5px;
 }
+
     /* -- -- */
 .npsLoadingBar {
 	background: url("/nps-addon-portlet/skin/images/loading-16x16.gif") no-repeat scroll left center rgba(0, 0, 0, 0);
