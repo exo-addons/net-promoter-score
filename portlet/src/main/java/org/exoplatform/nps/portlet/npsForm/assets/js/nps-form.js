@@ -17,6 +17,11 @@ require( ["SHARED/jquery", "npsFormControllers"], function ( $,  npsFormControll
                 $("#npsComment, #submit").css("opacity",1);
             }, 200);
         });
+
+        $("#nps .close").click(function(){
+            $("div#npsForm #npsFormCtrl").css("opacity","0");
+            setTimeout(function(){$("div#npsForm").css("display","none");}, 500);
+        });
     });
 
 });

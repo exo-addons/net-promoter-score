@@ -13,6 +13,13 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                 + type.slice(1);
             $scope.showAlert = true;
             $scope.resultMessage = text;
+
+            $("div#npsForm").addClass("thankyou");
+
+            setTimeout(function () {
+                $scope.showAlert = false;
+                $("div#npsForm").css("display", "none");
+            }, 5000);
         }
 
         $scope.updateSettings = function() {

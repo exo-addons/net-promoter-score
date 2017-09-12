@@ -36,6 +36,12 @@
     margin: 30px;
     width: initial;
 }
+.uiGrid.table tr.ng-scope > td:nth-last-child(1) {
+    text-align: center;
+}
+a.actionIconde {
+    float: right;
+}
 /**/
 /* SWICHER*/
 /**/

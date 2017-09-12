@@ -1,5 +1,39 @@
-
-/* -- -- */
+div#npsForm {
+    display: block;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 3;
+    background: rgba(0, 0, 0, 0.56);
+}
+div#npsForm #npsFormCtrl {
+    width: 40%;
+    top: 15%;
+    position: relative;
+    margin: auto;
+    overflow-x: auto;
+    -ms-transition-duration: .5s;
+    -moz-transition-duration: .5s;
+    -webkit-transition-duration: .5s;
+    transition-duration: .5s;
+}
+div#npsForm.thankyou {
+    position: relative;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    background: transparent;
+}
+div#npsForm.thankyou #npsFormCtrl{
+    width: 100%;
+    top: 0;
+}
+div#npsForm.thankyou #resultMessage{
+    margin: 0;
+}
+    /* -- -- */
 .npsLoadingBar {
 	background: url("/nps-addon-portlet/skin/images/loading-16x16.gif") no-repeat scroll left center rgba(0, 0, 0, 0);
 	background-size: 25px;
@@ -167,10 +201,7 @@ div#nps {
 }
 
 .npsRadio {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: box;
+    display: block;
     -webkit-box-orient: horizontal;
     -moz-box-orient: horizontal;
     box-orient: horizontal;
@@ -244,4 +275,10 @@ div#nps {
     -moz-transition-duration: .5s;
     -ms-transition-duration: .5s;
     transition-duration: .5s;
+}
+
+.close {
+    position: absolute;
+    top: 4px;
+    right: 10px;
 }
