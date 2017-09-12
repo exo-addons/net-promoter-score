@@ -18,7 +18,7 @@ require( ["SHARED/jquery", "npsFormControllers"], function ( $,  npsFormControll
             }, 200);
         });
 
-        $("#nps .close").click(function(){
+        $("#nps .close, #nps .thankyClose").click(function(){
             $("div#npsForm #npsFormCtrl").css("opacity","0");
             setTimeout(function(){$("div#npsForm").css("display","none");}, 500);
         });

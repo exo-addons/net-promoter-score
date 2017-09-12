@@ -21,9 +21,20 @@ div#npsForm #npsFormCtrl {
     transition-duration: .5s;
 }
 div#npsForm.thankyou #resultMessage{
-    margin: 30px auto 5px;
+    z-index: 12;
+    position: relative;
+    background: #FFF;
+    border: 0
 }
-
+div#npsForm.thankyou #resultMessage i.uiIconSuccess:before{color: #2eb58c;}
+button.thankyClose {
+    width: 125px;
+    background: #2eb58c;
+    border: solid 2px #2eb58c;
+    color: #FFF;
+    padding: 5px 0;
+    margin-bottom: 10px;
+}
     /* -- -- */
 .npsLoadingBar {
 	background: url("/nps-addon-portlet/skin/images/loading-16x16.gif") no-repeat scroll left center rgba(0, 0, 0, 0);
