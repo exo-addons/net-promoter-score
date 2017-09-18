@@ -48,8 +48,11 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
 
 
         $scope.loadContext = function() {
+
+        var cookies = ($cookies.get("_mkto_trk")).replace("&","%26").replace("&","%26");
             $http({
                 method : 'GET',
+                params: {mktCookie: cookies},
                 url : npsFormContainer.jzURL('NPSFormController.getContext')
             }).then(function successCallback(data) {
                 $scope.i18n = data.data;
@@ -62,7 +65,6 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
 
         $scope.saveScore = function() {
             $scope.showAlert = false;
-               // $scope.setResultMessage($scope.i18n.savingScore, "info");
                 $http({
                     data : $scope.newScore,
                     method : 'POST',
