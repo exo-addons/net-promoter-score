@@ -6,7 +6,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
         $scope.showAlert = false;
         $scope.newScore = null;
         $scope.showForm = true;
-
+        $scope.scoreTypeId = 0;
         $scope.setResultMessage = function (text, type) {
             $scope.resultMessageClass = "alert-" + type;
             $scope.resultMessageClassExt = "uiIcon" + type.charAt(0).toUpperCase()
@@ -49,13 +49,14 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
 
         $scope.loadContext = function() {
 
-        var cookies = ($cookies.get("_mkto_trk")).replace("&","%26").replace("&","%26");
+        var cookies = ($cookies.get("_mkto_trk"));//.replace("&","%26").replace("&","%26");
             $http({
                 method : 'GET',
                 params: {mktCookie: cookies},
                 url : npsFormContainer.jzURL('NPSFormController.getContext')
             }).then(function successCallback(data) {
                 $scope.i18n = data.data;
+                $scope.scoreTypeId = data.data.scoreTypeId;
                 $scope.showAlert = false;
                 deferred.resolve(data);
             }, function errorCallback(data) {
@@ -65,6 +66,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
 
         $scope.saveScore = function() {
             $scope.showAlert = false;
+            $scope.newScore.typeId=$scope.scoreTypeId;
                 $http({
                     data : $scope.newScore,
                     method : 'POST',

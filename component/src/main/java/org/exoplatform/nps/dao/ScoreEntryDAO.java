@@ -30,15 +30,18 @@ import java.util.List;
 public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
     private static final Logger LOG = LoggerFactory.getLogger(ScoreEntryDAO.class);
 
-    public List<ScoreEntryEntity> getScoreEntries(int offset, int limit) {
+    public List<ScoreEntryEntity> getScoreEntries(long typeId, int offset, int limit) {
         try {
             if (offset >= 0 && limit > 0) {
                 return getEntityManager().createNamedQuery("scoreEntryEntity.findAllOrderBy", ScoreEntryEntity.class)
                         .setFirstResult(offset)
                         .setMaxResults(limit)
+                        .setParameter("typeId", typeId)
                         .getResultList();
             } else {
-                return findAll();
+                return getEntityManager().createNamedQuery("scoreEntryEntity.findAllOrderBy", ScoreEntryEntity.class)
+                        .setParameter("typeId", typeId)
+                        .getResultList();
             }
         } catch (Exception e) {
             LOG.warn("Exception while attempting to get scores with offset = '" + offset + "' and limit = '" + limit + "'.", e);
@@ -46,12 +49,14 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
         }
     }
 
-    public  long getScoreEntriesCount(boolean enabled) {
+    public  long getScoreEntriesCount(long typeId,boolean enabled) {
         try {
             if(enabled==true){
-                return getEntityManager().createNamedQuery("scoreEntryEntity.countEnabled", Long.class).getSingleResult();
+                return getEntityManager().createNamedQuery("scoreEntryEntity.countEnabled", Long.class)
+                        .setParameter("typeId", typeId)
+                        .getSingleResult();
             }else{
-                return getEntityManager().createNamedQuery("scoreEntryEntity.count", Long.class).getSingleResult();
+                return getEntityManager().createNamedQuery("scoreEntryEntity.count", Long.class).setParameter("typeId", typeId).getSingleResult();
             }
 
         } catch (Exception e) {
@@ -60,18 +65,18 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
         }
     }
 
-    public  long getPromotersCount() {
+    public  long getPromotersCount(long typeId) {
         try {
-            return getEntityManager().createNamedQuery("scoreEntryEntity.countPromoters", Long.class).getSingleResult();
+            return getEntityManager().createNamedQuery("scoreEntryEntity.countPromoters", Long.class).setParameter("typeId", typeId).getSingleResult();
         } catch (Exception e) {
             LOG.warn("Exception while attempting to get scores count.", e);
             throw e;
         }
     }
 
-    public  long getDetractorsCount() {
+    public  long getDetractorsCount(long typeId) {
         try {
-            return getEntityManager().createNamedQuery("scoreEntryEntity.countDetractors", Long.class).getSingleResult();
+            return getEntityManager().createNamedQuery("scoreEntryEntity.countDetractors", Long.class).setParameter("typeId", typeId).getSingleResult();
         } catch (Exception e) {
             LOG.warn("Exception while attempting to get scores count.", e);
             throw e;
@@ -80,17 +85,19 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
 
 
 
-    public List<ScoreEntryEntity> getScoreEntriesByUserId(String userId, int offset, int limit) {
+    public List<ScoreEntryEntity> getScoreEntriesByUserId(long typeId,String userId, int offset, int limit) {
         try {
             if (offset >= 0 && limit > 0) {
                 return getEntityManager().createNamedQuery("scoreEntryEntity.findByUserId", ScoreEntryEntity.class)
                         .setFirstResult(offset)
                         .setMaxResults(limit)
                         .setParameter("userId", userId)
+                        .setParameter("typeId", typeId)
                         .getResultList();
             } else {
                 return getEntityManager().createNamedQuery("scoreEntryEntity.findByUserId", ScoreEntryEntity.class)
                         .setParameter("userId", userId)
+                        .setParameter("typeId", typeId)
                         .getResultList();
             }
         } catch (Exception e) {

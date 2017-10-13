@@ -32,6 +32,11 @@
 				<value></value>
 				<read-only>false</read-only>
 			</preference>
+			<preference>
+				<name>exo.nps.addon.selectedType</name>
+				<value></value>
+				<read-only>false</read-only>
+			</preference>
 		</portlet-preferences>
 	</portlet>
 

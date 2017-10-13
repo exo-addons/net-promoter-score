@@ -13,9 +13,63 @@
         <h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsChart}}</h4>
 </div>
 <h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsAddon.npsAdmin}}</h4>
+
+
+<select name="types" id="types" ng-model="typeId"
+placeholder="{{i18n.serverUsername}}">
+<option ng-repeat="type in scoreTypes" value="{{type.id}}">{{type.typeName}} </option>
+</select>
+
+<input type="submit" id="getScores" class="btn btn-primary Submitbtn" value="Get Scores}" data-ng-click="loadData(typeId)"/>
+<input type="submit" id="addTypeScores" class="btn btn-primary Submitbtn" value="Add Score Type}" data-ng-click="showForm=true"/>
+
+<div id="typeForm" ng-show="showForm">
+<!--Start Type creation Form-->
+<form name="typeForm" class="form-horizontal">
+
+
+
+
+
+
+<div class="control-group {{usernameClass}}">
+<label class="control-label" for="typeName">{{i18n.typeName}}:</label>
+<div class="controls">
+<input type="text" name="inputUsername" id="type"
+placeholder="{{i18n.serverUsername}}"
+ng-model="newScoreType.typeName">
+
+</div>
+</div>
+
+
+<div class="control-group {{usernameClass}}">
+<label class="control-label" for="question">{{i18n.question}}:</label>
+<div class="controls">
+<input type="text" name="inputUsername" id="question"
+placeholder="{{i18n.serverUsername}}"
+ng-model="newScoreType.question">
+
+</div>
+</div>
+
+
+
+<div id="scoreSaveAs"
+class="control-group form-horizontal {{scoreTypeNameClass}}">
+<button type="button" class="btn" ng-click="showForm = false">{{i18n.cancel}}</button>
+<button type="button" class="btn btn-primary" id="saveType"
+ng-click="saveScoreType(newScoreType)">{{i18n.save}}
+</button>
+
+</div>
+</form>
+<!--End Type creation Form-->
+</div>
+
 <div class="span10" style="float: none; margin: auto; height: auto">
 <div google-chart class="span4" chart="gaugeChartObject" style="height:450px"></div>
-    <div google-chart class="span4" chart="pieChartObject" style="height:450px;float: right"></div>
+<div google-chart class="span4" chart="pieChartObject" style="height:450px;float: right"></div>
 </div>
 </div>
 <div class="scoresDiv">
@@ -77,11 +131,11 @@ src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
 
     <label class="switch">
         <input type="checkbox" ng-model="score.enabled" data-placement="right" data-original-title="Enable / Disable" ng-click="checkState(score, score.enabled)">
-        <span class="slider round"></span>
+<span class="slider round"></span>
     </label>
 
 
-    <a class="actionIconde" data-placement="right"
+<a class="actionIconde" data-placement="right"
 data-original-title="Delete "
 ng-click="deleteScore(score)">
 <i class="uiIconDeleteUser uiIconLightGray"></i>
@@ -97,11 +151,11 @@ ng-click="deleteScore(score)">
 <li ng-class="prevPageDisabled()">
 <a href ng-click="prevPage()"><i class="uiIconArrowLeft"></i> Prev</a>
 </li>
-              <li ng-repeat="n in pages" ng-class="{active: n == currentPage}" ng-click="setPage(n)">
-                <a href="#">{{n+1}}</a>
+<li ng-repeat="n in pages" ng-class="{active: n == currentPage}" ng-click="setPage(n)">
+<a href="#">{{n+1}}</a>
 </li>
-              <li ng-class="nextPageDisabled()">
-                <a href ng-click="nextPage()">Next <i class="uiIconArrowRight"></i></a>
+<li ng-class="nextPageDisabled()">
+<a href ng-click="nextPage()">Next <i class="uiIconArrowRight"></i></a>
 </li>
 </ul>
 </div>

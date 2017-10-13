@@ -52,6 +52,9 @@ public class NPSFormController {
     NpsService npsService;
 
     @Inject
+    NpsTypeService npsTypeService;
+
+    @Inject
     IdentityManager identityManager;
 
     @Inject
@@ -71,6 +74,7 @@ public class NPSFormController {
     private static String RESP_COOKIES_EXP_DEFAULT_VALUE = "30";
     private static String REPORTED_COOKIES_EXP_DEFAULT_VALUE = "10";
     private static String REPORTED_COOKIES_EXP = "exo.nps.addon.reportedCookiesExpiration";
+    private static String SCORE_TYPE = "exo.nps.addon.selectedType";
 
     private String mktToken;
     private String mktLead;
@@ -91,9 +95,15 @@ public class NPSFormController {
                 respondedCookiesExpiration = RESP_COOKIES_EXP_DEFAULT_VALUE;
             if (reportedCookiesExpiration == null || reportedCookiesExpiration.equals(""))
                 reportedCookiesExpiration = REPORTED_COOKIES_EXP_DEFAULT_VALUE;
+            String selectedType = prefs.getValue(SCORE_TYPE, "");
+            List<ScoreTypeDTO> scoreTypes=npsTypeService.getScoreTypes(0,0);
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("respondedCookiesExpiration", respondedCookiesExpiration);
             parameters.put("reportedCookiesExpiration", reportedCookiesExpiration);
+            parameters.put("scoreTypes", scoreTypes);
+            parameters.put("selectedType", selectedType);
+
+
             return editTmpl.with(parameters).ok();
         } else {
             return indexTmpl.ok();
@@ -267,13 +277,14 @@ public class NPSFormController {
             PortletPreferences prefs = bridge.getPortletRequest().getPreferences();
             String respondedCookiesExpiration = prefs.getValue(RESP_COOKIES_EXP, RESP_COOKIES_EXP_DEFAULT_VALUE);
             String reportedCookiesExpiration = prefs.getValue(REPORTED_COOKIES_EXP, REPORTED_COOKIES_EXP_DEFAULT_VALUE);
+            String scoreTypeId = prefs.getValue(SCORE_TYPE, "");
             if (respondedCookiesExpiration == null || respondedCookiesExpiration.equals(""))
                 respondedCookiesExpiration = RESP_COOKIES_EXP_DEFAULT_VALUE;
             if (reportedCookiesExpiration == null || reportedCookiesExpiration.equals(""))
                 reportedCookiesExpiration = REPORTED_COOKIES_EXP_DEFAULT_VALUE;
-            if (!PropertyManager.isDevelopping() && bundleString != null && getResourceBundle().getLocale().equals(PortalRequestContext.getCurrentInstance().getLocale())) {
-                return Response.ok(bundleString);
-            }
+            if (scoreTypeId == null || scoreTypeId.equals(""))
+                scoreTypeId = "0";
+
             bundle = getResourceBundle(PortalRequestContext.getCurrentInstance().getLocale());
             JSON data = new JSON();
             Enumeration<String> enumeration = getResourceBundle().getKeys();
@@ -291,6 +302,7 @@ public class NPSFormController {
             data.set("fullName", profile.getFullName());
             data.set("respondedCookiesExpiration", respondedCookiesExpiration);
             data.set("reportedCookiesExpiration", reportedCookiesExpiration);
+            data.set("scoreTypeId", scoreTypeId);
 
             bundleString = data.toString();
             mktToken = getToken();
@@ -305,12 +317,13 @@ public class NPSFormController {
 
     @Action
     @Route("updateSettings")
-    public Response.Content updateSettings(String respondedCookiesExpiration, String reportedCookiesExpiration) throws Exception {
+    public Response.Content updateSettings(String respondedCookiesExpiration, String reportedCookiesExpiration,String typeId) throws Exception {
         Request request = Request.getCurrent();
         PortletRequestBridge bridge = (PortletRequestBridge) request.getBridge();
         PortletPreferences prefs = bridge.getPortletRequest().getPreferences();
         prefs.setValue(RESP_COOKIES_EXP, respondedCookiesExpiration);
         prefs.setValue(REPORTED_COOKIES_EXP, reportedCookiesExpiration);
+        prefs.setValue(SCORE_TYPE, typeId);
         prefs.store();
         return indexTmpl.ok();
     }

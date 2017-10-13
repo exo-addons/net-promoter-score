@@ -38,5 +38,22 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="nps-addon" id="1.0.0-3">
+
+    <createTable tableName="NPS_SCORE_TYPE">
+      <column name="ID" type="BIGINT" autoIncrement="${autoIncrement}" startWith="1">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="TYPE_NAME" type="NVARCHAR(50)"></column>
+      <column name="QUESTION" type="NVARCHAR(550)"></column>
+      <column name="IS_DEFAULT" type="BOOLEAN"/>
+    </createTable>
+
+
+    <addColumn tableName="NPS_SCORE_ENTRY">
+      <column name="TYPE_ID" type="BIGINT"/>
+    </addColumn>
+  </changeSet>
+
 
 </databaseChangeLog>

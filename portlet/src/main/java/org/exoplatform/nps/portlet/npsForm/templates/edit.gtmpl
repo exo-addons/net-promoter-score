@@ -14,8 +14,26 @@
 </div>
       </div>
 
+<div class="control-group" >
+<label class="control-label" for="typeId">Select Type</label>
+            <select class="controls" id="typeId" name="typeId">
+            <option value="0"></option>
+<% if (scoreTypes != null) {
+    scoreTypes.each { scoreType ->
+        def   typeName= scoreType.typeName;
+        def   typeId= scoreType.id;
+        def   selected = selectedType != null && scoreType.id.equals(selectedType)?'selected':'';
+        %>
+        <option value="${typeId}" ${selected}>${typeName}</option>
+<% }
+}
+%>
+</select>
+        </div>
+
+
 <div class="uiAction">
 <button type="submit" class="btn btn-primary input-large">Save</button>
         </div>
 </form>
-</div>
+        </div>
