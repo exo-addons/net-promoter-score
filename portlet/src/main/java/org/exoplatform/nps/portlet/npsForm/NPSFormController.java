@@ -274,6 +274,7 @@ public class NPSFormController {
         try {
             Request request = Request.getCurrent();
             PortletRequestBridge bridge = (PortletRequestBridge) request.getBridge();
+            String portletId = bridge.getWindowContext().getId();
             PortletPreferences prefs = bridge.getPortletRequest().getPreferences();
             String respondedCookiesExpiration = prefs.getValue(RESP_COOKIES_EXP, RESP_COOKIES_EXP_DEFAULT_VALUE);
             String reportedCookiesExpiration = prefs.getValue(REPORTED_COOKIES_EXP, REPORTED_COOKIES_EXP_DEFAULT_VALUE);
@@ -303,6 +304,7 @@ public class NPSFormController {
             data.set("respondedCookiesExpiration", respondedCookiesExpiration);
             data.set("reportedCookiesExpiration", reportedCookiesExpiration);
             data.set("scoreTypeId", scoreTypeId);
+            data.set("portletId", portletId);
 
             bundleString = data.toString();
             mktToken = getToken();

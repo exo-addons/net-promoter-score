@@ -12,7 +12,7 @@
     <div class="scoresDiv">
         <h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsChart}}</h4>
 </div>
-<h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsAddon.npsAdmin}}</h4>
+<h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsAdmin}}</h4>
 
 
 <select name="types" id="types" ng-model="typeId"
@@ -20,18 +20,12 @@ placeholder="{{i18n.serverUsername}}">
 <option ng-repeat="type in scoreTypes" value="{{type.id}}">{{type.typeName}} </option>
 </select>
 
-<input type="submit" id="getScores" class="btn btn-primary Submitbtn" value="Get Scores}" data-ng-click="loadData(typeId)"/>
-<input type="submit" id="addTypeScores" class="btn btn-primary Submitbtn" value="Add Score Type}" data-ng-click="showForm=true"/>
+<input type="submit" id="getScores" class="btn btn-primary Submitbtn" value="{{i18n.getScores}}" data-ng-click="loadData(typeId)"/>
+<input type="submit" id="addTypeScores" class="btn btn-primary Submitbtn" value="{{i18n.addScoreType}}" data-ng-click="showForm=true"/>
 
 <div id="typeForm" ng-show="showForm">
 <!--Start Type creation Form-->
 <form name="typeForm" class="form-horizontal">
-
-
-
-
-
-
 <div class="control-group {{usernameClass}}">
 <label class="control-label" for="typeName">{{i18n.typeName}}:</label>
 <div class="controls">
@@ -44,7 +38,7 @@ ng-model="newScoreType.typeName">
 
 
 <div class="control-group {{usernameClass}}">
-<label class="control-label" for="question">{{i18n.question}}:</label>
+<label class="control-label" for="question">{{i18n.typeQuestion}}:</label>
 <div class="controls">
 <input type="text" name="inputUsername" id="question"
 placeholder="{{i18n.serverUsername}}"
@@ -59,7 +53,7 @@ ng-model="newScoreType.question">
 class="control-group form-horizontal {{scoreTypeNameClass}}">
 <button type="button" class="btn" ng-click="showForm = false">{{i18n.cancel}}</button>
 <button type="button" class="btn btn-primary" id="saveType"
-ng-click="saveScoreType(newScoreType)">{{i18n.save}}
+ng-click="saveScoreType(newScoreType);showForm = false">{{i18n.save}}
 </button>
 
 </div>

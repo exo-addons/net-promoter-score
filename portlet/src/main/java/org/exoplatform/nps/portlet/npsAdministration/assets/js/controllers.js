@@ -129,6 +129,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                     ]}
                 ]};
                 $scope.pages=$scope.range();
+                $scope.getScoresbyType(typeId);
+
                 deferred.resolve(data);
 //                $scope.setResultMessage(data, "success");
             }, function errorCallback(data) {
