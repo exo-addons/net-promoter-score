@@ -88,6 +88,24 @@ ng-click="deleteScore(score)">
 </a>
 </td>
 
+    <!-- POPUP -->
+    <div class="npsAdminPopup"  ng-show="showDeletePopup">
+    <div class="UIPopupWindow uiPopup UIDragObject NormalStyle">
+        <div class="popupHeader ClearFix">
+            <a class="uiIconClose pull-right" aria-hidden="true" ng-click='showDeletePopup = false'></a>
+            <span class="PopupTitle popupTitle">{{i18n.deletePopupHeader}}</span>
+        </div>
+        <div class="PopupContent popupContent">
+            <p>{{i18n.deletePopupContent}} <span id="voteName"></span>{{i18n.deletePopupContentEnd}}</p>
+            <div class="uiAction uiActionBorder">
+                <button class="btn" ng-click="validatedDeleteScore(scoreToDelete)" type="button">Save</button>
+                <button class="btn" ng-click='showDeletePopup = false' type="button">Cancel</button>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- -->
+
 </tr>
 </tbody>
 <tfoot>
@@ -113,5 +131,6 @@ ng-click="deleteScore(score)">
 </div>
 
 </div>
+
 </div>
 
