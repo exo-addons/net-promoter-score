@@ -36,6 +36,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.itemsPerPage = 10;
         $scope.currentPage = 0;
         $scope.pages=[];
+        $scope.scoreToDelete=null;
+        $scope.showDeletePopup=false;
 
 
         $scope.setResultMessage = function (text, type) {
@@ -159,7 +161,14 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 }
 
         $scope.deleteScore = function(score) {
-            $scope.showAlert = false;
+            $scope.scoreToDelete = score;
+            $("#voteName").text(score.userFullName);
+            $scope.showDeletePopup = true;
+//            $(".npsAdminPopup").css("display", "block");
+        }
+
+        $scope.validatedDeleteScore = function(score) {
+            $scope.showDeletePopup = false;
             // $scope.setResultMessage($scope.i18n.savingScore, "info");
             $http({
                 data : score,
@@ -175,8 +184,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
             });
-
         }
+
 
         $scope.disableScore = function(score) {
             $scope.showAlert = false;

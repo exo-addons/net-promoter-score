@@ -50,7 +50,10 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
 
         $scope.loadContext = function() {
 
-        var cookies = ($cookies.get("_mkto_trk"));//.replace("&","%26").replace("&","%26");
+            var cookies = ($cookies.get("_mkto_trk"));
+            if(!angular.isUndefined(cookies)){
+                cookies.replace("&","%26");
+            }
             $http({
                 method : 'GET',
                 params: {mktCookie: cookies},
