@@ -59,6 +59,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                 $scope.i18n = data.data;
                 $scope.scoreTypeId = data.data.scoreTypeId;
                 $scope.portletId = data.data.portletId;
+                $scope.displayForm();
                 $scope.showAlert = false;
                 deferred.resolve(data);
             }, function errorCallback(data) {
@@ -113,7 +114,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                 $('#npsForm').css('display', 'none');
             }else{
                 $('#npsForm').css('display', 'block');
-                $scope.loadContext();
+
                 $scope.showForm = true;
                 $scope.showAlert = false;
             }
@@ -121,7 +122,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
 
         }
 
-        $scope.displayForm();
+        $scope.loadContext();
 
     };
     return npsFormCtrl;
