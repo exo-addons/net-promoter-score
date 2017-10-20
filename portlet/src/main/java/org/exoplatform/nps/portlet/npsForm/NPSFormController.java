@@ -271,9 +271,9 @@ public class NPSFormController {
                 respondedCookiesExpiration = RESP_COOKIES_EXP_DEFAULT_VALUE;
             if (reportedCookiesExpiration == null || reportedCookiesExpiration.equals(""))
                 reportedCookiesExpiration = REPORTED_COOKIES_EXP_DEFAULT_VALUE;
-            if (!PropertyManager.isDevelopping() && bundleString != null && getResourceBundle().getLocale().equals(PortalRequestContext.getCurrentInstance().getLocale())) {
+/*            if (!PropertyManager.isDevelopping() && bundleString != null && getResourceBundle().getLocale().equals(PortalRequestContext.getCurrentInstance().getLocale())) {
                 return Response.ok(bundleString);
-            }
+            }*/
             bundle = getResourceBundle(PortalRequestContext.getCurrentInstance().getLocale());
             JSON data = new JSON();
             Enumeration<String> enumeration = getResourceBundle().getKeys();
@@ -291,7 +291,7 @@ public class NPSFormController {
             data.set("fullName", profile.getFullName());
             data.set("respondedCookiesExpiration", respondedCookiesExpiration);
             data.set("reportedCookiesExpiration", reportedCookiesExpiration);
-
+            data.set("firstLogDiff", Utils.getDiffinDays(Utils.getFirstLoginDate(currentUser),Calendar.getInstance()));
             bundleString = data.toString();
             mktToken = getToken();
             mktLead = getMktLead(mktCookie);

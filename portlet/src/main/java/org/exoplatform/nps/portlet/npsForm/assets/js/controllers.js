@@ -49,6 +49,9 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
 
         $scope.loadContext = function() {
 
+            if(typeof $cookies.get("nps_status") != 'undefined'){
+                $('#npsForm').css('display', 'none');
+            }else{
             var cookies = ($cookies.get("_mkto_trk"));
             if(!angular.isUndefined(cookies)){
                 cookies.replace("&","%26");
@@ -59,11 +62,16 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                 url : npsFormContainer.jzURL('NPSFormController.getContext')
             }).then(function successCallback(data) {
                 $scope.i18n = data.data;
+                if($scope.i18n.firstLogDiff>10){
+                     $scope.showForm = true;
+                     $('#npsForm').css('display', 'block');
+                 }
                 $scope.showAlert = false;
                 deferred.resolve(data);
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
             });
+            }
         }
 
         $scope.saveScore = function() {
@@ -106,21 +114,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
         }
 
 
-        $scope.displayForm = function() {
-
-            if(typeof $cookies.get("nps_status") != 'undefined'){
-                $('#npsForm').css('display', 'none');
-            }else{
-                $('#npsForm').css('display', 'block');
-                $scope.loadContext();
-                $scope.showForm = true;
-                $scope.showAlert = false;
-            }
-            console.log($cookies.get("nps_status"));
-
-        }
-
-        $scope.displayForm();
+        $scope.loadContext();
 
     };
     return npsFormCtrl;
