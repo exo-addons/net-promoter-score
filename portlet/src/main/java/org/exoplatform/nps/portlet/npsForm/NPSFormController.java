@@ -74,6 +74,8 @@ public class NPSFormController {
     private static String RESP_COOKIES_EXP_DEFAULT_VALUE = "30";
     private static String REPORTED_COOKIES_EXP_DEFAULT_VALUE = "10";
     private static String REPORTED_COOKIES_EXP = "exo.nps.addon.reportedCookiesExpiration";
+    private static String SCORE_TYPE = "exo.nps.addon.selectedType";
+
 
     private String mktToken;
     private String mktLead;
