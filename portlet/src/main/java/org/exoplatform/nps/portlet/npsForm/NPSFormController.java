@@ -74,7 +74,6 @@ public class NPSFormController {
     private static String RESP_COOKIES_EXP_DEFAULT_VALUE = "30";
     private static String REPORTED_COOKIES_EXP_DEFAULT_VALUE = "10";
     private static String REPORTED_COOKIES_EXP = "exo.nps.addon.reportedCookiesExpiration";
-    private static String SCORE_TYPE = "exo.nps.addon.selectedType";
 
     private String mktToken;
     private String mktLead;
@@ -283,9 +282,9 @@ public class NPSFormController {
                 respondedCookiesExpiration = RESP_COOKIES_EXP_DEFAULT_VALUE;
             if (reportedCookiesExpiration == null || reportedCookiesExpiration.equals(""))
                 reportedCookiesExpiration = REPORTED_COOKIES_EXP_DEFAULT_VALUE;
-            if (scoreTypeId == null || scoreTypeId.equals(""))
-                scoreTypeId = "0";
-
+/*            if (!PropertyManager.isDevelopping() && bundleString != null && getResourceBundle().getLocale().equals(PortalRequestContext.getCurrentInstance().getLocale())) {
+                return Response.ok(bundleString);
+            }*/
             bundle = getResourceBundle(PortalRequestContext.getCurrentInstance().getLocale());
             JSON data = new JSON();
             Enumeration<String> enumeration = getResourceBundle().getKeys();
@@ -306,6 +305,7 @@ public class NPSFormController {
             data.set("scoreTypeId", scoreTypeId);
             data.set("portletId", portletId);
 
+            data.set("firstLogDiff", Utils.getDiffinDays(Utils.getFirstLoginDate(currentUser),Calendar.getInstance()));
             bundleString = data.toString();
             mktToken = getToken();
             mktLead = getMktLead(mktCookie);
@@ -325,7 +325,6 @@ public class NPSFormController {
         PortletPreferences prefs = bridge.getPortletRequest().getPreferences();
         prefs.setValue(RESP_COOKIES_EXP, respondedCookiesExpiration);
         prefs.setValue(REPORTED_COOKIES_EXP, reportedCookiesExpiration);
-        prefs.setValue(SCORE_TYPE, typeId);
         prefs.store();
         return indexTmpl.ok();
     }
