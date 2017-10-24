@@ -10,17 +10,15 @@
 
 <div style="padding-bottom: 20px;position: relative">
     <div class="scoresDiv">
-        <h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsChart}}</h4>
+        <h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsAdmin}}</h4>
 </div>
-<h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsAdmin}}</h4>
+<h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsChart}}</h4>
 
 
-<select name="types" id="types" ng-model="typeId"
-placeholder="{{i18n.serverUsername}}">
+<select name="types" id="types" ng-model="typeId" placeholder="{{i18n.serverUsername}}"  ng-change="getScoresbyType(typeId)">
 <option ng-repeat="type in scoreTypes" value="{{type.id}}">{{type.typeName}} </option>
 </select>
 
-<input type="submit" id="getScores" class="btn btn-primary Submitbtn" value="{{i18n.getScores}}" data-ng-click="loadData(typeId)"/>
 <input type="submit" id="addTypeScores" class="btn btn-primary Submitbtn" value="{{i18n.addScoreType}}" data-ng-click="showForm=true"/>
 
 <div id="typeForm" ng-show="showForm">

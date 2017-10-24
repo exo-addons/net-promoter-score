@@ -131,7 +131,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                     ]}
                 ]};
                 $scope.pages=$scope.range();
-                $scope.getScoresbyType(typeId);
+               // $scope.getScoresbyType(typeId);
 
                 deferred.resolve(data);
 //                $scope.setResultMessage(data, "success");
@@ -178,8 +178,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 },
                 url : npsAdminContainer.jzURL('NPSAdministrationController.deleteScore')
             }).then(function successCallback(data) {
-                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
                 $scope.loadData($scope.typeId);
+                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
                 $scope.setResultMessage($scope.i18n.scoreDeleted, "success");
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
@@ -198,8 +198,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 },
                 url : npsAdminContainer.jzURL('NPSAdministrationController.disableScore')
             }).then(function successCallback(data) {
-                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
                 $scope.loadData($scope.typeId);
+                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
                 $scope.setResultMessage($scope.i18n.scoreEnabled, "success");
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
@@ -218,8 +218,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 },
                 url : npsAdminContainer.jzURL('NPSAdministrationController.enableScore')
             }).then(function successCallback(data) {
-                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
                 $scope.loadData($scope.typeId);
+                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
                 $scope.setResultMessage($scope.i18n.scoreDisabled, "success");
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
