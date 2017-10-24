@@ -18,8 +18,7 @@
 <select name="types" id="types" ng-model="typeId" placeholder="{{i18n.serverUsername}}"  ng-change="getScoresbyType(typeId)">
 <option ng-repeat="type in scoreTypes" value="{{type.id}}">{{type.typeName}} </option>
 </select>
-
-<input type="submit" id="addTypeScores" class="btn btn-primary Submitbtn" value="{{i18n.addScoreType}}" data-ng-click="showForm=true"/>
+<a class="actionIcon"   data-original-title="Add Score" ng-click="showForm=true"> <i class="uiIconPlus uiIconLightGray" style=" font-size: 24px;"></i> </a>
 
 <div id="typeForm" ng-show="showForm">
 <!--Start Type creation Form-->
@@ -28,7 +27,6 @@
 <label class="control-label" for="typeName">{{i18n.typeName}}:</label>
 <div class="controls">
 <input type="text" name="inputUsername" id="type"
-placeholder="{{i18n.serverUsername}}"
 ng-model="newScoreType.typeName">
 
 </div>
