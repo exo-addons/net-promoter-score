@@ -20,10 +20,18 @@
 </select>
 <a class="actionIcon"   data-original-title="Add Score" ng-click="showForm=true"> <i class="uiIconPlus uiIconLightGray" style=" font-size: 24px;"></i> </a>
 
-<div id="typeForm" ng-show="showForm">
-<!--Start Type creation Form-->
-<form name="typeForm" class="form-horizontal">
-<div class="control-group {{usernameClass}}">
+
+
+<!-- POPUP -->
+<div id="typeForm" class="npsAdminPopup"  ng-show="showForm">
+<div class="UIPopupWindow uiPopup UIDragObject NormalStyle">
+<div class="popupHeader ClearFix">
+<a class="uiIconClose pull-right" aria-hidden="true" ng-click='showForm = false'></a>
+            <span class="PopupTitle popupTitle">{{i18n.addScoreType}}</span>
+</div>
+        <div class="PopupContent popupContent">
+            
+			<div class="control-group {{usernameClass}}">
 <label class="control-label" for="typeName">{{i18n.typeName}}:</label>
 <div class="controls">
 <input type="text" name="inputUsername" id="type"
@@ -42,20 +50,20 @@ ng-model="newScoreType.question">
 
 </div>
 </div>
-
-
-
-<div id="scoreSaveAs"
-class="control-group form-horizontal {{scoreTypeNameClass}}">
+			
+            <div class="uiAction uiActionBorder">
 <button type="button" class="btn" ng-click="showForm = false">{{i18n.cancel}}</button>
 <button type="button" class="btn btn-primary" id="saveType"
 ng-click="saveScoreType(newScoreType);showForm = false">{{i18n.save}}
 </button>
+            </div>
+</div>
+    </div>
+</div>
+    <!-- -->
+	
 
-</div>
-</form>
-<!--End Type creation Form-->
-</div>
+
 
 <div class="span10" style="float: none; margin: auto; height: auto">
 <div google-chart class="span4" chart="gaugeChartObject" style="height:450px"></div>

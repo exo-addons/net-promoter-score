@@ -16,7 +16,7 @@
             </div>
 
             <div ng-show="showForm">
-                <h4>{{i18n.hi}} {{i18n.fullName}},<br/><br/> {{i18n.messageForm}}</h4>
+                <h4>{{i18n.hi}} {{i18n.fullName}},<br/><br/> {{scoreTypeMessage}}</h4>
                 <span class="close"><i class="uiIconClose"></i></span>
                 <form id="npsForm">
                     <div class="npsRadio">

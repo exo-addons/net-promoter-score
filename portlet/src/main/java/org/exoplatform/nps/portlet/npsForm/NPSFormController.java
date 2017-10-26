@@ -300,12 +300,15 @@ public class NPSFormController {
             }
             Profile profile = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, currentUser, false).getProfile();
 
+            ScoreTypeDTO  sType = npsTypeService.getScoreType(Long.parseLong(scoreTypeId));
+
             data.set("currentUser", currentUser);
             data.set("fullName", profile.getFullName());
             data.set("respondedCookiesExpiration", respondedCookiesExpiration);
             data.set("reportedCookiesExpiration", reportedCookiesExpiration);
             data.set("scoreTypeId", scoreTypeId);
             data.set("portletId", portletId);
+            data.set("scoreTypeMessage", sType.getQuestion());
 
             data.set("firstLogDiff", Utils.getDiffinDays(Utils.getFirstLoginDate(currentUser),Calendar.getInstance()));
             bundleString = data.toString();
@@ -313,8 +316,8 @@ public class NPSFormController {
             mktLead = getMktLead(mktCookie);
 
             return Response.ok(bundleString);
-        } catch (Throwable e) {
-            log.error("error while getting bundele", e);
+        } catch (Exception e) {
+            log.error("error while getting context", e);
             return Response.status(500);
         }
     }
@@ -327,6 +330,7 @@ public class NPSFormController {
         PortletPreferences prefs = bridge.getPortletRequest().getPreferences();
         prefs.setValue(RESP_COOKIES_EXP, respondedCookiesExpiration);
         prefs.setValue(REPORTED_COOKIES_EXP, reportedCookiesExpiration);
+        prefs.setValue(SCORE_TYPE, typeId);
         prefs.store();
         return indexTmpl.ok();
     }

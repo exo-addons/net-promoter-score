@@ -22,7 +22,7 @@
     scoreTypes.each { scoreType ->
         def   typeName= scoreType.typeName;
         def   typeId= scoreType.id;
-        def   selected = selectedType != null && typeId==selectedType?'selected':'';
+        def   selected = selectedType != null && typeId.toString().equals(selectedType.toString())?'selected':'';
         %>
         <option value="${typeId}" ${selected}>${typeName}</option>
 <% }
