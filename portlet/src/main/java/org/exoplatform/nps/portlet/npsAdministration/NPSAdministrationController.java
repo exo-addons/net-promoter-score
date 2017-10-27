@@ -151,6 +151,15 @@ public class NPSAdministrationController {
     }
   }
 
+  @Ajax
+  @juzu.Resource
+  @MimeType.JSON
+  @Jackson
+  public ScoreTypeDTO getScoreTypeById (Long id) {
+
+    return npsTypeService.getScoreType(id);
+
+  }
 
   @Ajax
   @Resource(method = HttpMethod.POST)
@@ -161,6 +170,17 @@ public class NPSAdministrationController {
     npsTypeService.save(obj,true);
 
   }
+
+  @Ajax
+  @Resource(method = HttpMethod.POST)
+  @MimeType.JSON
+  @Jackson
+  public void updateType(@Jackson ScoreTypeDTO obj) {
+
+    npsTypeService.save(obj,false);
+
+  }
+
 
   @Ajax
   @Resource(method = HttpMethod.POST)

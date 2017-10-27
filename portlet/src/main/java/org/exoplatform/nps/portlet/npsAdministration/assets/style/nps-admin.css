@@ -120,6 +120,7 @@ div#resultMessage {
     width: 100%;
     left: 0;
     right: 0;
+    z-index: 10;
 }
 .npsAdminPopup > div{
     position: relative;
@@ -127,4 +128,5 @@ div#resultMessage {
     margin: 0 auto 20px;
     z-index: 1;
     max-width: 100%;
+
 }

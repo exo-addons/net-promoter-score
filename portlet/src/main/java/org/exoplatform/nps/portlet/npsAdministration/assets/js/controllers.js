@@ -3,6 +3,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         var npsAdminContainer = $('#npsAdmin');
         var deferred = $q.defer();
         $scope.newScoreType = null;
+        $scope.scoreTypeToEdit = null;
+        $scope.showEditForm = false;
         $scope.typeId = 0;
         $scope.showForm = false;
         $scope.scores  = [];
@@ -159,6 +161,42 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                     });
 
                 }
+
+                 $scope.upadteScoreType= function(newScoreType)
+                 {
+                             $scope.showAlert = false;
+                             // $scope.setResultMessage($scope.i18n.savingScore, "info");
+                             $http({
+                                 data : newScoreType,
+                                 method : 'POST',
+                                 headers : {
+                                     'Content-Type' : 'application/json'
+                                 },
+                                 url : npsAdminContainer.jzURL('NPSAdministrationController.updateType')
+                             }).then(function successCallback(data) {
+                                 $scope.setResultMessage($scope.i18n.typeSaved, "success");
+                                 $scope.loadScoreTypes();
+                             }, function errorCallback(data) {
+                                 $scope.setResultMessage($scope.i18n.defaultError, "error");
+                             });
+
+                         }
+
+
+
+                $scope.getScoreType = function (id) {
+                    $http({
+                        method: 'GET',
+                        url: npsAdminContainer.jzURL('NPSAdministrationController.getScoreTypeById')+ "&id=" +id
+                    }).then(function successCallback(data) {
+                        $scope.scoreTypeToEdit = data.data;
+                        $scope.showAlert = false;
+                        $scope.showEditForm = true;
+                    }, function errorCallback(data) {
+                        $scope.setResultMessage($scope.i18n.defaultError, "error");
+                    });
+
+                };
 
         $scope.deleteScore = function(score) {
             $scope.scoreToDelete = score;
