@@ -51,9 +51,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
 
         $scope.loadContext = function() {
 
-            if(typeof $cookies.get("nps_status") != 'undefined'){
-                $('#npsForm').css('display', 'none');
-            }else{
+
             var cookies = ($cookies.get("_mkto_trk"));
             if(!angular.isUndefined(cookies)){
                 cookies.replace("&","%26");
@@ -64,22 +62,27 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                 url : npsFormContainer.jzURL('NPSFormController.getContext')
             }).then(function successCallback(data) {
                 $scope.i18n = data.data;
-                if($scope.i18n.firstLogDiff>10){
+                $scope.scoreTypeId = data.data.scoreTypeId;
+                $scope.portletId = data.data.portletId;
+                if($scope.i18n.firstLogDiff>10 && typeof $cookies.get("nps_status-"+$scope.portletId) == 'undefined'){
+
+                        $scope.scoreTypeMessage = data.data.scoreTypeMessage;
+                         if ($scope.scoreTypeMessage==null||$scope.scoreTypeMessage==""){
+                         $scope.scoreTypeMessage=data.data.messageForm;
+                         }
+
                      $scope.showForm = true;
                      $('#npsForm').css('display', 'block');
+                 }else{
+                  $('#npsForm').css('display', 'none');
                  }
-                $scope.scoreTypeId = data.data.scoreTypeId;
-                $scope.scoreTypeMessage = data.data.scoreTypeMessage;
-                if ($scope.scoreTypeMessage==null||$scope.scoreTypeMessage==""){
-                $scope.scoreTypeMessage=data.data.messageForm;
-                }
-                $scope.portletId = data.data.portletId;
+
                 $scope.showAlert = false;
                 deferred.resolve(data);
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
             });
-            }
+
         }
 
         $scope.saveScore = function() {
