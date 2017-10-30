@@ -18,10 +18,9 @@
 <select name="types" id="types" ng-model="typeId" placeholder="{{i18n.serverUsername}}"  ng-change="getScoresbyType(typeId)">
 <option ng-repeat="type in scoreTypes" value="{{type.id}}">{{type.typeName}} </option>
 </select>
-<a class="actionIcon"   data-original-title="Add Score" ng-click="showForm=true"> <i class="uiIconPlus uiIconLightGray" style=" font-size: 24px;"></i> </a>
+
 <a class="actionIcon"   data-original-title="Edit Score" ng-click="getScoreType(typeId)"> <i class="uiIconEdit uiIconLightGray" style=" font-size: 24px;"></i> </a>
-
-
+<a class="actionIcon"   data-original-title="Add Score" ng-click="showForm=true"> <i class="uiIconPlus uiIconLightGray" style=" font-size: 24px;"></i> </a>
 
 <!--ADD POPUP -->
 <div id="typeForm" class="npsAdminPopup"  ng-show="showForm">
@@ -68,7 +67,7 @@ ng-click="saveScoreType(newScoreType);showForm = false">{{i18n.save}}
 <div id="typeEditForm" class="npsAdminPopup"  ng-show="showEditForm">
 <div class="UIPopupWindow uiPopup UIDragObject NormalStyle">
 <div class="popupHeader ClearFix">
-<a class="uiIconClose pull-right" aria-hidden="true" ng-click='showForm = false'></a>
+<a class="uiIconClose pull-right" aria-hidden="true" ng-click='showEditForm = false'></a>
             <span class="PopupTitle popupTitle">{{i18n.editScoreType}}</span>
 </div>
         <div class="PopupContent popupContent">
