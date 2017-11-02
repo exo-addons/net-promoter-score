@@ -4,224 +4,237 @@
         <div id="resultMessage" ng-show="showAlert"
              class="result-message userSearch alert {{resultMessageClass}}">
             <i class="{{resultMessageClassExt}}"></i> {{resultMessage}}
-</div>
+        </div>
         <div id="npsAdminApplication">
+            <div style="padding-bottom: 20px;position: relative">
+                <!--<div class="scoresDiv">-->
+                    <!--<h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsAdmin}}</h4>-->
+                <!--</div>-->
+                <div class="scoresDiv">
+                    <h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsChart}}</h4>
+                </div>
+                <div class="scoresDiv">
+                    <div class="scoreManagement">
+                        <h3 class="primaryColor lead">{{i18n.scoreManagement}}</h3>
+                        <select name="types" id="types" ng-model="typeId" placeholder="{{i18n.serverUsername}}"
+                                ng-change="getScoresbyType(typeId)">
+                            <option ng-repeat="type in scoreTypes" value="{{type.id}}">{{type.typeName}}</option>
+                        </select>
+
+                        <a class="actionIcon" data-original-title="Edit Score" ng-click="getScoreType(typeId)"> <i
+                                class="uiIconEdit uiIconLightGray" style=" font-size: 24px;"></i> </a>
+                        <a class="actionIcon" data-original-title="Add Score" ng-click="showForm=true"> <i
+                                class="uiIconPlus uiIconLightGray" style=" font-size: 24px;"></i> </a>
+                    </div>
+                </div>
+                <!--ADD POPUP -->
+                <div id="typeForm" class="npsAdminPopup" ng-show="showForm">
+                    <div class="UIPopupWindow uiPopup UIDragObject NormalStyle">
+                        <div class="popupHeader ClearFix">
+                            <a class="uiIconClose pull-right" aria-hidden="true" ng-click='showForm = false'></a>
+                            <span class="PopupTitle popupTitle">{{i18n.addScoreType}}</span>
+                        </div>
+                        <div class="PopupContent popupContent">
+
+                            <div class="control-group {{usernameClass}}">
+                                <label class="control-label" for="typeName">{{i18n.typeName}}:</label>
+                                <div class="controls">
+                                    <input type="text" name="inputUsername" id="type"
+                                           ng-model="newScoreType.typeName">
+
+                                </div>
+                            </div>
 
 
-<div style="padding-bottom: 20px;position: relative">
-    <div class="scoresDiv">
-        <h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsAdmin}}</h4>
-</div>
-<h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsChart}}</h4>
+                            <div class="control-group {{usernameClass}}">
+                                <label class="control-label" for="question">{{i18n.typeQuestion}}:</label>
+                                <div class="controls">
+                                    <input type="text" name="inputUsername" id="question"
+                                           placeholder="{{i18n.serverUsername}}"
+                                           ng-model="newScoreType.question">
+
+                                </div>
+                            </div>
+
+                            <div class="uiAction uiActionBorder">
+                                <button type="button" class="btn" ng-click="showForm = false">{{i18n.cancel}}</button>
+                                <button type="button" class="btn btn-primary" id="saveType"
+                                        ng-click="saveScoreType(newScoreType);showForm = false">{{i18n.save}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--END ADD POPUP -->
 
 
-<select name="types" id="types" ng-model="typeId" placeholder="{{i18n.serverUsername}}"  ng-change="getScoresbyType(typeId)">
-<option ng-repeat="type in scoreTypes" value="{{type.id}}">{{type.typeName}} </option>
-</select>
+                <!--EDIT POPUP -->
+                <div id="typeEditForm" class="npsAdminPopup" ng-show="showEditForm">
+                    <div class="UIPopupWindow uiPopup UIDragObject NormalStyle">
+                        <div class="popupHeader ClearFix">
+                            <a class="uiIconClose pull-right" aria-hidden="true" ng-click='showEditForm = false'></a>
+                            <span class="PopupTitle popupTitle">{{i18n.editScoreType}}</span>
+                        </div>
+                        <div class="PopupContent popupContent">
 
-<a class="actionIcon"   data-original-title="Edit Score" ng-click="getScoreType(typeId)"> <i class="uiIconEdit uiIconLightGray" style=" font-size: 24px;"></i> </a>
-<a class="actionIcon"   data-original-title="Add Score" ng-click="showForm=true"> <i class="uiIconPlus uiIconLightGray" style=" font-size: 24px;"></i> </a>
+                            <div class="control-group {{usernameClass}}">
+                                <label class="control-label" for="typeName">{{i18n.typeName}}:</label>
+                                <div class="controls">
+                                    <input type="text" name="inputUsername" id="type"
+                                           ng-model="scoreTypeToEdit.typeName">
 
-<!--ADD POPUP -->
-<div id="typeForm" class="npsAdminPopup"  ng-show="showForm">
-<div class="UIPopupWindow uiPopup UIDragObject NormalStyle">
-<div class="popupHeader ClearFix">
-<a class="uiIconClose pull-right" aria-hidden="true" ng-click='showForm = false'></a>
-            <span class="PopupTitle popupTitle">{{i18n.addScoreType}}</span>
-</div>
-        <div class="PopupContent popupContent">
-            
-			<div class="control-group {{usernameClass}}">
-<label class="control-label" for="typeName">{{i18n.typeName}}:</label>
-<div class="controls">
-<input type="text" name="inputUsername" id="type"
-ng-model="newScoreType.typeName">
-
-</div>
-</div>
+                                </div>
+                            </div>
 
 
-<div class="control-group {{usernameClass}}">
-<label class="control-label" for="question">{{i18n.typeQuestion}}:</label>
-<div class="controls">
-<input type="text" name="inputUsername" id="question"
-placeholder="{{i18n.serverUsername}}"
-ng-model="newScoreType.question">
+                            <div class="control-group {{usernameClass}}">
+                                <label class="control-label" for="question">{{i18n.typeQuestion}}:</label>
+                                <div class="controls">
+                                    <input type="text" name="inputUsername" id="question"
+                                           placeholder="{{i18n.serverUsername}}"
+                                           ng-model="scoreTypeToEdit.question">
 
-</div>
-</div>
-			
-            <div class="uiAction uiActionBorder">
-<button type="button" class="btn" ng-click="showForm = false">{{i18n.cancel}}</button>
-<button type="button" class="btn btn-primary" id="saveType"
-ng-click="saveScoreType(newScoreType);showForm = false">{{i18n.save}}
-</button>
+                                </div>
+                            </div>
+
+                            <div class="uiAction uiActionBorder">
+                                <button type="button" class="btn" ng-click="showEditForm = false">{{i18n.cancel}}
+                                </button>
+                                <button type="button" class="btn btn-primary" id="saveType"
+                                        ng-click="upadteScoreType(scoreTypeToEdit);showEditForm = false">{{i18n.save}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--END ADD POPUP -->
+
+
+                <div class="span10" style="float: none; margin: auto; height: auto" ng-show="showGraphs">
+                    <div google-chart class="span4" chart="gaugeChartObject" style="height:450px"></div>
+                    <div google-chart class="span4" chart="pieChartObject" style="height:450px;float: right"></div>
+                </div>
             </div>
-</div>
-    </div>
-</div>
-    <!--END ADD POPUP -->
-	
+            <div class="scoresDiv" ng-show="showGraphs">
+                <h4 class="titleWithBorder pull-left" style="width: 100%">{{scorsnbr}} {{i18n.rates}} </h4>
 
-<!--EDIT POPUP -->
-<div id="typeEditForm" class="npsAdminPopup"  ng-show="showEditForm">
-<div class="UIPopupWindow uiPopup UIDragObject NormalStyle">
-<div class="popupHeader ClearFix">
-<a class="uiIconClose pull-right" aria-hidden="true" ng-click='showEditForm = false'></a>
-            <span class="PopupTitle popupTitle">{{i18n.editScoreType}}</span>
-</div>
-        <div class="PopupContent popupContent">
+                <table id="scoresTable" class="table uiGrid table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th><a href="#" ng-click="orderByField = 'title'; reverseSort = !reverseSort">{{i18n.userFullName}}
+                            <img ng-show="orderByField == 'title' && !reverseSort"
+                                 src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueDownArrow.gif">
+                            <img ng-show="orderByField == 'title' && reverseSort"
+                                 src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
+                        </a>
+                        </th>
+                        <th><a href="#" ng-click="orderByField = 'type'; reverseSort = !reverseSort">{{i18n.rate}}
+                            <img ng-show="orderByField == 'type' && !reverseSort"
+                                 src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueDownArrow.gif">
+                            <img ng-show="orderByField == 'type' && reverseSort"
+                                 src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
+                        </a>
+                        </th>
+                        <th><a href="#" ng-click="orderByField = 'severity'; reverseSort = !reverseSort">{{i18n.comment}}
+                            <img ng-show="orderByField == 'severity' && !reverseSort"
+                                 src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueDownArrow.gif">
+                            <img ng-show="orderByField == 'severity' && reverseSort"
+                                 src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
+                        </a>
+                        </th>
+                        <th><a href="#" ng-click="orderByField = 'startDate'; reverseSort = !reverseSort">{{i18n.responseDate}}
+                            <img ng-show="orderByField == 'startDate' && !reverseSort"
+                                 src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueDownArrow.gif">
+                            <img ng-show="orderByField == 'startDate' && reverseSort"
+                                 src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
+                        </a>
+                        </th>
+                        <th>{{i18n.actions}}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="score in scores| orderBy:orderByField:reverseSort">
+                        <td>
+                            <span><a href="/portal/intranet/profile/{{score.userId}}">{{score.userFullName}}</a></span>
+                        </td>
+                        <td>
+                            <span>{{score.score}}</span>
+                        </td>
+                        <td>
+                            <span>{{score.comment}}</span>
+                        </td>
+                        <td>
+                            <span>{{score.postedTime | date:'d MMM y HH:mm:ss'}}</span>
+                        </td>
+                        <td>
+                            <!--<a ng-if="score.enabled == true" data-placement="right" data-original-title="Disable" ng-click="disableScore(score)">Disable</a>-->
+                            <!--<a ng-if="score.enabled == false" data-placement="right" data-original-title="Disable" ng-click="enableScore(score)">Enable</a>-->
 
-			<div class="control-group {{usernameClass}}">
-<label class="control-label" for="typeName">{{i18n.typeName}}:</label>
-<div class="controls">
-<input type="text" name="inputUsername" id="type" ng-model="scoreTypeToEdit.typeName">
 
-</div>
-</div>
+                            <label class="switch">
+                                <input type="checkbox" ng-model="score.enabled" data-placement="right"
+                                       data-original-title="Enable / Disable"
+                                       ng-click="checkState(score, score.enabled)">
+                                <span class="slider round"></span>
+                            </label>
 
 
-<div class="control-group {{usernameClass}}">
-<label class="control-label" for="question">{{i18n.typeQuestion}}:</label>
-<div class="controls">
-<input type="text" name="inputUsername" id="question"
-placeholder="{{i18n.serverUsername}}"
-ng-model="scoreTypeToEdit.question">
+                            <a class="actionIconde" data-placement="right"
+                               data-original-title="Delete "
+                               ng-click="deleteScore(score)">
+                                <i class="uiIconDeleteUser uiIconLightGray"></i>
+                            </a>
+                        </td>
 
-</div>
-</div>
+                        <!-- POPUP -->
+                        <div class="npsAdminPopup" ng-show="showDeletePopup">
+                            <div class="UIPopupWindow uiPopup UIDragObject NormalStyle">
+                                <div class="popupHeader ClearFix">
+                                    <a class="uiIconClose pull-right" aria-hidden="true"
+                                       ng-click='showDeletePopup = false'></a>
+                                    <span class="PopupTitle popupTitle">{{i18n.deletePopupHeader}}</span>
+                                </div>
+                                <div class="PopupContent popupContent">
+                                    <p>{{i18n.deletePopupContent}} <span id="voteName"></span>{{i18n.deletePopupContentEnd}}
+                                    </p>
+                                    <div class="uiAction uiActionBorder">
+                                        <button class="btn" ng-click="validatedDeleteScore(scoreToDelete)"
+                                                type="button">Save
+                                        </button>
+                                        <button class="btn" ng-click='showDeletePopup = false' type="button">Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- -->
 
-            <div class="uiAction uiActionBorder">
-<button type="button" class="btn" ng-click="showEditForm = false">{{i18n.cancel}}</button>
-<button type="button" class="btn btn-primary" id="saveType"
-ng-click="upadteScoreType(scoreTypeToEdit);showEditForm = false">{{i18n.save}}
-</button>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <td colspan="5">
+                        <div class="pagination">
+                            <ul>
+                                <li ng-class="prevPageDisabled()">
+                                    <a href ng-click="prevPage()"><i class="uiIconArrowLeft"></i> Prev</a>
+                                </li>
+                                <li ng-repeat="n in pages" ng-class="{active: n == currentPage}" ng-click="setPage(n)">
+                                    <a href="#">{{n+1}}</a>
+                                </li>
+                                <li ng-class="nextPageDisabled()">
+                                    <a href ng-click="nextPage()">Next <i class="uiIconArrowRight"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                    </tfoot>
+                </table>
             </div>
-</div>
-    </div>
-</div>
-    <!--END ADD POPUP -->
 
-
-
-<div class="span10" style="float: none; margin: auto; height: auto">
-<div google-chart class="span4" chart="gaugeChartObject" style="height:450px"></div>
-<div google-chart class="span4" chart="pieChartObject" style="height:450px;float: right"></div>
-</div>
-</div>
-<div class="scoresDiv">
-<h4 class="titleWithBorder pull-left" style="width: 100%">{{scorsnbr}} {{i18n.rates}} </h4>
-
-<table id="scoresTable" class="table uiGrid table-hover table-striped">
-<thead>
-<tr>
-<th><a href="#" ng-click="orderByField = 'title'; reverseSort = !reverseSort">{{i18n.userFullName}}
-<img ng-show="orderByField == 'title' && !reverseSort"
-src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueDownArrow.gif">
-<img ng-show="orderByField == 'title' && reverseSort"
-src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
-</a>
-                                </th>
-<th><a href="#" ng-click="orderByField = 'type'; reverseSort = !reverseSort">{{i18n.rate}}
-<img ng-show="orderByField == 'type' && !reverseSort"
-src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueDownArrow.gif">
-<img ng-show="orderByField == 'type' && reverseSort"
-src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
-</a>
-                                </th>
-<th><a href="#" ng-click="orderByField = 'severity'; reverseSort = !reverseSort">{{i18n.comment}}
-<img ng-show="orderByField == 'severity' && !reverseSort"
-src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueDownArrow.gif">
-<img ng-show="orderByField == 'severity' && reverseSort"
-src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
-</a>
-                                </th>
-<th><a href="#" ng-click="orderByField = 'startDate'; reverseSort = !reverseSort">{{i18n.responseDate}}
-<img ng-show="orderByField == 'startDate' && !reverseSort"
-src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueDownArrow.gif">
-<img ng-show="orderByField == 'startDate' && reverseSort"
-src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
-</a>
-                                </th>
-<th>{{i18n.actions}}
-</th>
-</tr>
-</thead>
-<tbody>
-<tr ng-repeat="score in scores| orderBy:orderByField:reverseSort">
-<td>
-<span><a href="/portal/intranet/profile/{{score.userId}}">{{score.userFullName}}</a></span>
-</td>
-<td>
-<span>{{score.score}}</span>
-</td>
-<td>
-<span>{{score.comment}}</span>
-</td>
-<td>
-<span>{{score.postedTime | date:'d MMM y HH:mm:ss'}}</span>
-</td>
-<td>
-<!--<a ng-if="score.enabled == true" data-placement="right" data-original-title="Disable" ng-click="disableScore(score)">Disable</a>-->
-<!--<a ng-if="score.enabled == false" data-placement="right" data-original-title="Disable" ng-click="enableScore(score)">Enable</a>-->
-
-
-    <label class="switch">
-        <input type="checkbox" ng-model="score.enabled" data-placement="right" data-original-title="Enable / Disable" ng-click="checkState(score, score.enabled)">
-<span class="slider round"></span>
-    </label>
-
-
-<a class="actionIconde" data-placement="right"
-data-original-title="Delete "
-ng-click="deleteScore(score)">
-<i class="uiIconDeleteUser uiIconLightGray"></i>
-</a>
-</td>
-
-    <!-- POPUP -->
-    <div class="npsAdminPopup"  ng-show="showDeletePopup">
-    <div class="UIPopupWindow uiPopup UIDragObject NormalStyle">
-        <div class="popupHeader ClearFix">
-            <a class="uiIconClose pull-right" aria-hidden="true" ng-click='showDeletePopup = false'></a>
-            <span class="PopupTitle popupTitle">{{i18n.deletePopupHeader}}</span>
         </div>
-        <div class="PopupContent popupContent">
-            <p>{{i18n.deletePopupContent}} <span id="voteName"></span>{{i18n.deletePopupContentEnd}}</p>
-            <div class="uiAction uiActionBorder">
-                <button class="btn" ng-click="validatedDeleteScore(scoreToDelete)" type="button">Save</button>
-                <button class="btn" ng-click='showDeletePopup = false' type="button">Cancel</button>
-            </div>
-        </div>
+
     </div>
-    </div>
-    <!-- -->
-
-</tr>
-</tbody>
-<tfoot>
-<td colspan="5">
-<div class="pagination">
-<ul>
-<li ng-class="prevPageDisabled()">
-<a href ng-click="prevPage()"><i class="uiIconArrowLeft"></i> Prev</a>
-</li>
-<li ng-repeat="n in pages" ng-class="{active: n == currentPage}" ng-click="setPage(n)">
-<a href="#">{{n+1}}</a>
-</li>
-<li ng-class="nextPageDisabled()">
-<a href ng-click="nextPage()">Next <i class="uiIconArrowRight"></i></a>
-</li>
-</ul>
-</div>
-</td>
-</tfoot>
-</table>
-</div>
-
-</div>
-
-</div>
 
 </div>
 

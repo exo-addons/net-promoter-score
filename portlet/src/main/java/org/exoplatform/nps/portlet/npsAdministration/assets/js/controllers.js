@@ -7,6 +7,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.showEditForm = false;
         $scope.typeId = 0;
         $scope.showForm = false;
+        $scope.showGraphs = false;
         $scope.scores  = [];
         $scope.scoreTypes  = [];
         $scope.scoresSum=0;
@@ -326,6 +327,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 $scope.typeId=typeId;
                 $scope.loadData(typeId);
                 $scope.loadScores(typeId,0, $scope.itemsPerPage);
+
+                $scope.showGraphs = true;
         };
 
         $scope.loadBundle();
