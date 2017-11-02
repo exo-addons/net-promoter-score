@@ -75,7 +75,10 @@ public class NPSFormController {
     private static String REPORTED_COOKIES_EXP_DEFAULT_VALUE = "10";
     private static String REPORTED_COOKIES_EXP = "exo.nps.addon.reportedCookiesExpiration";
     private static String SCORE_TYPE = "exo.nps.addon.selectedType";
-
+    private static String FIRST_DISPLAY_DELAY = "exo.nps.addon.firstDisplayDelay";
+    private static String FIRST_DISPLAY_DELAY_DEFAULT_VALUE = "10";
+    private static String DISPLAY_POPUP= "exo.nps.addon.displayPopup";
+    private static String DISPLAY_POPUP_DEFAULT_VALUE = "false";
 
     private String mktToken;
     private String mktLead;
@@ -97,12 +100,16 @@ public class NPSFormController {
             if (reportedCookiesExpiration == null || reportedCookiesExpiration.equals(""))
                 reportedCookiesExpiration = REPORTED_COOKIES_EXP_DEFAULT_VALUE;
             String selectedType = prefs.getValue(SCORE_TYPE, "");
+            String firstDisplayDelay = prefs.getValue(FIRST_DISPLAY_DELAY, FIRST_DISPLAY_DELAY_DEFAULT_VALUE);
+            if (firstDisplayDelay == null || firstDisplayDelay.equals(""))
+                firstDisplayDelay = FIRST_DISPLAY_DELAY_DEFAULT_VALUE;
             List<ScoreTypeDTO> scoreTypes=npsTypeService.getScoreTypes(0,0);
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("respondedCookiesExpiration", respondedCookiesExpiration);
             parameters.put("reportedCookiesExpiration", reportedCookiesExpiration);
             parameters.put("scoreTypes", scoreTypes);
             parameters.put("selectedType", selectedType);
+            parameters.put("firstDisplayDelay", firstDisplayDelay);
 
 
             return editTmpl.with(parameters).ok();
@@ -280,10 +287,13 @@ public class NPSFormController {
             String respondedCookiesExpiration = prefs.getValue(RESP_COOKIES_EXP, RESP_COOKIES_EXP_DEFAULT_VALUE);
             String reportedCookiesExpiration = prefs.getValue(REPORTED_COOKIES_EXP, REPORTED_COOKIES_EXP_DEFAULT_VALUE);
             String scoreTypeId = prefs.getValue(SCORE_TYPE, "");
+            String firstDisplayDelay = prefs.getValue(FIRST_DISPLAY_DELAY, FIRST_DISPLAY_DELAY_DEFAULT_VALUE);
             if (respondedCookiesExpiration == null || respondedCookiesExpiration.equals(""))
                 respondedCookiesExpiration = RESP_COOKIES_EXP_DEFAULT_VALUE;
             if (reportedCookiesExpiration == null || reportedCookiesExpiration.equals(""))
                 reportedCookiesExpiration = REPORTED_COOKIES_EXP_DEFAULT_VALUE;
+            if (firstDisplayDelay == null || firstDisplayDelay.equals(""))
+                firstDisplayDelay = FIRST_DISPLAY_DELAY_DEFAULT_VALUE;
 /*            if (!PropertyManager.isDevelopping() && bundleString != null && getResourceBundle().getLocale().equals(PortalRequestContext.getCurrentInstance().getLocale())) {
                 return Response.ok(bundleString);
             }*/
@@ -309,6 +319,7 @@ public class NPSFormController {
             data.set("scoreTypeId", scoreTypeId);
             data.set("portletId", portletId);
             data.set("scoreTypeMessage", sType.getQuestion());
+            data.set("firstDisplayDelay", firstDisplayDelay);
 
             data.set("firstLogDiff", Utils.getDiffinDays(Utils.getFirstLoginDate(currentUser),Calendar.getInstance()));
             bundleString = data.toString();
@@ -324,13 +335,14 @@ public class NPSFormController {
 
     @Action
     @Route("updateSettings")
-    public Response.Content updateSettings(String respondedCookiesExpiration, String reportedCookiesExpiration,String typeId) throws Exception {
+    public Response.Content updateSettings(String respondedCookiesExpiration, String reportedCookiesExpiration,String typeId, String firstDisplayDelay) throws Exception {
         Request request = Request.getCurrent();
         PortletRequestBridge bridge = (PortletRequestBridge) request.getBridge();
         PortletPreferences prefs = bridge.getPortletRequest().getPreferences();
         prefs.setValue(RESP_COOKIES_EXP, respondedCookiesExpiration);
         prefs.setValue(REPORTED_COOKIES_EXP, reportedCookiesExpiration);
         prefs.setValue(SCORE_TYPE, typeId);
+        prefs.setValue(FIRST_DISPLAY_DELAY, firstDisplayDelay);
         prefs.store();
         return indexTmpl.ok();
     }

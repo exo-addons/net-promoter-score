@@ -37,6 +37,16 @@
 				<value></value>
 				<read-only>false</read-only>
 			</preference>
+			<preference>
+				<name>exo.nps.addon.firstDisplayDelay</name>
+				<value></value>
+				<read-only>false</read-only>
+			</preference>
+			<preference>
+				<name>exo.nps.addon.displayPopup</name>
+				<value></value>
+				<read-only>false</read-only>
+			</preference>
 		</portlet-preferences>
 	</portlet>
 

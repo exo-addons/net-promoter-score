@@ -14,6 +14,13 @@
 </div>
       </div>
 
+<div class="control-group">
+<label class="control-label" for="firstDisplayDelay">Delay for the first display (days):</label>
+<div class="controls">
+<input type="text" name="firstDisplayDelay" value="${firstDisplayDelay}">
+</div>
+</div>
+
 <div class="control-group" >
 <label class="control-label" for="typeId">Select Type</label>
             <select class="controls" id="typeId" name="typeId">
