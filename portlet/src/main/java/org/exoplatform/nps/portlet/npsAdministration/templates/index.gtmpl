@@ -15,11 +15,9 @@
                 </div>
                 <div class="scoresDiv">
                     <div class="scoreManagement">
-                        <h3 class="primaryColor lead">{{i18n.scoreManagement}}</h3>
-                        <select name="types" id="types" ng-model="typeId" placeholder="{{i18n.serverUsername}}"
-                                ng-change="getScoresbyType(typeId)">
-                            <option ng-repeat="type in scoreTypes" value="{{type.id}}">{{type.typeName}}</option>
-                        </select>
+                        <select name="types" id="types"
+                                ng-options="type.typeName for type in scoreTypes track by type.id"
+                                ng-model="selectModel" ng-change="getScoresbyType(selectModel.id)"></select>
 
                         <a class="actionIcon" data-original-title="Edit Score" ng-click="getScoreType(typeId)"> <i
                                 class="uiIconEdit uiIconLightGray" style=" font-size: 24px;"></i> </a>

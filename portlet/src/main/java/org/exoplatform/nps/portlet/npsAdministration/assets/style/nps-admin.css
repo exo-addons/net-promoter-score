@@ -103,7 +103,6 @@ input:checked + .slider:before {
 }
 
 .scoreManagement {
-    width: 90%;
     margin: auto;
     position: relative;
 }

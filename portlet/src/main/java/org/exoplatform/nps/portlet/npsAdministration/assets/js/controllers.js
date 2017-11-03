@@ -6,6 +6,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.scoreTypeToEdit = null;
         $scope.showEditForm = false;
         $scope.typeId = 0;
+        $scope.selectModel = {};
         $scope.showForm = false;
         $scope.showGraphs = false;
         $scope.scores  = [];
@@ -59,6 +60,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             }).then(function successCallback(data) {
                 $scope.scoreTypes = data.data;
                  if(isDefault && $scope.scoreTypes.length>0){
+                 $scope.selectModel=$scope.scoreTypes[0];
                  $scope.typeId=$scope.scoreTypes[0].id;
                  $scope.getScoresbyType($scope.typeId);
                  }
