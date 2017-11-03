@@ -10,6 +10,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
         $scope.portletId = "";
         $scope.firstDisplayDelay=10;
         $scope.scoreTypeMessage = "";
+        $scope.displayPopup = "";
         $scope.setResultMessage = function (text, type) {
             $scope.resultMessageClass = "alert-" + type;
             $scope.resultMessageClassExt = "uiIcon" + type.charAt(0).toUpperCase()
@@ -66,6 +67,11 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                 $scope.scoreTypeId = data.data.scoreTypeId;
                 $scope.portletId = data.data.portletId;
                 $scope.firstDisplayDelay= data.data.firstDisplayDelay;
+                $scope.displayPopup = data.data.displayPopup;
+                if($scope.displayPopup == 'checked'){
+                $('#npsForm').addClass("npsFormPopup");
+                }
+
                 if($scope.i18n.firstLogDiff>= $scope.firstDisplayDelay && typeof $cookies.get("nps_status-"+$scope.portletId) == 'undefined'){
 
                         $scope.scoreTypeMessage = data.data.scoreTypeMessage;

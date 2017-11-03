@@ -14,6 +14,8 @@
 </div>
       </div>
 
+
+
 <div class="control-group">
 <label class="control-label" for="firstDisplayDelay">Delay for the first display (days):</label>
 <div class="controls">
@@ -23,9 +25,9 @@
 
 <div class="control-group" >
 <label class="control-label" for="typeId">Select Type</label>
-    <div class="controls">
-            <select  id="typeId" name="typeId">
-            <option value="0"></option>
+<div class="controls">
+<select  id="typeId" name="typeId">
+<option value="0"></option>
 <% if (scoreTypes != null) {
     scoreTypes.each { scoreType ->
         def   typeName= scoreType.typeName;
@@ -38,7 +40,15 @@
 %>
 </select>
     </div>
-        </div>
+</div>
+
+<input type='hidden' name="displayPopup" id='displayPopup' value="${displayPopup}">
+<div class="control-group">
+<label class="control-label" for="displayPopup">Dispaly in Popup:</label>
+<div class="controls">
+<input type="checkbox"  onchange="setDisplay(this)" ${displayPopup}>
+</div>
+</div>
 
 
 <div class="uiAction">
@@ -46,3 +56,13 @@
         </div>
 </form>
         </div>
+
+<script>
+        function setDisplay(checkboxElem) {
+    if (checkboxElem.checked) {
+        document.getElementById('displayPopup').value='checked' ;
+    } else {
+        document.getElementById('displayPopup').value='' ;
+    }
+}
+</script>

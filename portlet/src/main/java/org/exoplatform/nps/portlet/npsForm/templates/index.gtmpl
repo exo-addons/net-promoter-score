@@ -1,4 +1,4 @@
-<div id="npsForm" class="npsForm npsFormPopup" style="display: none;">
+<div id="npsForm" class="npsForm" style="display: none;">
 
     <div ng-controller="npsFormCtrl" id="npsFormCtrl">
 
