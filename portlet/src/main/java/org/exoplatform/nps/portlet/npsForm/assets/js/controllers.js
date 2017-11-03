@@ -56,7 +56,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
             var cookies = ($cookies.get("_mkto_trk"));
             if(!angular.isUndefined(cookies)){
                 cookies.replace("&","%26");
-
+}
             $http({
                 method : 'GET',
                 params: {mktCookie: cookies},
@@ -84,7 +84,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
             }, function errorCallback(data) {
 //                $scope.setResultMessage($scope.i18n.defaultError, "error");
             });
-            }
+
 
         }
 

@@ -52,12 +52,16 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         }
 
 
-        $scope.loadScoreTypes = function () {
+        $scope.loadScoreTypes = function (isDefault) {
             $http({
                 method: 'GET',
                 url: npsAdminContainer.jzURL('NPSAdministrationController.getScoreTypes')
             }).then(function successCallback(data) {
                 $scope.scoreTypes = data.data;
+                 if(isDefault && $scope.scoreTypes.length>0){
+                 $scope.typeId=$scope.scoreTypes[0].id;
+                 $scope.getScoresbyType($scope.typeId);
+                 }
                 $scope.showAlert = false;
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
@@ -156,7 +160,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                         url : npsAdminContainer.jzURL('NPSAdministrationController.saveType')
                     }).then(function successCallback(data) {
                         $scope.setResultMessage($scope.i18n.typeSaved, "success");
-                        $scope.loadScoreTypes();
+                        $scope.loadScoreTypes(false);
                     }, function errorCallback(data) {
                         $scope.setResultMessage($scope.i18n.defaultError, "error");
                     });
@@ -176,7 +180,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                                  url : npsAdminContainer.jzURL('NPSAdministrationController.updateType')
                              }).then(function successCallback(data) {
                                  $scope.setResultMessage($scope.i18n.typeSaved, "success");
-                                 $scope.loadScoreTypes();
+                                 $scope.loadScoreTypes(false);
                              }, function errorCallback(data) {
                                  $scope.setResultMessage($scope.i18n.defaultError, "error");
                              });
@@ -332,7 +336,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         };
 
         $scope.loadBundle();
-        $scope.loadScoreTypes();
+        $scope.loadScoreTypes(true);
         $('#npsAdmin').css('visibility', 'visible');
         $(".npsLoadingBar").remove();
     };
