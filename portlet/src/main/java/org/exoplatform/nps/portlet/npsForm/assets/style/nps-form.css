@@ -62,8 +62,12 @@ div#nps {
     margin: 35px 5px 0;
 }
 
-#nps .btn-primary{border: solid 2px #578dc9;    float: none;
-    display: inline-block;}
+#nps .btn-primary{
+border: solid 2px #578dc9;
+float: none;
+display: inline-block;
+}
+#nps .btn-primary.thankyClose{border: 0}
 #nps .btn-block{
     margin-top: 0;
     float: none;
