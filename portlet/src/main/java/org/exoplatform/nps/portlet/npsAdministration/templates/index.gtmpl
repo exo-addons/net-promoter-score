@@ -55,10 +55,11 @@
                             </div>
 
                             <div class="uiAction uiActionBorder">
-                                <button type="button" class="btn" ng-click="showForm = false">{{i18n.cancel}}</button>
                                 <button type="button" class="btn btn-primary" id="saveType"
                                         ng-click="saveScoreType(newScoreType);showForm = false">{{i18n.save}}
                                 </button>
+                                <button type="button" class="btn" ng-click="showForm = false">{{i18n.cancel}}</button>
+
                             </div>
                         </div>
                     </div>
@@ -96,11 +97,10 @@
                             </div>
 
                             <div class="uiAction uiActionBorder">
-                                <button type="button" class="btn" ng-click="showEditForm = false">{{i18n.cancel}}
-                                </button>
                                 <button type="button" class="btn btn-primary" id="saveType"
                                         ng-click="upadteScoreType(scoreTypeToEdit);showEditForm = false">{{i18n.save}}
                                 </button>
+                                <button type="button" class="btn" ng-click="showEditForm = false">{{i18n.cancel}}</button>
                             </div>
                         </div>
                     </div>
@@ -111,6 +111,9 @@
                 <div class="span10" style="float: none; margin: auto; height: auto" ng-show="showGraphs">
                     <div google-chart class="span4" chart="gaugeChartObject" style="height:450px"></div>
                     <div google-chart class="span4" chart="pieChartObject" style="height:450px;float: right"></div>
+                </div>
+                <div class="span12" style="float: none; margin: auto; height: auto" ng-show="!showGraphs">
+                    <h3 class="scoresDiv no-graph">{{i18n.noScore}}</h3>
                 </div>
             </div>
             <div class="scoresDiv" ng-show="showGraphs">

@@ -6,7 +6,7 @@ div.npsFormPopup {
     right: 0;
     top: 0;
     bottom: 0;
-    z-index: 3;
+    z-index: 4;
     background: rgba(0, 0, 0, 0.56);
 }
 div.npsFormPopup #npsFormCtrl {
@@ -29,8 +29,8 @@ div.npsFormPopup.thankyou #resultMessage{
 div.npsFormPopup.thankyou #resultMessage i.uiIconSuccess:before{color: #2eb58c;}
 button.thankyClose {
     width: 125px;
-    background: #2eb58c;
-    border: solid 2px #2eb58c;
+    /*background: #2eb58c;
+    border: solid 2px #2eb58c;*/
     color: #FFF;
     padding: 5px 0;
     margin-bottom: 10px;
@@ -57,7 +57,7 @@ div#nps {
     text-align: justify;
     margin-top: 20px;
 }
-#nps textarea{width: 100%}
+#nps textarea{width: 100%;    resize: none;}
 .npsRadio {
     margin: 35px 5px 0;
 }
@@ -136,7 +136,7 @@ div#nps {
     -webkit-transition: all 0.15s ease-out 0s;
     -moz-transition: all 0.15s ease-out 0s;
     transition: all 0.15s ease-out 0s;
-    background: #cbd1d8;
+    /*background: #cbd1d8;*/
     border: none;
     color: #fff;
     cursor: pointer;
@@ -146,26 +146,26 @@ div#nps {
     position: relative;
     z-index: 1;
 }
-/*.npsRadio .option-input.promoters{background: #3caf8c;}*/
-.npsRadio .option-input.promoters{background: rgba(60, 175, 140,  0.5);}
-/*.npsRadio .option-input.passives{background: #ef950d;}*/
-.npsRadio .option-input.passives{background: rgba(239, 149, 13,  0.5);}
-/*.npsRadio .option-input.detractor{background: #c14444;}*/
-.npsRadio .option-input.detractor{background: rgba(144, 19, 21,  0.5);}
+.npsRadio .option-input.promoters{border: solid 2px rgba(60, 175, 140,  0.7);}
+/*.npsRadio .option-input.promoters{background: rgba(60, 175, 140,  0.7);}*/
+.npsRadio .option-input.passives{border: solid 2px rgba(239, 149, 13,  0.7);}
+/*.npsRadio .option-input.passives{background: rgba(239, 149, 13,  0.7);}*/
+.npsRadio .option-input.detractor{border: solid 2px rgba(144, 19, 21,  0.5);}
+/*.npsRadio .option-input.detractor{background: rgba(144, 19, 21,  0.7);}*/
 
 .npsRadio .option-input:hover {
     background: #9faab7;
 }
-.npsRadio .option-input.promoters:hover {  background: #3caf8c}
-.npsRadio .option-input.passives:hover {  background: #ef950d}
-.npsRadio .option-input.detractor:hover {  background: #c14444}
+.npsRadio .option-input.promoters:hover {  background: rgba(60, 175, 140,  0.5)}
+.npsRadio .option-input.passives:hover {  background: rgba(239, 149, 13,  0.5)}
+.npsRadio .option-input.detractor:hover {  background: rgba(144, 19, 21,  0.5)}
 
 .npsRadio .option-input:checked {
     background: #476a9c;
 }
-.npsRadio .option-input.promoters:checked {  background: #3caf8c;}
-.npsRadio .option-input.passives:checked {  background: #ef950d;}
-.npsRadio .option-input.detractor:checked {  background: #c14444;}
+.npsRadio .option-input.promoters:checked {  background: rgba(60, 175, 140,  0.7);}
+.npsRadio .option-input.passives:checked {  background: rgba(239, 149, 13,  0.6);}
+.npsRadio .option-input.detractor:checked {  background: rgba(144, 19, 21,  0.6);}
 
 .npsRadio .option-input:checked::before {
     height: 35px;
@@ -189,9 +189,9 @@ div#nps {
     z-index: 0;
 }
 
-.npsRadio .option-input.promoters:checked::after{background: #3caf8c;}
-.npsRadio .option-input.passives:checked::after{background: #ef950d;}
-.npsRadio .option-input.detractor:checked::after{background: #c14444;}
+.npsRadio .option-input.promoters:checked::after{background: rgba(60, 175, 140,  0.7);}
+.npsRadio .option-input.passives:checked::after{background: rgba(239, 149, 13,  0.7);}
+.npsRadio .option-input.detractor:checked::after{background: rgba(144, 19, 21,  0.7);}
 
 .npsRadio .option-input.radio {
     border-radius: 50%;
@@ -233,13 +233,20 @@ div#nps {
     /*position: absolute;*/
     /*top: 18px;*/
     /*left: 16px;*/
-    z-index: 2;
-    color: #FFF;
+    z-index: 1;
+    /*color: #ab7d7d;*/
     font-weight: bold;
     position: relative;
     top: -22px;
     margin: auto;
 }
+
+.npsRadio label .option-input.promoters + span{color: rgba(60, 175, 140,  0.7);}
+.npsRadio label .option-input.passives + span{color: rgba(239, 149, 13,  0.7);}
+.npsRadio label .option-input.detractor + span{color: rgba(144, 19, 21,  0.7);}
+
+.npsRadio .option-input:checked + span{color: #FFF!important;}
+
 #nps .submitdiv{
     margin-bottom: 5px;
 }
@@ -261,11 +268,11 @@ div#nps {
     color: #476a9c;
 }
 .div_indication .indication.detractor {
-    /*color: #c14444;*/
+    color: rgba(144, 19, 21,  0.8);
     float: left;
 }
 .div_indication .indication.promoters {
-    /*color: #3caf8c;*/
+    color: rgba(60, 175, 140,  1);
     top: initial;
     float: right;
 }
@@ -284,3 +291,7 @@ div#nps {
     top: 4px;
     right: 10px;
 }
+
+/* settingsContainer */
+
+.settingsContainer button.btn.btn-primary.input-large{margin: 0}

@@ -12,7 +12,7 @@
                     <i class="{{resultMessageClassExt}}"></i>{{resultMessage}}
                 </div>
 
-                <button class="thankyClose">Ok</button>
+                <button class="btn btn-primary thankyClose">Ok</button>
             </div>
 
             <div ng-show="showForm">
@@ -21,48 +21,48 @@
                 <form id="npsForm">
                     <div class="npsRadio">
                         <label>
-                            <input type="radio" class="option-input radio" checked name="npsScore" id="npsScore0"
+                            <input type="radio" class="option-input radio detractor" checked name="npsScore" id="npsScore0"
                                    ng-model="newScore.score" value="0">
                             <span> 0 </span>
                         </label>
                         <label>
-                            <input type="radio" class="option-input radio" name="npsScore" id="npsScore1"
+                            <input type="radio" class="option-input radio detractor" name="npsScore" id="npsScore1"
                                    ng-model="newScore.score" value="1">
                             <span> 1 </span>
                         </label>
                         <label>
-                            <input type="radio" class="option-input radio" name="npsScore" id="npsScore2"
+                            <input type="radio" class="option-input radio detractor" name="npsScore" id="npsScore2"
                                    ng-model="newScore.score" value="2">
                             <span> 2 </span>
                         </label>
                         <label>
-                            <input type="radio" class="option-input radio" name="npsScore" id="npsScore3"
+                            <input type="radio" class="option-input radio detractor" name="npsScore" id="npsScore3"
                                    ng-model="newScore.score" value="3">
                             <span> 3 </span>
                         </label>
                         <label>
-                            <input type="radio" class="option-input radio" name="npsScore" id="npsScore4"
+                            <input type="radio" class="option-input radio detractor" name="npsScore" id="npsScore4"
                                    ng-model="newScore.score" value="4">
                             <span> 4 </span>
                         </label>
                         <label>
-                            <input type="radio" class="option-input radio" name="npsScore" id="npsScore5"
+                            <input type="radio" class="option-input radio detractor" name="npsScore" id="npsScore5"
                                    ng-model="newScore.score" value="5">
                             <span> 5 </span>
                         </label>
                         <label>
-                            <input type="radio" class="option-input radio" name="npsScore" id="npsScore6"
+                            <input type="radio" class="option-input radio detractor" name="npsScore" id="npsScore6"
                                    ng-model="newScore.score" value="6">
                             <span> 6 </span>
                         </label>
 
                         <label>
-                            <input type="radio" class="option-input radio" name="npsScore" id="npsScore7"
+                            <input type="radio" class="option-input radio passives" name="npsScore" id="npsScore7"
                                    ng-model="newScore.score" value="7">
                             <span> 7 </span>
                         </label>
                         <label>
-                            <input type="radio" class="option-input radio" name="npsScore" id="npsScore8"
+                            <input type="radio" class="option-input radio passives" name="npsScore" id="npsScore8"
                                    ng-model="newScore.score" value="8">
                             <span> 8 </span>
                         </label>
@@ -70,13 +70,13 @@
                         <!--</div>-->
                         <!--<div class="div_indication">-->
                         <label>
-                            <input type="radio" class="option-input radio" name="npsScore" id="npsScore9"
+                            <input type="radio" class="option-input radio promoters" name="npsScore" id="npsScore9"
                                    ng-model="newScore.score" value="9">
                             <span> 9 </span>
                         </label>
 
                         <label>
-                            <input type="radio" class="option-input radio" name="npsScore" id="npsScore10"
+                            <input type="radio" class="option-input radio promoters" name="npsScore" id="npsScore10"
                                    ng-model="newScore.score" value="10">
                             <span> 10 </span>
                         </label>

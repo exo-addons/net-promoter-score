@@ -53,7 +53,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         }
 
 
-        $scope.loadScoreTypes = function (isDefault) {
+        $scope.loadScoreTypes = function (isDefault, question = null) {
             $http({
                 method: 'GET',
                 url: npsAdminContainer.jzURL('NPSAdministrationController.getScoreTypes')
@@ -63,7 +63,16 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                  $scope.selectModel=$scope.scoreTypes[0];
                  $scope.typeId=$scope.scoreTypes[0].id;
                  $scope.getScoresbyType($scope.typeId);
-                 }
+                 }else if((!isDefault) && (question != null)){
+                     $scope.selectModel=$scope.scoreTypes[question-1];
+                     $scope.typeId=question;
+                     $scope.getScoresbyType($scope.typeId);
+                 }else if((!isDefault) && (question == null)){
+                       $scope.selectModel=$scope.scoreTypes[$scope.scoreTypes.length-1];
+                       $scope.typeId=$scope.scoreTypes.length;
+                       $scope.getScoresbyType($scope.typeId);
+                   }
+
                 $scope.showAlert = false;
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
@@ -116,29 +125,35 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 				$scope.passivesPrc = data.data.passivesPrc;
                 $scope.npScore = data.data.npScore;
 
-                $scope.gaugeChartObject.data = [
-                    ['Label', 'Value'],
-                    ['NPS',parseFloat($scope.npScore)]
-                ];
+                if($scope.npScore == "NaN"){
+                    $scope.showGraphs = false;
+                }else{
+                    $scope.showGraphs = true;
+                    $scope.gaugeChartObject.data = [
+                        ['Label', 'Value'],
+                        ['NPS',parseFloat($scope.npScore)]
+                    ];
 
 
-                $scope.pieChartObject.data = {"cols": [
-                    {id: "t", label: "Topping", type: "string"},
-                    {id: "s", label: "Slices", type: "number"}
-                ], "rows": [
-                    {c: [
-                        {v: "Promoters"},
-                        {v: $scope.promotersNbr},
-                    ]},
-                    {c: [
-                        {v: "Passives"},
-                        {v: $scope.passivesNbr}
-                    ]},
-                    {c: [
-                        {v: "Detractor"},
-                        {v: $scope.detractorsNbr}
-                    ]}
-                ]};
+                    $scope.pieChartObject.data = {"cols": [
+                        {id: "t", label: "Topping", type: "string"},
+                        {id: "s", label: "Slices", type: "number"}
+                    ], "rows": [
+                        {c: [
+                            {v: "Promoters"},
+                            {v: $scope.promotersNbr},
+                        ]},
+                        {c: [
+                            {v: "Passives"},
+                            {v: $scope.passivesNbr}
+                        ]},
+                        {c: [
+                            {v: "Detractor"},
+                            {v: $scope.detractorsNbr}
+                        ]}
+                    ]};
+                }
+
                 $scope.pages=$scope.range();
                // $scope.getScoresbyType(typeId);
 
@@ -161,7 +176,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                         },
                         url : npsAdminContainer.jzURL('NPSAdministrationController.saveType')
                     }).then(function successCallback(data) {
-                        $scope.setResultMessage($scope.i18n.typeSaved, "success");
+//                        $scope.setResultMessage($scope.i18n.typeSaved, "success");
                         $scope.loadScoreTypes(false);
                     }, function errorCallback(data) {
                         $scope.setResultMessage($scope.i18n.defaultError, "error");
@@ -171,23 +186,23 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 
                  $scope.upadteScoreType= function(newScoreType)
                  {
-                             $scope.showAlert = false;
-                             // $scope.setResultMessage($scope.i18n.savingScore, "info");
-                             $http({
-                                 data : newScoreType,
-                                 method : 'POST',
-                                 headers : {
-                                     'Content-Type' : 'application/json'
-                                 },
-                                 url : npsAdminContainer.jzURL('NPSAdministrationController.updateType')
-                             }).then(function successCallback(data) {
-                                 $scope.setResultMessage($scope.i18n.typeSaved, "success");
-                                 $scope.loadScoreTypes(false);
-                             }, function errorCallback(data) {
-                                 $scope.setResultMessage($scope.i18n.defaultError, "error");
-                             });
+                     $scope.showAlert = false;
+                     // $scope.setResultMessage($scope.i18n.savingScore, "info");
+                     $http({
+                         data : newScoreType,
+                         method : 'POST',
+                         headers : {
+                             'Content-Type' : 'application/json'
+                         },
+                         url : npsAdminContainer.jzURL('NPSAdministrationController.updateType')
+                     }).then(function successCallback(data) {
+//                                 $scope.setResultMessage($scope.i18n.typeSaved, "success");
+                         $scope.loadScoreTypes(false, newScoreType.id);
+                     }, function errorCallback(data) {
+                         $scope.setResultMessage($scope.i18n.defaultError, "error");
+                     });
 
-                         }
+                 }
 
 
 
