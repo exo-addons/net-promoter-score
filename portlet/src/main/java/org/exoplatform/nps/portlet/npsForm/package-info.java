@@ -1,7 +1,8 @@
 @Portlet
 @Application(name = "NPSFormController")
 @Bindings({ @Binding(value = NpsService.class),
-        @Binding(value = IdentityManager.class),
+        @Binding(value = NpsTypeService.class),
+        @Binding(value = IdentityManager.class)
 })
 @Scripts({
     @Script(id = "jQueryUI", value = "js/lib/jquery-ui.js"),
@@ -33,6 +34,7 @@ import juzu.plugin.portlet.Portlet;
 
 import org.exoplatform.nps.services.NpsService;
 
+import org.exoplatform.nps.services.NpsTypeService;
 import org.exoplatform.social.core.manager.IdentityManager;
 
 

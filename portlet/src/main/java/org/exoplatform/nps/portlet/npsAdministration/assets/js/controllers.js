@@ -2,10 +2,15 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
     var npsAdminCtrl = function ($scope, $q, $timeout, $http, $filter) {
         var npsAdminContainer = $('#npsAdmin');
         var deferred = $q.defer();
-        $scope.currentUser = "";
-        $scope.currentUserAvatar = "";
-        $scope.currentUserName = "";
+        $scope.newScoreType = null;
+        $scope.scoreTypeToEdit = null;
+        $scope.showEditForm = false;
+        $scope.typeId = 0;
+        $scope.selectModel = {};
+        $scope.showForm = false;
+        $scope.showGraphs = false;
         $scope.scores  = [];
+        $scope.scoreTypes  = [];
         $scope.scoresSum=0;
         $scope.pieChartObject = {};
         $scope.pieChartObject.options = {
@@ -48,6 +53,35 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         }
 
 
+        $scope.loadScoreTypes = function (isDefault, question = null) {
+            $http({
+                method: 'GET',
+                url: npsAdminContainer.jzURL('NPSAdministrationController.getScoreTypes')
+            }).then(function successCallback(data) {
+                $scope.scoreTypes = data.data;
+                 if(isDefault && $scope.scoreTypes.length>0){
+                 $scope.selectModel=$scope.scoreTypes[0];
+                 $scope.typeId=$scope.scoreTypes[0].id;
+                 $scope.getScoresbyType($scope.typeId);
+                 }else if((!isDefault) && (question != null)){
+                     $scope.selectModel=$scope.scoreTypes[question-1];
+                     $scope.typeId=question;
+                     $scope.getScoresbyType($scope.typeId);
+                 }else if((!isDefault) && (question == null)){
+                       $scope.selectModel=$scope.scoreTypes[$scope.scoreTypes.length-1];
+                       $scope.typeId=$scope.scoreTypes.length;
+                       $scope.getScoresbyType($scope.typeId);
+                   }
+
+                $scope.showAlert = false;
+            }, function errorCallback(data) {
+                $scope.setResultMessage($scope.i18n.defaultError, "error");
+            });
+
+        };
+
+
+
         $scope.loadBundle = function () {
             $http({
                 method: 'GET',
@@ -63,10 +97,10 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         }
 
 
-        $scope.loadScores = function (offset,limit) {
+        $scope.loadScores = function (typeId,offset,limit) {
             $http({
                 method: 'GET',
-                url: npsAdminContainer.jzURL('NPSAdministrationController.getScores')+ "&offset="+offset+ "&limit="+limit
+                url: npsAdminContainer.jzURL('NPSAdministrationController.getScores')+ "&typeId="+typeId+ "&offset="+offset+ "&limit="+limit
             }).then(function successCallback(data) {
                 $scope.scores = data.data;
                 $scope.showAlert = false;
@@ -77,14 +111,11 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         };
 
 
-        $scope.loadData = function () {
+        $scope.loadData = function (typeId) {
             $http({
                 method: 'GET',
-                url: npsAdminContainer.jzURL('NPSAdministrationController.getData')
+                url: npsAdminContainer.jzURL('NPSAdministrationController.getData')+ "&typeId="+typeId
             }).then(function successCallback(data) {
-                $scope.currentUser = data.data.currentUser;
-                $scope.currentUserAvatar = data.data.currentUserAvatar;
-                $scope.currentUserName = data.data.currentUserName;
                 $scope.scorsnbr = data.data.scorsnbr;
 				$scope.detractorsNbr = data.data.detractorsNbr;
 				$scope.promotersNbr = data.data.promotersNbr;
@@ -94,30 +125,38 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 				$scope.passivesPrc = data.data.passivesPrc;
                 $scope.npScore = data.data.npScore;
 
-                $scope.gaugeChartObject.data = [
-                    ['Label', 'Value'],
-                    ['NPS',parseFloat($scope.npScore)]
-                ];
+                if($scope.npScore == "NaN"){
+                    $scope.showGraphs = false;
+                }else{
+                    $scope.showGraphs = true;
+                    $scope.gaugeChartObject.data = [
+                        ['Label', 'Value'],
+                        ['NPS',parseFloat($scope.npScore)]
+                    ];
 
 
-                $scope.pieChartObject.data = {"cols": [
-                    {id: "t", label: "Topping", type: "string"},
-                    {id: "s", label: "Slices", type: "number"}
-                ], "rows": [
-                    {c: [
-                        {v: "Promoters"},
-                        {v: $scope.promotersNbr},
-                    ]},
-                    {c: [
-                        {v: "Passives"},
-                        {v: $scope.passivesNbr}
-                    ]},
-                    {c: [
-                        {v: "Detractor"},
-                        {v: $scope.detractorsNbr}
-                    ]}
-                ]};
+                    $scope.pieChartObject.data = {"cols": [
+                        {id: "t", label: "Topping", type: "string"},
+                        {id: "s", label: "Slices", type: "number"}
+                    ], "rows": [
+                        {c: [
+                            {v: "Promoters"},
+                            {v: $scope.promotersNbr},
+                        ]},
+                        {c: [
+                            {v: "Passives"},
+                            {v: $scope.passivesNbr}
+                        ]},
+                        {c: [
+                            {v: "Detractor"},
+                            {v: $scope.detractorsNbr}
+                        ]}
+                    ]};
+                }
+
                 $scope.pages=$scope.range();
+               // $scope.getScoresbyType(typeId);
+
                 deferred.resolve(data);
 //                $scope.setResultMessage(data, "success");
             }, function errorCallback(data) {
@@ -125,6 +164,61 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             });
         }
 
+        $scope.saveScoreType= function(newScoreType)
+        {
+                    $scope.showAlert = false;
+                    // $scope.setResultMessage($scope.i18n.savingScore, "info");
+                    $http({
+                        data : newScoreType,
+                        method : 'POST',
+                        headers : {
+                            'Content-Type' : 'application/json'
+                        },
+                        url : npsAdminContainer.jzURL('NPSAdministrationController.saveType')
+                    }).then(function successCallback(data) {
+//                        $scope.setResultMessage($scope.i18n.typeSaved, "success");
+                        $scope.loadScoreTypes(false);
+                    }, function errorCallback(data) {
+                        $scope.setResultMessage($scope.i18n.defaultError, "error");
+                    });
+
+                }
+
+                 $scope.upadteScoreType= function(newScoreType)
+                 {
+                     $scope.showAlert = false;
+                     // $scope.setResultMessage($scope.i18n.savingScore, "info");
+                     $http({
+                         data : newScoreType,
+                         method : 'POST',
+                         headers : {
+                             'Content-Type' : 'application/json'
+                         },
+                         url : npsAdminContainer.jzURL('NPSAdministrationController.updateType')
+                     }).then(function successCallback(data) {
+//                                 $scope.setResultMessage($scope.i18n.typeSaved, "success");
+                         $scope.loadScoreTypes(false, newScoreType.id);
+                     }, function errorCallback(data) {
+                         $scope.setResultMessage($scope.i18n.defaultError, "error");
+                     });
+
+                 }
+
+
+
+                $scope.getScoreType = function (id) {
+                    $http({
+                        method: 'GET',
+                        url: npsAdminContainer.jzURL('NPSAdministrationController.getScoreTypeById')+ "&id=" +id
+                    }).then(function successCallback(data) {
+                        $scope.scoreTypeToEdit = data.data;
+                        $scope.showAlert = false;
+                        $scope.showEditForm = true;
+                    }, function errorCallback(data) {
+                        $scope.setResultMessage($scope.i18n.defaultError, "error");
+                    });
+
+                };
 
         $scope.deleteScore = function(score) {
             $scope.scoreToDelete = score;
@@ -144,8 +238,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 },
                 url : npsAdminContainer.jzURL('NPSAdministrationController.deleteScore')
             }).then(function successCallback(data) {
-                $scope.loadScores($scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
-                $scope.loadData();
+                $scope.loadData($scope.typeId);
+                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
                 $scope.setResultMessage($scope.i18n.scoreDeleted, "success");
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
@@ -164,8 +258,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 },
                 url : npsAdminContainer.jzURL('NPSAdministrationController.disableScore')
             }).then(function successCallback(data) {
-                $scope.loadScores($scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
-                $scope.loadData();
+                $scope.loadData($scope.typeId);
+                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
                 $scope.setResultMessage($scope.i18n.scoreEnabled, "success");
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
@@ -184,8 +278,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 },
                 url : npsAdminContainer.jzURL('NPSAdministrationController.enableScore')
             }).then(function successCallback(data) {
-                $scope.loadScores($scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
-                $scope.loadData();
+                $scope.loadData($scope.typeId);
+                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
                 $scope.setResultMessage($scope.i18n.scoreDisabled, "success");
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
@@ -218,7 +312,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             if ($scope.currentPage > 0) {
                 $scope.currentPage--;
                 $scope.pages=$scope.range();
-                $scope.loadScores($scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
+                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
             }
         };
 
@@ -230,7 +324,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             if ($scope.currentPage < $scope.pageCount() - 1) {
                 $scope.currentPage++;
                 $scope.pages=$scope.range();
-                $scope.loadScores($scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
+                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
             }
         };
 
@@ -246,13 +340,20 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             if (n >= 0 && n < $scope.pageCount()) {
                 $scope.currentPage = n;
                 $scope.pages=$scope.range();
-                $scope.loadScores(n*$scope.itemsPerPage, $scope.itemsPerPage);
+                $scope.loadScores($scope.typeId,n*$scope.itemsPerPage, $scope.itemsPerPage);
             }
         };
 
+        $scope.getScoresbyType = function (typeId) {
+                $scope.typeId=typeId;
+                $scope.loadData(typeId);
+                $scope.loadScores(typeId,0, $scope.itemsPerPage);
+
+                $scope.showGraphs = true;
+        };
+
         $scope.loadBundle();
-        $scope.loadData();
-        $scope.loadScores(0, $scope.itemsPerPage);
+        $scope.loadScoreTypes(true);
         $('#npsAdmin').css('visibility', 'visible');
         $(".npsLoadingBar").remove();
     };

@@ -1,21 +1,67 @@
-<div class="settingsContainer" >
-<form name="updateSettingsForm" class="form-horizontal" action="@{updateSettings()}" method="post">
+<div class="settingsContainer">
+    <form name="updateSettingsForm" class="form-horizontal" action="@{updateSettings()}" method="post">
 
-<div class="control-group">
-<label class="control-label" for="respondedCookiesExpiration">Responded Cookies experation periode (days):</label>
-        <div class="controls">
-          <input type="text" name="respondedCookiesExpiration"  value="${respondedCookiesExpiration}">
+        <div class="control-group">
+            <label class="control-label" for="respondedCookiesExpiration">Show survey every:</label>
+            <div class="controls">
+                <input type="text" name="respondedCookiesExpiration" value="${respondedCookiesExpiration}"> Days
+            </div>
         </div>
-</div>
-	  		 <div class="control-group">
-        <label class="control-label" for="reportedCookiesExpiration">Reported Cookies experation periode (days):</label>
-<div class="controls">
-<input type="text" name="reportedCookiesExpiration" value="${reportedCookiesExpiration}">
-</div>
-      </div>
+        <div class="control-group">
+            <label class="control-label" for="reportedCookiesExpiration">Hide for:</label>
+            <div class="controls">
+                <input type="text" name="reportedCookiesExpiration" value="${reportedCookiesExpiration}"> days when user answers "Not Now"
+            </div>
+        </div>
 
-<div class="uiAction">
-<button type="submit" class="btn btn-primary input-large">Save</button>
+
+        <div class="control-group">
+            <label class="control-label" for="firstDisplayDelay">Delay for the first display (days):</label>
+            <div class="controls">
+                <input type="text" name="firstDisplayDelay" value="${firstDisplayDelay}">
+            </div>
         </div>
-</form>
+
+        <div class="control-group">
+            <label class="control-label" for="typeId">NPS Score</label>
+            <div class="controls">
+                <select id="typeId" name="typeId">
+                    <option value="0"></option>
+                    <% if (scoreTypes != null) {
+                    scoreTypes.each { scoreType ->
+                    def typeName= scoreType.typeName;
+                    def typeId= scoreType.id;
+                    def selected = selectedType != null &&
+                    typeId.toString().equals(selectedType.toString())?'selected':'';
+                    %>
+                    <option value="${typeId}" ${selected}>${typeName}</option>
+                    <% }
+                    }
+                    %>
+                </select>
+            </div>
+        </div>
+
+        <input type='hidden' name="displayPopup" id='displayPopup' value="${displayPopup}">
+        <div class="control-group">
+            <label class="control-label" for="displayPopup">Display in Popup:</label>
+            <div class="controls">
+                <input type="checkbox" onchange="setDisplay(this)" ${displayPopup}>
+            </div>
+        </div>
+        <div class="uiAction">
+            <button type="submit" class="btn btn-primary input-large">Save</button>
+        </div>
+    </form>
+
 </div>
+
+<script>
+function setDisplay(checkboxElem) {
+    if (checkboxElem.checked) {
+        document.getElementById('displayPopup').value='checked' ;
+    } else {
+        document.getElementById('displayPopup').value='' ;
+    }
+}
+</script>

@@ -18,36 +18,16 @@ package org.exoplatform.nps.dto;
 
 import lombok.Data;
 
-import java.util.Date;
-
 
 @Data
-public class ScoreEntryDTO {
+public class ScoreTypeDTO {
 
   private long              id;
 
-  private String              userId;
+  private String              typeName;
   
-  private int               score;
+  private String               question;
 
-  private long                postedTime;
-
-  private String              comment;
-
-  private long                lastAppereance;
-
-  private String                userFullName;
-
-  private Boolean           enabled;
-
-  private long        typeId;
-
-  /*  public boolean verifySaveConditions() {
-    if (StringUtils.isBlank(vacationRequestId) || StringUtils.isBlank(userId) ) {
-      return false;
-    }
-    return true;
-  }*/
-
+  private Boolean                isDefault;
 
 }

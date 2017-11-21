@@ -7,7 +7,9 @@ import juzu.template.Template;
 import org.exoplatform.commons.juzu.ajax.Ajax;
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.nps.dto.ScoreEntryDTO;
+import org.exoplatform.nps.dto.ScoreTypeDTO;
 import org.exoplatform.nps.services.NpsService;
+import org.exoplatform.nps.services.NpsTypeService;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -33,6 +35,9 @@ public class NPSAdministrationController {
   NpsService npsService;
 
   @Inject
+  NpsTypeService npsTypeService;
+
+  @Inject
   IdentityManager identityManager;
 
 
@@ -51,9 +56,9 @@ public class NPSAdministrationController {
   @juzu.Resource
   @MimeType.JSON
   @Jackson
-  public List<ScoreEntryDTO> getScores(int offset, int limit) {
+  public List<ScoreEntryDTO> getScores(Long typeId, int offset, int limit) {
     try {
-      List<ScoreEntryDTO> scores=npsService.getScores(offset,limit);
+      List<ScoreEntryDTO> scores=npsService.getScores(typeId,offset,limit);
       for (ScoreEntryDTO score : scores){
         Profile profile=identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, score.getUserId(), false).getProfile();
         score.setUserFullName(profile.getFullName());
@@ -100,21 +105,12 @@ public class NPSAdministrationController {
   @juzu.Resource
   @MimeType.JSON
   @Jackson
-  public Response getData() {
+  public Response getData(Long typeId) {
     try {
       JSON data = new JSON();
-      data.set("currentUser",currentUser);
-      Profile profile=identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, currentUser, false).getProfile();
-      if(profile.getAvatarUrl()!=null){
-        data.set("currentUserAvatar",profile.getAvatarUrl());
-      }else{
-        data.set("currentUserAvatar","/eXoSkin/skin/images/system/UserAvtDefault.png");
-      }
-      data.set("currentUserName",profile.getFullName());
-
-      long scorsnbr= npsService.getScoreCount(true);
-      long detractorsNbr= npsService.getDetractorsCount();
-      long promotersNbr= npsService.getPromotersCount();
+      long scorsnbr= npsService.getScoreCount(typeId, true);
+      long detractorsNbr= npsService.getDetractorsCount(typeId);
+      long promotersNbr= npsService.getPromotersCount(typeId);
       long passivesNbr= scorsnbr-(promotersNbr+detractorsNbr);
 
 
@@ -124,7 +120,7 @@ public class NPSAdministrationController {
 
       float npScore= promotersPrc-detractorsPrc;
 
-      data.set("scorsnbr",npsService.getScoreCount(false));
+      data.set("scorsnbr",npsService.getScoreCount(typeId,false));
       data.set("detractorsNbr",detractorsNbr);
       data.set("promotersNbr",promotersNbr);
       data.set("passivesNbr",passivesNbr);
@@ -143,6 +139,50 @@ public class NPSAdministrationController {
 
 
   @Ajax
+  @juzu.Resource
+  @MimeType.JSON
+  @Jackson
+  public List<ScoreTypeDTO> getScoreTypes() {
+    try {
+      return npsTypeService.getScoreTypes(0,0);
+    } catch (Throwable e) {
+      LOG.error(e);
+      return null;
+    }
+  }
+
+  @Ajax
+  @juzu.Resource
+  @MimeType.JSON
+  @Jackson
+  public ScoreTypeDTO getScoreTypeById (Long id) {
+
+    return npsTypeService.getScoreType(id);
+
+  }
+
+  @Ajax
+  @Resource(method = HttpMethod.POST)
+  @MimeType.JSON
+  @Jackson
+  public void saveType(@Jackson ScoreTypeDTO obj) {
+
+    npsTypeService.save(obj,true);
+
+  }
+
+  @Ajax
+  @Resource(method = HttpMethod.POST)
+  @MimeType.JSON
+  @Jackson
+  public void updateType(@Jackson ScoreTypeDTO obj) {
+
+    npsTypeService.save(obj,false);
+
+  }
+
+
+  @Ajax
   @Resource(method = HttpMethod.POST)
   @MimeType.JSON
   @Jackson
@@ -151,7 +191,6 @@ public class NPSAdministrationController {
     npsService.remove(obj);
 
   }
-
 
   @Ajax
   @Resource(method = HttpMethod.POST)
@@ -162,7 +201,6 @@ public class NPSAdministrationController {
     npsService.save(obj,false);
 
   }
-
 
 
   @Ajax
@@ -177,7 +215,6 @@ public class NPSAdministrationController {
 
 
 
-
   private ResourceBundle getResourceBundle(Locale locale) {
     return bundle = ResourceBundle.getBundle("locale.portlet.nps-addon", locale, this.getClass().getClassLoader());
   }
@@ -188,7 +225,5 @@ public class NPSAdministrationController {
     }
     return bundle;
   }
-
-
 
 }

@@ -52,6 +52,9 @@ public class NPSFormController {
     NpsService npsService;
 
     @Inject
+    NpsTypeService npsTypeService;
+
+    @Inject
     IdentityManager identityManager;
 
     @Inject
@@ -71,6 +74,11 @@ public class NPSFormController {
     private static String RESP_COOKIES_EXP_DEFAULT_VALUE = "30";
     private static String REPORTED_COOKIES_EXP_DEFAULT_VALUE = "10";
     private static String REPORTED_COOKIES_EXP = "exo.nps.addon.reportedCookiesExpiration";
+    private static String SCORE_TYPE = "exo.nps.addon.selectedType";
+    private static String FIRST_DISPLAY_DELAY = "exo.nps.addon.firstDisplayDelay";
+    private static String FIRST_DISPLAY_DELAY_DEFAULT_VALUE = "10";
+    private static String DISPLAY_POPUP= "exo.nps.addon.displayPopup";
+    private static String DISPLAY_POPUP_DEFAULT_VALUE = "";
 
     private String mktToken;
     private String mktLead;
@@ -91,9 +99,23 @@ public class NPSFormController {
                 respondedCookiesExpiration = RESP_COOKIES_EXP_DEFAULT_VALUE;
             if (reportedCookiesExpiration == null || reportedCookiesExpiration.equals(""))
                 reportedCookiesExpiration = REPORTED_COOKIES_EXP_DEFAULT_VALUE;
+            String selectedType = prefs.getValue(SCORE_TYPE, "");
+            String firstDisplayDelay = prefs.getValue(FIRST_DISPLAY_DELAY, FIRST_DISPLAY_DELAY_DEFAULT_VALUE);
+            if (firstDisplayDelay == null || firstDisplayDelay.equals(""))
+                firstDisplayDelay = FIRST_DISPLAY_DELAY_DEFAULT_VALUE;
+            String displayPopup = prefs.getValue(DISPLAY_POPUP, DISPLAY_POPUP_DEFAULT_VALUE);
+            if (displayPopup == null)
+                displayPopup = DISPLAY_POPUP_DEFAULT_VALUE;
+            List<ScoreTypeDTO> scoreTypes=npsTypeService.getScoreTypes(0,0);
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("respondedCookiesExpiration", respondedCookiesExpiration);
             parameters.put("reportedCookiesExpiration", reportedCookiesExpiration);
+            parameters.put("scoreTypes", scoreTypes);
+            parameters.put("selectedType", selectedType);
+            parameters.put("firstDisplayDelay", firstDisplayDelay);
+            parameters.put("displayPopup", displayPopup);
+
+
             return editTmpl.with(parameters).ok();
         } else {
             return indexTmpl.ok();
@@ -264,13 +286,22 @@ public class NPSFormController {
         try {
             Request request = Request.getCurrent();
             PortletRequestBridge bridge = (PortletRequestBridge) request.getBridge();
+            String portletId = bridge.getWindowContext().getId();
             PortletPreferences prefs = bridge.getPortletRequest().getPreferences();
             String respondedCookiesExpiration = prefs.getValue(RESP_COOKIES_EXP, RESP_COOKIES_EXP_DEFAULT_VALUE);
             String reportedCookiesExpiration = prefs.getValue(REPORTED_COOKIES_EXP, REPORTED_COOKIES_EXP_DEFAULT_VALUE);
+            String scoreTypeId = prefs.getValue(SCORE_TYPE, "");
+            String firstDisplayDelay = prefs.getValue(FIRST_DISPLAY_DELAY, FIRST_DISPLAY_DELAY_DEFAULT_VALUE);
             if (respondedCookiesExpiration == null || respondedCookiesExpiration.equals(""))
                 respondedCookiesExpiration = RESP_COOKIES_EXP_DEFAULT_VALUE;
             if (reportedCookiesExpiration == null || reportedCookiesExpiration.equals(""))
                 reportedCookiesExpiration = REPORTED_COOKIES_EXP_DEFAULT_VALUE;
+            if (firstDisplayDelay == null || firstDisplayDelay.equals(""))
+                firstDisplayDelay = FIRST_DISPLAY_DELAY_DEFAULT_VALUE;
+            String displayPopup = prefs.getValue(DISPLAY_POPUP, DISPLAY_POPUP_DEFAULT_VALUE);
+
+            if (displayPopup == null)
+                displayPopup = FIRST_DISPLAY_DELAY_DEFAULT_VALUE;
 /*            if (!PropertyManager.isDevelopping() && bundleString != null && getResourceBundle().getLocale().equals(PortalRequestContext.getCurrentInstance().getLocale())) {
                 return Response.ok(bundleString);
             }*/
@@ -287,30 +318,40 @@ public class NPSFormController {
             }
             Profile profile = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, currentUser, false).getProfile();
 
+            ScoreTypeDTO  sType = npsTypeService.getScoreType(Long.parseLong(scoreTypeId));
+
             data.set("currentUser", currentUser);
             data.set("fullName", profile.getFullName());
             data.set("respondedCookiesExpiration", respondedCookiesExpiration);
             data.set("reportedCookiesExpiration", reportedCookiesExpiration);
+            data.set("scoreTypeId", scoreTypeId);
+            data.set("portletId", portletId);
+            data.set("scoreTypeMessage", sType.getQuestion());
+            data.set("firstDisplayDelay", firstDisplayDelay);
+            data.set("displayPopup", displayPopup);
             data.set("firstLogDiff", Utils.getDiffinDays(Utils.getFirstLoginDate(currentUser),Calendar.getInstance()));
             bundleString = data.toString();
             mktToken = getToken();
             mktLead = getMktLead(mktCookie);
 
             return Response.ok(bundleString);
-        } catch (Throwable e) {
-            log.error("error while getting bundele", e);
+        } catch (Exception e) {
+            log.error("error while getting context", e);
             return Response.status(500);
         }
     }
 
     @Action
     @Route("updateSettings")
-    public Response.Content updateSettings(String respondedCookiesExpiration, String reportedCookiesExpiration) throws Exception {
+    public Response.Content updateSettings(String respondedCookiesExpiration, String reportedCookiesExpiration,String typeId, String firstDisplayDelay , String displayPopup) throws Exception {
         Request request = Request.getCurrent();
         PortletRequestBridge bridge = (PortletRequestBridge) request.getBridge();
         PortletPreferences prefs = bridge.getPortletRequest().getPreferences();
         prefs.setValue(RESP_COOKIES_EXP, respondedCookiesExpiration);
         prefs.setValue(REPORTED_COOKIES_EXP, reportedCookiesExpiration);
+        prefs.setValue(SCORE_TYPE, typeId);
+        prefs.setValue(FIRST_DISPLAY_DELAY, firstDisplayDelay);
+        prefs.setValue(DISPLAY_POPUP, displayPopup);
         prefs.store();
         return indexTmpl.ok();
     }

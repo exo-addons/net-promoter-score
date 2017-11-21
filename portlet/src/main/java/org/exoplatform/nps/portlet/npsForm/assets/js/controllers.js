@@ -6,7 +6,11 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
         $scope.showAlert = false;
         $scope.newScore = null;
         $scope.showForm = true;
-
+        $scope.scoreTypeId = 0;
+        $scope.portletId = "";
+        $scope.firstDisplayDelay=10;
+        $scope.scoreTypeMessage = "";
+        $scope.displayPopup = "";
         $scope.setResultMessage = function (text, type) {
             $scope.resultMessageClass = "alert-" + type;
             $scope.resultMessageClassExt = "uiIcon" + type.charAt(0).toUpperCase()
@@ -49,33 +53,50 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
 
         $scope.loadContext = function() {
 
-            if(typeof $cookies.get("nps_status") != 'undefined'){
-                $('#npsForm').css('display', 'none');
-            }else{
+
             var cookies = ($cookies.get("_mkto_trk"));
             if(!angular.isUndefined(cookies)){
                 cookies.replace("&","%26");
-            }
+}
             $http({
                 method : 'GET',
                 params: {mktCookie: cookies},
                 url : npsFormContainer.jzURL('NPSFormController.getContext')
             }).then(function successCallback(data) {
                 $scope.i18n = data.data;
-                if($scope.i18n.firstLogDiff>10){
+                $scope.scoreTypeId = data.data.scoreTypeId;
+                $scope.portletId = data.data.portletId;
+                $scope.firstDisplayDelay= data.data.firstDisplayDelay;
+                $scope.displayPopup = data.data.displayPopup;
+                if($scope.displayPopup == 'checked'){
+                $('#npsForm').addClass("npsFormPopup");
+                }
+
+                if($scope.i18n.firstLogDiff>= $scope.firstDisplayDelay && typeof $cookies.get("nps_status-"+$scope.portletId) == 'undefined'){
+
+                        $scope.scoreTypeMessage = data.data.scoreTypeMessage;
+                         if ($scope.scoreTypeMessage==null||$scope.scoreTypeMessage==""){
+                         $scope.scoreTypeMessage=data.data.messageForm;
+                         }
+
                      $scope.showForm = true;
                      $('#npsForm').css('display', 'block');
+                 }else{
+                  $('#npsForm').css('display', 'none');
                  }
+
                 $scope.showAlert = false;
                 deferred.resolve(data);
             }, function errorCallback(data) {
-                $scope.setResultMessage($scope.i18n.defaultError, "error");
+//                $scope.setResultMessage($scope.i18n.defaultError, "error");
             });
-            }
+
+
         }
 
         $scope.saveScore = function() {
             $scope.showAlert = false;
+            $scope.newScore.typeId=$scope.scoreTypeId;
                 $http({
                     data : $scope.newScore,
                     method : 'POST',
@@ -87,7 +108,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                     var today = new Date();
                     var expiresValue = new Date(today);
                     expiresValue.setDate(today.getDate() + parseInt($scope.i18n.respondedCookiesExpiration));
-                    $cookies.put("nps_status","responded" , {'expires' : expiresValue});
+                    $cookies.put("nps_status-"+$scope.portletId,"responded" , {'expires' : expiresValue});
                    // $('#npsForm').css('display', 'none');
                     $scope.showForm = false;
                     $scope.setResultMessage($scope.i18n.thanks, "success");
@@ -101,7 +122,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                 var today = new Date();
                 var expiresValue = new Date(today);
                 expiresValue.setDate(today.getDate() + parseInt($scope.i18n.reportedCookiesExpiration));
-                $cookies.put("nps_status","enabled" , {'expires' : expiresValue});
+                $cookies.put("nps_status-"+$scope.portletId,"enabled" , {'expires' : expiresValue});
             $('#npsForm').css('display', 'none');
             $scope.showForm = false;
         }
@@ -109,10 +130,24 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
         $scope.disableUser = function() {
                 var now = new Date();
                 var expiresValue  = new Date(now.getFullYear()+20, now.getMonth(), now.getDate());
-                $cookies.put("nps_status","disabled" , {'expires' : expiresValue});
+                $cookies.put("nps_status-"+$scope.portletId,"disabled" , {'expires' : expiresValue});
                $('#npsForm').css('display', 'none');
         }
 
+
+        $scope.displayForm = function() {
+
+            if(typeof $cookies.get("nps_status-"+$scope.portletId) != 'undefined'){
+                $('#npsForm').css('display', 'none');
+            }else{
+                $('#npsForm').css('display', 'block');
+
+                $scope.showForm = true;
+                $scope.showAlert = false;
+            }
+            console.log($cookies.get("nps_status-"+$scope.portletId));
+
+        }
 
         $scope.loadContext();
 

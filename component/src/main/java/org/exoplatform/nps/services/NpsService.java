@@ -68,11 +68,11 @@ public class NpsService {
     scoreEntryDAO.delete(convert(entity));
   }
 
-  public List<ScoreEntryDTO> getScores(int offset, int limit) {
+  public List<ScoreEntryDTO> getScores(long typeId, int offset, int limit) {
     if (offset < 0) {
       throw new IllegalArgumentException("Method getScores - Parameter 'offset' must be positive");
     }
-    List<ScoreEntryEntity> entities = scoreEntryDAO.getScoreEntries(offset, limit);
+    List<ScoreEntryEntity> entities = scoreEntryDAO.getScoreEntries(typeId, offset, limit);
     List<ScoreEntryDTO> dtos = new ArrayList<ScoreEntryDTO>();
     for (ScoreEntryEntity entity : entities) {
       if(entity.getEnabled()==null) entity.setEnabled(true);
@@ -92,11 +92,11 @@ public class NpsService {
   }
 
 
-  public List<ScoreEntryDTO> getScoreEntriesByUserId(String userId,  int offset, int limit) {
+  public List<ScoreEntryDTO> getScoreEntriesByUserId(long typeId, String userId,  int offset, int limit) {
     if (offset < 0) {
       throw new IllegalArgumentException("Method getScoreEntriesByUserId - Parameter 'offset' must be positive");
     }
-    List<ScoreEntryEntity> entities = scoreEntryDAO.getScoreEntriesByUserId(userId,offset, limit);
+    List<ScoreEntryEntity> entities = scoreEntryDAO.getScoreEntriesByUserId(typeId,userId,offset, limit);
     List<ScoreEntryDTO> dtos = new ArrayList<ScoreEntryDTO>();
     for (ScoreEntryEntity entity : entities) {
       if(entity.getEnabled()==null) entity.setEnabled(true);
@@ -107,21 +107,21 @@ public class NpsService {
 
 
 
-  public long getPromotersCount() {
+  public long getPromotersCount(long typeId) {
 
-    return scoreEntryDAO.getPromotersCount();
+    return scoreEntryDAO.getPromotersCount(typeId);
   }
 
 
-  public long getDetractorsCount() {
+  public long getDetractorsCount(long typeId) {
 
-    return scoreEntryDAO.getDetractorsCount();
+    return scoreEntryDAO.getDetractorsCount(typeId);
   }
 
 
 
-  public long getScoreCount(boolean enabled) {
-    return scoreEntryDAO.getScoreEntriesCount(enabled);
+  public long getScoreCount(long typeId, boolean enabled) {
+    return scoreEntryDAO.getScoreEntriesCount(typeId, enabled);
   }
 
 
@@ -134,6 +134,7 @@ public class NpsService {
     entity.setComment(dto.getComment());
     entity.setLastAppereance(dto.getLastAppereance());
     entity.setEnabled(dto.getEnabled());
+    entity.setTypeId(dto.getTypeId());
 
     return entity;
   }
@@ -147,6 +148,7 @@ public class NpsService {
     dto.setComment(entity.getComment());
     dto.setLastAppereance(entity.getLastAppereance());
     dto.setEnabled(entity.getEnabled());
+    dto.setTypeId(entity.getTypeId());
 
     return dto;
   }

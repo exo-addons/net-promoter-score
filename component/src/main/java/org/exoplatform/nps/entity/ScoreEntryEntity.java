@@ -29,12 +29,12 @@ import java.util.Date;
 @ExoEntity
 @Table(name = "NPS_SCORE_ENTRY")
 @NamedQueries({
-        @NamedQuery(name = "scoreEntryEntity.findAllOrderBy", query = "SELECT a FROM NPSScoreEntryEntity a order by a.id desc"),
-        @NamedQuery(name = "scoreEntryEntity.count", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a"),
-        @NamedQuery(name = "scoreEntryEntity.countEnabled", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.enabled = true"),
-        @NamedQuery(name = "scoreEntryEntity.countPromoters", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.score >= 9 and  a.enabled = true"),
-        @NamedQuery(name = "scoreEntryEntity.countDetractors", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.score <= 6 and  a.enabled = true"),
-        @NamedQuery(name = "scoreEntryEntity.findByUserId", query = "SELECT a FROM NPSScoreEntryEntity a where a.userId = :userId order by a.id desc"),
+        @NamedQuery(name = "scoreEntryEntity.findAllOrderBy", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId order by a.id desc"),
+        @NamedQuery(name = "scoreEntryEntity.count", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId "),
+        @NamedQuery(name = "scoreEntryEntity.countEnabled", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.enabled = true"),
+        @NamedQuery(name = "scoreEntryEntity.countPromoters", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId  and a.score >= 9 and  a.enabled = true"),
+        @NamedQuery(name = "scoreEntryEntity.countDetractors", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.score <= 6 and  a.enabled = true"),
+        @NamedQuery(name = "scoreEntryEntity.findByUserId", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.userId = :userId order by a.id desc"),
         @NamedQuery(name = "scoreEntryEntity.findById", query = "SELECT a FROM NPSScoreEntryEntity a where a.id = :id") })
 @Data
 public class ScoreEntryEntity {
@@ -62,5 +62,8 @@ public class ScoreEntryEntity {
 
   @Column(name = "ENABLED")
   private Boolean enabled;
+
+  @Column(name = "TYPE_ID")
+  private long   typeId;
 
 }

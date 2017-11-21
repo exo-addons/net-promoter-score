@@ -33,7 +33,7 @@
 .npsStat .alert.alert-warning > span{color : #edad00}
 .npsStat .alert.alert-error > span{color : #c72222}
 .scoresDiv{
-    margin: 30px;
+    margin: 30px 30px 0 30px;
     width: initial;
 }
 .uiGrid.table tr.ng-scope > td:nth-last-child(1) {
@@ -95,6 +95,24 @@ input:checked + .slider:before {
   -ms-transform: translateX(26px);
   transform: translateX(26px);
 }
+/* SCORE MANAGEMENT */
+.scoresDiv > h4{
+    width: 100%;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.scoreManagement {
+    margin: auto;
+    position: relative;
+}
+.scoreManagement > h3.lead{
+    margin-bottom: 10px;
+    font-size: 16.5px;
+}
+.scoreManagement > select{padding: 2px 4px;min-height: 33px;}
+.scoreManagement > a{margin: -10px 0 0;}
+
 
 /* Rounded sliders */
 .slider.round {
@@ -120,6 +138,7 @@ div#resultMessage {
     width: 100%;
     left: 0;
     right: 0;
+    z-index: 10;
 }
 .npsAdminPopup > div{
     position: relative;
@@ -127,4 +146,12 @@ div#resultMessage {
     margin: 0 auto 20px;
     z-index: 1;
     max-width: 100%;
+
+}
+.npsAdminPopup input {
+    width: 100%;
+}
+/**/
+.no-graph{
+font-size: 18px;
 }
