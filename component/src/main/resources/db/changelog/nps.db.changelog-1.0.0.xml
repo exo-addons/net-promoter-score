@@ -63,4 +63,18 @@
     </update>
   </changeSet>
 
+  <changeSet author="nps-addon" id="1.0.0-5">
+  <addColumn tableName="NPS_SCORE_TYPE">
+    <column name="FOLLOWUP_DETRACTOR" type="NVARCHAR(550)"/>
+    <column name="FOLLOWUP_PASSIVE" type="NVARCHAR(550)"/>
+    <column name="FOLLOWUP_PROMOTER" type="NVARCHAR(550)"/>
+  </addColumn>
+</changeSet>
+
+  <changeSet author="nps-addon" id="1.0.0-6">
+    <addColumn tableName="NPS_SCORE_TYPE">
+      <column name="ANONYMOUS" type="BOOLEAN"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

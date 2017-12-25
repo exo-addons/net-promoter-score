@@ -4,13 +4,17 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
         var npsFormContainer = $('#npsForm');
         var deferred = $q.defer();
         $scope.showAlert = false;
-        $scope.newScore = null;
+        $scope.newScore = {id: null };
         $scope.showForm = true;
         $scope.scoreTypeId = 0;
+        $scope.scoreTypeAnonymous = false;
         $scope.portletId = "";
         $scope.firstDisplayDelay=10;
         $scope.scoreTypeMessage = "";
         $scope.displayPopup = "";
+        $scope.followUpDetractorPH = "";
+        $scope.followUpPassivePH = "";
+        $scope.followUpPromoterPH = "";
         $scope.setResultMessage = function (text, type) {
             $scope.resultMessageClass = "alert-" + type;
             $scope.resultMessageClassExt = "uiIcon" + type.charAt(0).toUpperCase()
@@ -65,6 +69,8 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
             }).then(function successCallback(data) {
                 $scope.i18n = data.data;
                 $scope.scoreTypeId = data.data.scoreTypeId;
+                $scope.scoreTypeAnonymous=data.data.scoreTypeAnonymous;
+                $scope.newScore.isAnonymous=data.data.scoreTypeAnonymous;
                 $scope.portletId = data.data.portletId;
                 $scope.firstDisplayDelay= data.data.firstDisplayDelay;
                 $scope.displayPopup = data.data.displayPopup;
@@ -77,6 +83,18 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                         $scope.scoreTypeMessage = data.data.scoreTypeMessage;
                          if ($scope.scoreTypeMessage==null||$scope.scoreTypeMessage==""){
                          $scope.scoreTypeMessage=data.data.messageForm;
+                         }
+                         $scope.followUpDetractorPH= data.data.followUpDetractor;
+                         if ($scope.followUpDetractorPH==null||$scope.followUpDetractorPH==""){
+                         $scope.followUpDetractorPH=data.data.followUpDetractorDefault;
+                         }
+                         $scope.followUpPassivePH= data.data.followUpPassive;
+                         if ($scope.followUpPassivePH==null||$scope.followUpPassivePH==""){
+                         $scope.followUpPassivePH=data.data.followUpPassiveDefault;
+                         }
+                         $scope.followUpPromoterPH= data.data.followUpPromoter;
+                         if ($scope.followUpPromoterPH==null||$scope.followUpPromoterPH==""){
+                         $scope.followUpPromoterPH=data.data.followUpPromoterDefault;
                          }
 
                      $scope.showForm = true;

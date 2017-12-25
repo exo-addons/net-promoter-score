@@ -129,7 +129,9 @@ public class NPSFormController {
     @Jackson
     public void saveScore(@Jackson ScoreEntryDTO obj) {
         obj.setEnabled(true);
-        obj.setUserId(currentUser);
+        if(obj.getIsAnonymous()){
+            obj.setUserId("");
+        }else obj.setUserId(currentUser);
         npsService.save(obj, true);
 
         /**
@@ -327,6 +329,10 @@ public class NPSFormController {
             data.set("scoreTypeId", scoreTypeId);
             data.set("portletId", portletId);
             data.set("scoreTypeMessage", sType.getQuestion());
+            data.set("followUpPassive", sType.getFollowUpPassive());
+            data.set("followUpPromoter", sType.getFollowUpPromoter());
+            data.set("followUpDetractor", sType.getFollowUpDetractor());
+            data.set("scoreTypeAnonymous", sType.getAnonymous());
             data.set("firstDisplayDelay", firstDisplayDelay);
             data.set("displayPopup", displayPopup);
             data.set("firstLogDiff", Utils.getDiffinDays(Utils.getFirstLoginDate(currentUser),Calendar.getInstance()));

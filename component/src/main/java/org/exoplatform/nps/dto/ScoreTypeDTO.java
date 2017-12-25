@@ -24,10 +24,18 @@ public class ScoreTypeDTO {
 
   private long              id;
 
-  private String              typeName;
+  private String            typeName;
   
-  private String               question;
+  private String            question;
 
-  private Boolean                isDefault;
+  private Boolean           isDefault;
+
+  private String            followUpDetractor;
+
+  private String            followUpPassive;
+
+  private String            followUpPromoter;
+
+  private Boolean           anonymous;
 
 }

@@ -60,8 +60,10 @@ public class NPSAdministrationController {
     try {
       List<ScoreEntryDTO> scores=npsService.getScores(typeId,offset,limit);
       for (ScoreEntryDTO score : scores){
-        Profile profile=identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, score.getUserId(), false).getProfile();
-        score.setUserFullName(profile.getFullName());
+        if(score.getUserId()!=null&&!((String)score.getUserId()).equals("")){
+            Profile profile=identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, score.getUserId(), false).getProfile();
+            score.setUserFullName(profile.getFullName());
+        }
       }
       return scores;
     } catch (Throwable e) {

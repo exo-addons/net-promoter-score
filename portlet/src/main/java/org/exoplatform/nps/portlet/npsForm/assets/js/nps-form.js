@@ -10,11 +10,33 @@ require( ["SHARED/jquery", "npsFormControllers"], function ( $,  npsFormControll
             console.log(e);
         }
 
-        $(".npsRadio .option-input.radio").click(function(){
-            $("#npsComment").css("display","block");
+        $(".npsRadio .option-input.radio.detractor").click(function(){
+            $("#npsDetractorComment").css("display","block");
+            $("#npsPassiveComment").css("display","none");
+            $("#npsPromoterComment").css("display","none");
             $("#submit").css("display","inline-block");
             setTimeout(function(){
-                $("#npsComment, #submit").css("opacity",1);
+                $("#npsDetractorComment, #submit").css("opacity",1);
+            }, 200);
+        });
+
+        $(".npsRadio .option-input.radio.passives").click(function(){
+            $("#npsPassiveComment").css("display","block");
+            $("#npsDetractorComment").css("display","none");
+            $("#npsPromoterComment").css("display","none");
+            $("#submit").css("display","inline-block");
+            setTimeout(function(){
+                $("#npsPassiveComment, #submit").css("opacity",1);
+            }, 200);
+        });
+
+        $(".npsRadio .option-input.radio.promoters").click(function(){
+            $("#npsPromoterComment").css("display","block");
+            $("#npsDetractorComment").css("display","none");
+            $("#npsPassiveComment").css("display","none");
+            $("#submit").css("display","inline-block");
+            setTimeout(function(){
+                $("#npsPromoterComment, #submit").css("opacity",1);
             }, 200);
         });
 

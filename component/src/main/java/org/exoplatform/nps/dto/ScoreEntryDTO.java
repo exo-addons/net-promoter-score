@@ -42,6 +42,8 @@ public class ScoreEntryDTO {
 
   private long        typeId;
 
+  private Boolean        isAnonymous;
+
   /*  public boolean verifySaveConditions() {
     if (StringUtils.isBlank(vacationRequestId) || StringUtils.isBlank(userId) ) {
       return false;

@@ -49,4 +49,19 @@ public class ScoreTypeEntity {
   @Column(name = "IS_DEFAULT")
   private Boolean   isDefault;
 
+
+  @Column(name = "FOLLOWUP_DETRACTOR")
+  private String followUpDetractor;
+
+
+  @Column(name = "FOLLOWUP_PASSIVE")
+  private String followUpPassive;
+
+
+  @Column(name = "FOLLOWUP_PROMOTER")
+  private String followUpPromoter;
+
+
+  @Column(name = "ANONYMOUS")
+  private Boolean  anonymous;
 }
