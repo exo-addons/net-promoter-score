@@ -98,10 +98,12 @@ class="result-message alert {{resultMessageClass}}">
                         <textarea ng-model="newScore.comment" placeholder="{{followUpPromoterPH}}"></textarea>
 </div>
 
-<div  id="anonym" ng-show="scoreTypeAnonymous">
-<label class="control-label" for="isAnonymous">{{i18n.anonymous}}:</label>
-<input type="checkbox" ng-model="newScore.isAnonymous" [name="isAnonymous"] >
-</div>
+                    <div  id="anonym" ng-show="scoreTypeAnonymous">
+                        <span class="uiCheckbox">
+                          <input type="checkbox" class="checkbox" ng-model="newScore.isAnonymous" [name="isAnonymous"]>
+                           <span>  {{i18n.anonymous}}</span>
+                        </span>
+                    </div>
 
                     <div class="row-fluid submitdiv">
                         <button type="submit" class="btn btn-block btn-primary span5" id="submit"

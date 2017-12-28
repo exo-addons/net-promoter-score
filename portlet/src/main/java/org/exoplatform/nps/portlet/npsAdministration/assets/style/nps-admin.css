@@ -49,7 +49,7 @@ a.actionIconde {
 .switch {
   position: relative;
   display: inline-block;
-  width: 47px;
+  width: 47px!important;
   height: 21px;
   margin-bottom: 0;
 }
@@ -136,8 +136,10 @@ div#resultMessage {
 .npsAdminPopup{
     position: fixed;
     width: 100%;
+    top: 62px;
     left: 0;
     right: 0;
+    bottom: 5px;
     z-index: 10;
 }
 .npsAdminPopup > div{
@@ -146,7 +148,8 @@ div#resultMessage {
     margin: 0 auto 20px;
     z-index: 1;
     max-width: 100%;
-
+    height: auto;
+    overflow: auto;
 }
 .npsAdminPopup input {
     width: 100%;
@@ -155,3 +158,9 @@ div#resultMessage {
 .no-graph{
 font-size: 18px;
 }
+
+/**/
+/* -- POPUP FORM -- */
+/**/
+.npsAdminPopup label, .npsAdminPopup div.controls{display: inline-block; width: 20%}
+.npsAdminPopup div.controls{display: inline-block;width: 75%;}

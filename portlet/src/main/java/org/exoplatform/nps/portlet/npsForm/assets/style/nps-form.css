@@ -253,13 +253,13 @@ display: inline-block;
 
 #nps .submitdiv{
     margin-bottom: 5px;
+    margin-top: 10px
 }
 
 /**/
 /**/
 .div_indication {
     display: inline-block;
-    margin-bottom: 20px;
     width: 100%;
 }
 .div_indication .indication {
@@ -299,3 +299,38 @@ display: inline-block;
 /* settingsContainer */
 
 .settingsContainer button.btn.btn-primary.input-large{margin: 0}
+
+
+/**/
+/* SWICHER*/
+/**/
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 47px!important;
+  height: 21px;
+  margin-bottom: 0;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/**/
+/* uiCheckbox STYLE */
+/**/
+#npsForm .uiCheckbox input[type="checkbox"]+span:before {
+    width: 20px;
+    height: 20px;
+}
+#npsForm .uiCheckbox>span {
+    margin-left: 10px;
+    margin-top: 4px;
+}
+#npsForm .uiCheckbox input[type="checkbox"]:checked+span:after {
+    width: 9px;
+    height: 4px;
+    box-shadow: none;
+    left: 5px;
+    top: 8px;
+}

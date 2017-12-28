@@ -164,12 +164,17 @@ ng-model="scoreTypeToEdit.followUpPromoter">
 </div>
                             </div>
 
-							<div class="control-group {{usernameClass}} span6">
-<label class="control-label" for="anonymous">{{i18n.anonymous}}:</label>
-<div class="controls">
-<input type="checkbox" ng-model="scoreTypeToEdit.anonymous" [name="anonymous"] >
-</div>
-</div>
+        <div class="control-group {{usernameClass}}">
+            <label class="control-label" for="anonymous">{{i18n.anonymous}}:</label>
+            <div class="controls">
+                <label class="switch">
+                    <input type="checkbox" ng-model="scoreTypeToEdit.anonymous" [name="anonymous"] data-placement="right"
+                           data-original-title="Enable / Disable">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+        </div>
 
 <div class="uiAction uiActionBorder">
 <button type="button" class="btn btn-primary" id="saveType"
