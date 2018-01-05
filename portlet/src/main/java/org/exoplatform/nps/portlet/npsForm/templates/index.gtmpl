@@ -16,7 +16,8 @@ class="result-message alert {{resultMessageClass}}">
             </div>
 
 <div ng-show="showForm">
-<h4>{{i18n.hi}} {{i18n.fullName}},<br/><br/> {{scoreTypeMessage}}</h4>
+<h4 ng-if="newScore.isAnonymous == true">{{i18n.hi}},<br/><br/> {{scoreTypeMessage}}</h4>
+<h4 ng-if="newScore.isAnonymous == false">{{i18n.hi}} {{i18n.fullName}},<br/><br/> {{scoreTypeMessage}}</h4>
                 <span class="close"><i class="uiIconClose"></i></span>
                 <form id="npsForm">
                     <div class="npsRadio">

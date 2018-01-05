@@ -107,7 +107,6 @@ public class NpsTypeService {
     entity.setFollowUpPassive(dto.getFollowUpPassive());
     entity.setFollowUpPromoter(dto.getFollowUpPromoter());
     entity.setFollowUpDetractor(dto.getFollowUpDetractor());
-    entity.setFollowUpDetractor(dto.getFollowUpDetractor());
     entity.setAnonymous(dto.getAnonymous());
     return entity;
   }
@@ -120,6 +119,7 @@ public class NpsTypeService {
     dto.setIsDefault(entity.getIsDefault());
     dto.setFollowUpPassive(entity.getFollowUpPassive());
     dto.setFollowUpPromoter(entity.getFollowUpPromoter());
+    dto.setFollowUpDetractor(entity.getFollowUpDetractor());
     dto.setAnonymous(entity.getAnonymous());
     return dto;
   }
