@@ -140,15 +140,15 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                         {id: "s", label: "Slices", type: "number"}
                     ], "rows": [
                         {c: [
-                            {v: "Promoters"},
+                            {v: $scope.i18n.Promoters},
                             {v: $scope.promotersNbr},
                         ]},
                         {c: [
-                            {v: "Passives"},
+                            {v: $scope.i18n.Passives},
                             {v: $scope.passivesNbr}
                         ]},
                         {c: [
-                            {v: "Detractor"},
+                            {v: $scope.i18n.Detractor},
                             {v: $scope.detractorsNbr}
                         ]}
                     ]};

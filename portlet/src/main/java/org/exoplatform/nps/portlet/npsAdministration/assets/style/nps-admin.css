@@ -36,9 +36,7 @@
     margin: 30px 30px 0 30px;
     width: initial;
 }
-.uiGrid.table tr.ng-scope > td:nth-last-child(1) {
-    text-align: center;
-}
+
 a.actionIconde {
     float: right;
 }

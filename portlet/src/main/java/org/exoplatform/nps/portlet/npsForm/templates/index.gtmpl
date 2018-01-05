@@ -6,19 +6,18 @@
 <div id="nps">
 
 <div ng-show="showAlert">
-
+    <span class="close thankyClose"><i class="uiIconClose"></i></span>
 <div id="resultMessage"
 class="result-message alert {{resultMessageClass}}">
 <i class="{{resultMessageClassExt}}"></i>{{resultMessage}}
                 </div>
 
-<button class="btn btn-primary thankyClose">Ok</button>
             </div>
 
 <div ng-show="showForm">
-<h4 ng-if="newScore.isAnonymous == true">{{i18n.hi}},<br/><br/> {{scoreTypeMessage}}</h4>
-<h4 ng-if="newScore.isAnonymous == false">{{i18n.hi}} {{i18n.fullName}},<br/><br/> {{scoreTypeMessage}}</h4>
-                <span class="close"><i class="uiIconClose"></i></span>
+    <h4 ng-if="newScore.isAnonymous == true">{{i18n.hi}},<br/><br/> {{scoreTypeMessage}}</h4>
+    <h4 ng-if="newScore.isAnonymous == false">{{i18n.hi}} {{i18n.fullName}},<br/><br/> {{scoreTypeMessage}}</h4>
+                <span class="close" ng-click="cancel()"><i class="uiIconClose"></i></span>
                 <form id="npsForm">
                     <div class="npsRadio">
                         <label>
@@ -110,9 +109,8 @@ class="result-message alert {{resultMessageClass}}">
                         <button type="submit" class="btn btn-block btn-primary span5" id="submit"
                                 ng-click="saveScore(newScore)">{{i18n.save}}
                         </button>
-<button type="cancel" class="btn btn-block span6" ng-click="cancel()">{{i18n.cancel}}</button>
                     </div>
-<a href="javascript:void(0)" ng-click="disableUser()">Don't ask me again.</a>
+<a href="javascript:void(0)" ng-click="disableUser()">{{i18n.dontaskagain}}</a>
 </form>
             </div>
 </div>

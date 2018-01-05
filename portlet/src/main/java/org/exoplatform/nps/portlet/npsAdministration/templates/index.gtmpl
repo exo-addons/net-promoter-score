@@ -19,9 +19,9 @@
                                 ng-options="type.typeName for type in scoreTypes track by type.id"
                                 ng-model="selectModel" ng-change="getScoresbyType(selectModel.id)"></select>
 
-<a class="actionIcon" data-original-title="Edit Score" ng-click="getScoreType(typeId)"> <i
+<a class="actionIcon" ng-click="getScoreType(typeId)" rel="tooltip" data-toggle="tooltip" data-original-title="{{i18n.editScoreType}}"> <i
 class="uiIconEdit uiIconLightGray" style=" font-size: 24px;"></i> </a>
-<a class="actionIcon" data-original-title="Add Score" ng-click="showForm=true"> <i
+<a class="actionIcon" ng-click="showForm=true" rel="tooltip" data-toggle="tooltip" data-original-title="{{i18n.addScoreType}}"> <i
 class="uiIconPlus uiIconLightGray" style=" font-size: 24px;"></i> </a>
 </div>
                 </div>
@@ -84,19 +84,25 @@ ng-model="newScoreType.followUpPromoter">
 </div>
 </div>
 
-<div class="control-group {{usernameClass}} span6">
+<!--  ANONYME -->
+<div class="control-group {{usernameClass}}">
 <label class="control-label" for="anonymous">{{i18n.anonymous}}:</label>
-<div class="controls">
-<input type="checkbox" ng-model="newScoreType.anonymous" [name="anonymous"] >
-</div>
+    <div class="controls">
+        <label class="switch">
+            <input type="checkbox" ng-model="newScoreType.anonymous" [name="anonymous"] data-placement="right"
+                   data-original-title="Enable / Disable">
+            <span class="slider round"></span>
+        </label>
+    </div>
 </div>
 
+<!-- END OLD ANONYME -->
 
 <div class="uiAction uiActionBorder">
 <button type="button" class="btn btn-primary" id="saveType"
-ng-click="saveScoreType(newScoreType);showForm = false">{{i18n.save}}
+ng-click="saveScoreType(newScoreType);showForm = false">{{i18n.saveAdmin}}
 </button>
-                                <button type="button" class="btn" ng-click="showForm = false">{{i18n.cancel}}</button>
+                                <button type="button" class="btn" ng-click="showForm = false">{{i18n.cancelAdmin}}</button>
 
 </div>
                         </div>
@@ -178,9 +184,9 @@ ng-model="scoreTypeToEdit.followUpPromoter">
 
 <div class="uiAction uiActionBorder">
 <button type="button" class="btn btn-primary" id="saveType"
-ng-click="upadteScoreType(scoreTypeToEdit);showEditForm = false">{{i18n.save}}
+ng-click="upadteScoreType(scoreTypeToEdit);showEditForm = false">{{i18n.saveAdmin}}
 </button>
-                                <button type="button" class="btn" ng-click="showEditForm = false">{{i18n.cancel}}</button>
+                                <button type="button" class="btn" ng-click="showEditForm = false">{{i18n.cancelAdmin}}</button>
 </div>
                         </div>
 </div>
@@ -202,35 +208,35 @@ ng-click="upadteScoreType(scoreTypeToEdit);showEditForm = false">{{i18n.save}}
                 <table id="scoresTable" class="table uiGrid table-hover table-striped">
                     <thead>
                     <tr>
-                        <th><a href="#" ng-click="orderByField = 'title'; reverseSort = !reverseSort">{{i18n.userFullName}}
+                        <th  width="13%"><a href="#" ng-click="orderByField = 'title'; reverseSort = !reverseSort">{{i18n.userFullName}}
                             <img ng-show="orderByField == 'title' && !reverseSort"
                                  src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueDownArrow.gif">
 <img ng-show="orderByField == 'title' && reverseSort"
 src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
 </a>
                         </th>
-<th><a href="#" ng-click="orderByField = 'type'; reverseSort = !reverseSort">{{i18n.rate}}
+<th width="2%"><a href="#" ng-click="orderByField = 'type'; reverseSort = !reverseSort">{{i18n.rate}}
 <img ng-show="orderByField == 'type' && !reverseSort"
 src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueDownArrow.gif">
 <img ng-show="orderByField == 'type' && reverseSort"
 src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
 </a>
                         </th>
-<th><a href="#" ng-click="orderByField = 'severity'; reverseSort = !reverseSort">{{i18n.comment}}
+<th width="60%"><a href="#" ng-click="orderByField = 'severity'; reverseSort = !reverseSort">{{i18n.comment}}
 <img ng-show="orderByField == 'severity' && !reverseSort"
 src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueDownArrow.gif">
 <img ng-show="orderByField == 'severity' && reverseSort"
 src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
 </a>
                         </th>
-<th><a href="#" ng-click="orderByField = 'startDate'; reverseSort = !reverseSort">{{i18n.responseDate}}
+<th width="15%"><a href="#" ng-click="orderByField = 'startDate'; reverseSort = !reverseSort">{{i18n.responseDate}}
 <img ng-show="orderByField == 'startDate' && !reverseSort"
 src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueDownArrow.gif">
 <img ng-show="orderByField == 'startDate' && reverseSort"
 src="/eXoResources/skin/images/Icons/skinIcons/16x16/BlueUpArrow.gif">
 </a>
                         </th>
-<th>{{i18n.actions}}
+<th width="10%">{{i18n.actions}}
 </th>
                     </tr>
 </thead>

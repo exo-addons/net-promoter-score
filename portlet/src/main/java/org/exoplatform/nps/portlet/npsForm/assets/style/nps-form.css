@@ -52,6 +52,7 @@ div#nps {
     border-radius: 5px;
     margin-bottom: 16px;
     overflow: hidden;
+    position: relative
 }
 #nps p {
     text-align: justify;
