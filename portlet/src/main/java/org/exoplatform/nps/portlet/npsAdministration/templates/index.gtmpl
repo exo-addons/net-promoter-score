@@ -283,7 +283,7 @@ ng-click="deleteScore(score)">
 <span class="PopupTitle popupTitle">{{i18n.deletePopupHeader}}</span>
                                 </div>
 <div class="PopupContent popupContent">
-<p>{{i18n.deletePopupContent}} <span id="voteName"></span>{{i18n.deletePopupContentEnd}}
+<p>{{i18n.deletePopupContent}}
                                     </p>
 <div class="uiAction uiActionBorder">
 <button class="btn" ng-click="validatedDeleteScore(scoreToDelete)"
