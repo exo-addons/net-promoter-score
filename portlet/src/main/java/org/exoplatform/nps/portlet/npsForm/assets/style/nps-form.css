@@ -335,3 +335,14 @@ display: inline-block;
     left: 5px;
     top: 8px;
 }
+/**
+*   RESPONSIVENESS
+*/
+
+@media all and (max-width: 911px) {
+    div.npsFormPopup #npsFormCtrl {width: 60%}
+}
+
+@media all and (max-width: 767px) {
+    div.npsFormPopup #npsFormCtrl {width: 90%}
+}
