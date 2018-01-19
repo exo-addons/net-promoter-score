@@ -109,6 +109,7 @@ class="result-message alert {{resultMessageClass}}">
                         <button type="submit" class="btn btn-block btn-primary span5" id="submit"
                                 ng-click="saveScore(newScore)">{{i18n.save}}
                         </button>
+                        <button type="cancel" class="btn btn-block span6" ng-click="cancel()">{{i18n.cancel}}</button>
                     </div>
 <a href="javascript:void(0)" ng-click="disableUser()">{{i18n.dontaskagain}}</a>
 </form>
