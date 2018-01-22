@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.exoplatform.addons.nps-addon</groupId>
 		<artifactId>nps-addon</artifactId>
-		<version>1.0.x-SNAPSHOT</version>
+		<version>1.0.0-M08</version>
 	</parent>
 	<artifactId>nps-addon-portlet</artifactId>
 	<packaging>war</packaging>
