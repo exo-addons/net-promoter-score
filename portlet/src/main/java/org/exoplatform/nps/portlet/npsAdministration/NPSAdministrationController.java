@@ -168,9 +168,8 @@ public class NPSAdministrationController {
   @MimeType.JSON
   @Jackson
   public void saveType(@Jackson ScoreTypeDTO obj) {
-
+    if (obj.getAnonymous()==null) obj.setAnonymous(false);
     npsTypeService.save(obj,true);
-
   }
 
   @Ajax
