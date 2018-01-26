@@ -331,6 +331,7 @@ public class NPSFormController {
             data.set("respondedCookiesExpiration", respondedCookiesExpiration);
             data.set("reportedCookiesExpiration", reportedCookiesExpiration);
             data.set("scoreTypeId", scoreTypeId);
+            data.set("scoreTypeName", sType.getTypeName());
             data.set("portletId", portletId);
             data.set("scoreTypeMessage", sType.getQuestion());
             data.set("followUpPassive", sType.getFollowUpPassive());

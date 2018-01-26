@@ -8,6 +8,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
         $scope.showForm = true;
         $scope.scoreTypeId = 0;
         $scope.scoreTypeAnonymous = false;
+        $scope.scoreTypeName="";
         $scope.portletId = "";
         $scope.firstDisplayDelay=10;
         $scope.scoreTypeMessage = "";
@@ -69,6 +70,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
             }).then(function successCallback(data) {
                 $scope.i18n = data.data;
                 $scope.scoreTypeId = data.data.scoreTypeId;
+                $scope.scoreTypeName = data.data.scoreTypeName;
                 $scope.scoreTypeAnonymous=data.data.scoreTypeAnonymous;
                 $scope.newScore.isAnonymous=data.data.scoreTypeAnonymous;
                 $scope.portletId = data.data.portletId;
