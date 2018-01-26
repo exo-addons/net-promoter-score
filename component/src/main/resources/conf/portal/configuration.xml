@@ -35,6 +35,10 @@
     <type>org.exoplatform.nps.services.NpsTypeService</type>
   </component>
 
+  <component>
+    <type>org.exoplatform.nps.services.rest.NpsRestService</type>
+  </component>
+
 
 
   <!-- Data Initialization -->
