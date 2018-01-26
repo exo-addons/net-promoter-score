@@ -77,4 +77,12 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="nps-addon" id="1.0.0-7">
+    <addColumn tableName="NPS_SCORE_TYPE">
+      <column name="LINKED_TO_SPACE" type="BOOLEAN"/>
+      <column name="SPACE_ID" type="NVARCHAR(50)"/>
+      <column name="USER_ID" type="NVARCHAR(50)"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

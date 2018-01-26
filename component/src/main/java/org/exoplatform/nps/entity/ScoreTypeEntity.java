@@ -64,4 +64,13 @@ public class ScoreTypeEntity {
 
   @Column(name = "ANONYMOUS")
   private Boolean  anonymous;
+
+  @Column(name = "LINKED_TO_SPACE")
+  private Boolean  linkedToSpace;
+
+  @Column(name = "SPACE_ID")
+  private String spaceId;
+
+  @Column(name = "USER_ID")
+  private String userId;
 }

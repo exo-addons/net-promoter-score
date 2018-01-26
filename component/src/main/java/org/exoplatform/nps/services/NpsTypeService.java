@@ -108,6 +108,9 @@ public class NpsTypeService {
     entity.setFollowUpPromoter(dto.getFollowUpPromoter());
     entity.setFollowUpDetractor(dto.getFollowUpDetractor());
     entity.setAnonymous(dto.getAnonymous());
+    entity.setLinkedToSpace(dto.getLinkedToSpace());
+    entity.setSpaceId(dto.getSpaceId());
+    entity.setUserId(dto.getUserId());
     return entity;
   }
 
@@ -121,6 +124,9 @@ public class NpsTypeService {
     dto.setFollowUpPromoter(entity.getFollowUpPromoter());
     dto.setFollowUpDetractor(entity.getFollowUpDetractor());
     dto.setAnonymous(entity.getAnonymous());
+    dto.setLinkedToSpace(entity.getLinkedToSpace());
+    dto.setSpaceId(entity.getSpaceId());
+    dto.setUserId(entity.getUserId());
     return dto;
   }
 

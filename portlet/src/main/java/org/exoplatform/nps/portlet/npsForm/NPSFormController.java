@@ -132,7 +132,11 @@ public class NPSFormController {
         if(obj.getIsAnonymous()!=null&&obj.getIsAnonymous()){
             obj.setUserId("");
         }else obj.setUserId(currentUser);
-        npsService.save(obj, true);
+        if(npsService.save(obj, true)){
+           if(obj.getComment()!=null){
+                   Utils.createActivity(obj);
+           }
+        }
 
         /**
          * MARKETO INTEGRATION

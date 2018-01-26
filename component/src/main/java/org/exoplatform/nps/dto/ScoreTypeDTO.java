@@ -38,4 +38,10 @@ public class ScoreTypeDTO {
 
   private Boolean           anonymous;
 
+  private Boolean           linkedToSpace;
+
+  private String            spaceId;
+
+  private String            userId;
+
 }
