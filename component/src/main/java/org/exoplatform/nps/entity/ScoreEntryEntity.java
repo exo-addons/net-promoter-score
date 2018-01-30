@@ -34,6 +34,9 @@ import java.util.Date;
         @NamedQuery(name = "scoreEntryEntity.countEnabled", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.enabled = true"),
         @NamedQuery(name = "scoreEntryEntity.countPromoters", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId  and a.score >= 9 and  a.enabled = true"),
         @NamedQuery(name = "scoreEntryEntity.countDetractors", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.score <= 6 and  a.enabled = true"),
+        @NamedQuery(name = "scoreEntryEntity.countEnabledByDate", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.postedTime < :toDate and a.enabled = true"),
+        @NamedQuery(name = "scoreEntryEntity.countPromotersByDate", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId  and a.score >= 9 and a.postedTime < :toDate and  a.enabled = true"),
+        @NamedQuery(name = "scoreEntryEntity.countDetractorsByDate", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.score <= 6 and a.postedTime < :toDate and  a.enabled = true"),
         @NamedQuery(name = "scoreEntryEntity.findByUserId", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.userId = :userId order by a.id desc"),
         @NamedQuery(name = "scoreEntryEntity.findById", query = "SELECT a FROM NPSScoreEntryEntity a where a.id = :id") })
 @Data

@@ -85,6 +85,48 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
 
 
 
+    public  long getScoreEntriesCountByDate(long typeId,long toDate) {
+        try {
+
+                return getEntityManager().createNamedQuery("scoreEntryEntity.countEnabledByDate", Long.class)
+                        .setParameter("typeId", typeId)
+                        .setParameter("toDate", toDate)
+                        .getSingleResult();
+
+
+        } catch (Exception e) {
+            LOG.warn("Exception while attempting to get scores count.", e);
+            throw e;
+        }
+    }
+
+    public  long getPromotersCountByDate(long typeId, long toDate) {
+        try {
+            return getEntityManager().createNamedQuery("scoreEntryEntity.countPromotersByDate", Long.class)
+                    .setParameter("typeId", typeId)
+                    .setParameter("toDate", toDate)
+                    .getSingleResult();
+        } catch (Exception e) {
+            LOG.warn("Exception while attempting to get scores count.", e);
+            throw e;
+        }
+    }
+
+    public  long getDetractorsCountByDate(long typeId, long toDate) {
+        try {
+            return getEntityManager().createNamedQuery("scoreEntryEntity.countDetractorsByDate", Long.class)
+                    .setParameter("typeId", typeId)
+                    .setParameter("toDate", toDate)
+                    .getSingleResult();
+        } catch (Exception e) {
+            LOG.warn("Exception while attempting to get scores count.", e);
+            throw e;
+        }
+    }
+
+
+
+
     public List<ScoreEntryEntity> getScoreEntriesByUserId(long typeId,String userId, int offset, int limit) {
         try {
             if (offset >= 0 && limit > 0) {

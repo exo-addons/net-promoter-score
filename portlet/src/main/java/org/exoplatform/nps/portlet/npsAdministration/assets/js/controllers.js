@@ -12,6 +12,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.scores  = [];
         $scope.scoreTypes  = [];
         $scope.scoresSum=0;
+        $scope.weeklyNpScore=[];
         $scope.pieChartObject = {};
         $scope.pieChartObject.options = {
             backgroundColor: 'transparent',
@@ -37,6 +38,38 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 greenFrom: 30,
                 greenTo: 100,
         };
+
+         $scope.myChartObject = {};
+         $scope.myChartObject.type = "LineChart";
+
+
+                     $scope.myChartObject.type = "LineChart";
+                     $scope.myChartObject.displayed = false;
+
+
+           $scope.myChartObject.options = {
+                         "title": "NPS per week",
+                         "colors": ['#0000FF', '#009900', '#CC0000'],
+                         "defaultColors": ['#0000FF', '#009900', '#CC0000'],
+                         "isStacked": "true",
+                         "fill": 20,
+                         "displayExactValues": true,
+                         "vAxis": {
+                             "title": "",
+                             "gridlines": {
+                                 "count": 10
+                             }
+                         },
+                         "hAxis": {
+                             "title": ""
+                         }
+                     };
+
+                     $scope.myChartObject.view = {
+                         columns: [0, 1, 2, 3]
+                     };
+
+
         $scope.itemsPerPage = 10;
         $scope.currentPage = 0;
         $scope.pages=[];
@@ -46,8 +79,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 
         $scope.setResultMessage = function (text, type) {
             $scope.resultMessageClass = "alert-" + type;
-            $scope.resultMessageClassExt = "uiIcon" + type.charAt(0).toUpperCase()
-                + type.slice(1);
+            $scope.resultMessageClassExt = "uiIcon" + type.charAt(0).toUpperCase()+ type.slice(1);
             $scope.showAlert = true;
             $scope.resultMessage = text;
         }
@@ -153,7 +185,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                         ]}
                     ]};
                 }
-
+               $scope.getWeeklyNPSForCurrentYear(typeId);
                 $scope.pages=$scope.range();
                // $scope.getScoresbyType(typeId);
 
@@ -163,6 +195,67 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
             });
         }
+
+       $scope.getWeeklyNPSForCurrentYear = function (typeId) {
+             $http({
+                 method: 'GET',
+                 url: npsAdminContainer.jzURL('NPSAdministrationController.getWeeklyNPSForCurrentYear')+ "&typeId="+typeId
+             }).then(function successCallback(data) {
+                 $scope.weeklyNpScore = data.data;
+                var NPSArray = [];
+                for(var i = 0; i < $scope.weeklyNpScore.length; i++) {
+                    var obj = $scope.weeklyNpScore[i];
+                        NPSArray.push({ c: [{v: obj.npsDate}, {v: obj.score }, { v: 70 }, { v: 25 }]});
+                }
+
+                    $scope.myChartObject.data = {
+                                         "cols": [{
+                                             id: "week",
+                                             label: "Week",
+                                             type: "string"
+                                         }, {
+                                             id: "nps-id",
+                                             label: "NPS",
+                                             type: "number"
+                                         }, {
+                                             id: "industry-high",
+                                             label: "Industry High",
+                                             type: "number"
+                                         }, {
+                                             id: "industry-low",
+                                             label: "Industry Low",
+                                             type: "number"
+                                         }                         ],
+                                         "rows": NPSArray
+                                     };
+
+                 deferred.resolve(data);
+ //                $scope.setResultMessage(data, "success");
+             }, function errorCallback(data) {
+                 $scope.setResultMessage($scope.i18n.defaultError, "error");
+             });
+         }
+
+$scope.hideSeries= function(selectedItem) {
+            var col = selectedItem.column;
+            if (selectedItem.row === null) {
+                if ($scope.myChartObject.view.columns[col] == col) {
+                    $scope.myChartObject.view.columns[col] = {
+                        label: $scope.myChartObject.data.cols[col].label,
+                        type: $scope.myChartObject.data.cols[col].type,
+                        calc: function() {
+                            return null;
+                        }
+                    };
+                    $scope.myChartObject.options.colors[col - 1] = '#CCCCCC';
+                }
+                else {
+                    $scope.myChartObject.view.columns[col] = col;
+                    $scope.myChartObject.options.colors[col - 1] = $scope.myChartObject.options.defaultColors[col - 1];
+                }
+            }
+        }
+
 
         $scope.saveScoreType= function(newScoreType)
         {
