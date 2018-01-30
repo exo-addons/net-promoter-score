@@ -33,18 +33,33 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
     public List<ScoreEntryEntity> getScoreEntries(long typeId, int offset, int limit) {
         try {
             if (offset >= 0 && limit > 0) {
-                return getEntityManager().createNamedQuery("scoreEntryEntity.findAllOrderBy", ScoreEntryEntity.class)
+                return getEntityManager().createNamedQuery("scoreEntryEntity.findAllOrderByDesc", ScoreEntryEntity.class)
                         .setFirstResult(offset)
                         .setMaxResults(limit)
                         .setParameter("typeId", typeId)
                         .getResultList();
             } else {
-                return getEntityManager().createNamedQuery("scoreEntryEntity.findAllOrderBy", ScoreEntryEntity.class)
+                return getEntityManager().createNamedQuery("scoreEntryEntity.findAllOrderByDesc", ScoreEntryEntity.class)
                         .setParameter("typeId", typeId)
                         .getResultList();
             }
         } catch (Exception e) {
             LOG.warn("Exception while attempting to get scores with offset = '" + offset + "' and limit = '" + limit + "'.", e);
+            throw e;
+        }
+    }
+
+    public List<ScoreEntryEntity> getFirstScoreEntries(long typeId) {
+        try {
+
+                return getEntityManager().createNamedQuery("scoreEntryEntity.findAllOrderByAsc", ScoreEntryEntity.class)
+                        .setParameter("typeId", typeId)
+                        .setFirstResult(0)
+                        .setMaxResults(1)
+                        .getResultList();
+
+        } catch (Exception e) {
+            LOG.warn("Exception while attempting to get first scores", e);
             throw e;
         }
     }

@@ -82,6 +82,13 @@ public class NpsService {
   }
 
 
+  public ScoreEntryDTO getFirstScoreEntries(long typeId) {
+    List<ScoreEntryEntity> entities =  scoreEntryDAO.getFirstScoreEntries(typeId);
+    if( entities.size()>0){
+      return convert(entities.get(0));
+    } else return null;
+  }
+
 
   public ScoreEntryDTO getScoreEntry(long id) {
     List<ScoreEntryEntity> entities=scoreEntryDAO.getScoreEntrybyId(id);

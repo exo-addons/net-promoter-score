@@ -119,7 +119,7 @@ public class Utils
         List<NPSDetailsDTO> NPSScors=new ArrayList<NPSDetailsDTO>();
         Calendar c=Calendar.getInstance();
         c.setTimeInMillis(fromDate);
-        int diff= Calendar.DAY_OF_WEEK-Calendar.SATURDAY;
+        int diff= Calendar.SATURDAY-c.get(Calendar.DAY_OF_WEEK);
         c.add(Calendar.DATE, diff);
         while(c.getTimeInMillis()<toDate){
             NPSScors.add(calculateNpsByDate (typeId,c.getTimeInMillis()));
@@ -133,21 +133,28 @@ public class Utils
     }
 
     public static List<NPSDetailsDTO> getWeeklyNPSForCurrentYear(long typeId){
+        NpsService npsService= CommonsUtils.getService(NpsService.class);
         List<NPSDetailsDTO> NPSScors=new ArrayList<NPSDetailsDTO>();
-        Calendar fromDate=Calendar.getInstance();
-        fromDate.set(Calendar.DAY_OF_YEAR, 1);
-        int diff= Calendar.DAY_OF_WEEK-Calendar.SATURDAY;
-        fromDate.add(Calendar.DATE, diff);
-        Calendar toDate=Calendar.getInstance();
-        while(fromDate.before(toDate)){
-            NPSScors.add(calculateNpsByDate (typeId,fromDate.getTimeInMillis()));
-            fromDate.add(Calendar.DATE, 7);
-        }
-        if(fromDate.after(toDate)){
-            NPSScors.add(calculateNpsByDate (typeId,fromDate.getTimeInMillis()));
+        ScoreEntryDTO score = npsService.getFirstScoreEntries(typeId);
+        if(score!=null){
+            Calendar fromDate=Calendar.getInstance();
+            fromDate.set(Calendar.DAY_OF_YEAR, 1);
+            fromDate.set(Calendar.YEAR, 2017);
+            Calendar c=Calendar.getInstance();
+            c.setTimeInMillis(score.getPostedTime());
+            if(fromDate.before(c)) fromDate.setTime(c.getTime());
+            int diff= Calendar.SATURDAY-fromDate.get(Calendar.DAY_OF_WEEK);
+            fromDate.add(Calendar.DATE, diff);
+            Calendar toDate=Calendar.getInstance();
+            while(fromDate.before(toDate)){
+                NPSScors.add(calculateNpsByDate (typeId,fromDate.getTimeInMillis()));
+                fromDate.add(Calendar.DATE, 7);
+            }
+            if(fromDate.after(toDate)){
+                NPSScors.add(calculateNpsByDate (typeId,fromDate.getTimeInMillis()));
+            }
         }
         return NPSScors;
-
     }
 
 }

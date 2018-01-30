@@ -29,7 +29,8 @@ import java.util.Date;
 @ExoEntity
 @Table(name = "NPS_SCORE_ENTRY")
 @NamedQueries({
-        @NamedQuery(name = "scoreEntryEntity.findAllOrderBy", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId order by a.id desc"),
+        @NamedQuery(name = "scoreEntryEntity.findAllOrderByDesc", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId order by a.id desc"),
+        @NamedQuery(name = "scoreEntryEntity.findAllOrderByAsc", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId order by a.id asc"),
         @NamedQuery(name = "scoreEntryEntity.count", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId "),
         @NamedQuery(name = "scoreEntryEntity.countEnabled", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.enabled = true"),
         @NamedQuery(name = "scoreEntryEntity.countPromoters", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId  and a.score >= 9 and  a.enabled = true"),
