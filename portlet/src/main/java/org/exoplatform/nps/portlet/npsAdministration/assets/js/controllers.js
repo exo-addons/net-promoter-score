@@ -166,8 +166,12 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 
         $scope.saveScoreType= function(newScoreType)
         {
-                    $scope.showAlert = false;
-                    // $scope.setResultMessage($scope.i18n.savingScore, "info");
+            $scope.showAlert = false;
+            if(newScoreType){
+               console.warn(((newScoreType.typeName != undefined) && (!newScoreType.linkedToSpace)) || ((newScoreType.linkedToSpace) && (newScoreType.typeName != undefined) && (newScoreType.spaceId != undefined) && (newScoreType.userId != undefined)));
+
+                if(((newScoreType.typeName != undefined) && (!newScoreType.linkedToSpace)) || ((newScoreType.linkedToSpace) && (newScoreType.typeName != undefined) && (newScoreType.spaceId != undefined) && (newScoreType.userId != undefined))){
+
                     $http({
                         data : newScoreType,
                         method : 'POST',
@@ -176,33 +180,47 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                         },
                         url : npsAdminContainer.jzURL('NPSAdministrationController.saveType')
                     }).then(function successCallback(data) {
-//                        $scope.setResultMessage($scope.i18n.typeSaved, "success");
+        //                        $scope.setResultMessage($scope.i18n.typeSaved, "success");
                         $scope.loadScoreTypes(false);
                     }, function errorCallback(data) {
                         $scope.setResultMessage($scope.i18n.defaultError, "error");
                     });
-
+                }else{
+                     $scope.loadScoreTypes(false);
+                    $scope.showAlert = true;
+                    $scope.setResultMessage($scope.i18n.defaultError, "error");
                 }
+            }else{
+                  $scope.loadScoreTypes(false);
+                 $scope.showAlert = true;
+                 $scope.setResultMessage($scope.i18n.defaultError, "error");
+             }
+        }
 
-                 $scope.upadteScoreType= function(newScoreType)
-                 {
-                     $scope.showAlert = false;
-                     // $scope.setResultMessage($scope.i18n.savingScore, "info");
-                     $http({
-                         data : newScoreType,
-                         method : 'POST',
-                         headers : {
-                             'Content-Type' : 'application/json'
-                         },
-                         url : npsAdminContainer.jzURL('NPSAdministrationController.updateType')
-                     }).then(function successCallback(data) {
+         $scope.upadteScoreType= function(newScoreType)
+         {
+            $scope.showAlert = false;
+            console.warn(((newScoreType.typeName != undefined) && (!newScoreType.linkedToSpace)) || ((newScoreType.linkedToSpace) && (newScoreType.typeName != undefined) && (newScoreType.spaceId != undefined) && (newScoreType.userId != undefined)));
+            if(((newScoreType.typeName != undefined) && (!newScoreType.linkedToSpace)) || ((newScoreType.linkedToSpace) && (newScoreType.typeName != undefined) && (newScoreType.spaceId != undefined) && (newScoreType.userId != undefined))){
+
+             $http({
+                 data : newScoreType,
+                 method : 'POST',
+                 headers : {
+                     'Content-Type' : 'application/json'
+                 },
+                 url : npsAdminContainer.jzURL('NPSAdministrationController.updateType')
+             }).then(function successCallback(data) {
 //                                 $scope.setResultMessage($scope.i18n.typeSaved, "success");
-                         $scope.loadScoreTypes(false, newScoreType.id);
-                     }, function errorCallback(data) {
-                         $scope.setResultMessage($scope.i18n.defaultError, "error");
-                     });
-
-                 }
+                 $scope.loadScoreTypes(false, newScoreType.id);
+             }, function errorCallback(data) {
+                 $scope.setResultMessage($scope.i18n.defaultError, "error");
+             });
+            }else{
+                $scope.showAlert = true;
+                $scope.setResultMessage($scope.i18n.defaultError, "error");
+            }
+         }
 
 
 
@@ -356,8 +374,99 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.loadScoreTypes(true);
         $('#npsAdmin').css('visibility', 'visible');
         $(".npsLoadingBar").remove();
+
+        $scope.getSpace = function (nameToSearch) {
+            var rsetUrl = "/rest/nps/spaces/find?nameToSearch=" + nameToSearch + "&currentUser=" + $scope.i18n.currentUser;
+            $http({
+                method: 'GET',
+                url: rsetUrl
+            }).then(function successCallback(data) {
+                console.warn(data);
+                /* create a table of users IDs*/
+                $(".newSpaceName").autocomplete({
+                    source: function( request, response ) {
+                        var users = [];
+                        angular.forEach(data.data.options, function (value, key) {
+                            users[key] = [];
+                            users[key]['value'] = value.value;
+                            users[key]['fullName'] = value.text;
+                            users[key]['avatar'] = value.avatarUrl || '/eXoSkin/skin/images/system/UserAvtDefault.png';
+                        });
+                        response( users );
+                    },
+                    minLength: 3,
+                    focus: function (event, ui) {
+
+                            $(".newSpaceName").val(ui.item.value);
+                            $scope.scoreTypeToEdit.spaceId = ui.item.value;
+
+                        return false;
+                    },
+                    select: function (event, ui) {
+                        $(".newSpaceName").val(ui.item.value);
+                       $scope.scoreTypeToEdit.spaceId = ui.item.value;
+
+                        return false;
+                    }
+                }).autocomplete("instance")._renderItem = function (ul, item) {
+
+                    return $("<li>")
+                        .append("<div> <img src='" + item.avatar + "' class='avataruser' /> " + item.fullName + "</div>")
+                        .appendTo(ul);
+                };
+
+            }, function errorCallback(data) {
+                console.log("error getEmployees");
+                $scope.setResultMessage($scope.i18n.defaultError, "error");
+            });
+        };
+
+        $scope.getEmployees = function (nameToSearch, spaceURL) {
+            var rsetUrl = "/rest/nps/users/find?nameToSearch=" + nameToSearch + "&spaceURL="+spaceURL+"&currentUser=" + $scope.i18n.currentUser;
+
+            $http({
+                method: 'GET',
+                url: rsetUrl
+            }).then(function successCallback(data) {
+                console.warn(data);
+                /* create a table of users IDs*/
+                $(".newUserName").autocomplete({
+                    source: function( request, response ) {
+                        var users = [];
+                        angular.forEach(data.data.options, function (value, key) {
+                            users[key] = [];
+                            users[key]['value'] = value.value;
+                            users[key]['fullName'] = value.text;
+                            users[key]['avatar'] = value.avatarUrl || '/eXoSkin/skin/images/system/UserAvtDefault.png';
+                        });
+                        response( users );
+                    },
+                    minLength: 3,
+                    focus: function (event, ui) {
+                    $(".newUserName").val(ui.item.value);
+                        $scope.scoreTypeToEdit.userId = ui.item.value;
+                        return false;
+                    },
+                    select: function (event, ui) {
+                    $(".newUserName").val(ui.item.value);
+                        $scope.scoreTypeToEdit.userId = ui.item.value;
+                        return false;
+                    }
+                }).autocomplete("instance")._renderItem = function (ul, item) {
+
+                    return $("<li>")
+                        .append("<div> <img src='" + item.avatar + "' class='avataruser' /> " + item.fullName + "</div>")
+                        .appendTo(ul);
+                };
+
+            }, function errorCallback(data) {
+                console.log("error getEmployees");
+                $scope.setResultMessage($scope.i18n.defaultError, "error");
+            });
+        }
     };
-    return npsAdminCtrl;
+
+        return npsAdminCtrl;
 
     /*
      $timeout(function() {

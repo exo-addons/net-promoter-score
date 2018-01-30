@@ -148,6 +148,7 @@ div#resultMessage {
     max-width: 100%;
     height: auto;
     overflow: auto;
+    max-height: 90%;
 }
 .npsAdminPopup input {
     width: 100%;
@@ -156,9 +157,14 @@ div#resultMessage {
 .no-graph{
 font-size: 18px;
 }
-
+.avataruser{width : 26px; height:26px; margin-right: 5px}
 /**/
 /* -- POPUP FORM -- */
 /**/
 .npsAdminPopup label, .npsAdminPopup div.controls{display: inline-block; width: 20%}
 .npsAdminPopup div.controls{display: inline-block;width: 75%;}
+
+.redtext{
+color: red;
+    font-weight: bold;
+}
