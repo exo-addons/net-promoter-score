@@ -121,7 +121,7 @@ public class NpsRestService implements ResourceContainer {
                 if (spaces_ != null && spaces_.size() > 0) {
                     for (Space space_ : spaces_) {
                         JSONObject space = new JSONObject();
-                        space.put("value",space_.getDisplayName());
+                        space.put("value",space_.getPrettyName());
                         space.put("type","space");
                         space.put("invalid",false);
                         space.put("order","1");
