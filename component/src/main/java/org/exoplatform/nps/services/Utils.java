@@ -2,13 +2,17 @@ package org.exoplatform.nps.services;
 
 import org.exoplatform.commons.utils.CommonsUtils;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.nps.dto.NPSDetailsDTO;
 import org.exoplatform.nps.dto.ScoreEntryDTO;
 import org.exoplatform.nps.dto.ScoreTypeDTO;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import javax.jcr.Node;
 import javax.jcr.Session;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.social.core.activity.model.ExoSocialActivity;
@@ -38,7 +42,7 @@ public class Utils
      */
     public static Calendar getFirstLoginDate(String userId) throws Exception {
 
-        RepositoryService repositoryService = (RepositoryService) PortalContainer.getInstance().getComponentInstanceOfType(RepositoryService.class);
+        RepositoryService repositoryService = CommonsUtils.getService(RepositoryService.class);
         SessionProvider sessionProvider = SessionProvider.createSystemProvider();
         try {
             Session session = sessionProvider.getSession("collaboration",repositoryService.getCurrentRepository());
@@ -99,6 +103,61 @@ public class Utils
             }
         }
 
+    }
+
+    public static NPSDetailsDTO calculateNpsByDate (long typeId,long date){
+        NpsService npsService= CommonsUtils.getService(NpsService.class);
+        long scorsnbr= npsService.getScoreCountByDate(typeId, date);
+        long detractorsNbr= npsService.getDetractorsCountByDate(typeId, date);
+        long promotersNbr= npsService.getPromotersCountByDate(typeId, date);
+        long passivesNbr= scorsnbr-(promotersNbr+detractorsNbr);
+        return new NPSDetailsDTO(typeId, date, scorsnbr, detractorsNbr,  promotersNbr, passivesNbr);
+    }
+
+
+    public static List<NPSDetailsDTO> getWeeklyNPSbyDates(long typeId,long fromDate, long toDate){
+        NpsService npsService= CommonsUtils.getService(NpsService.class);
+        List<NPSDetailsDTO> NPSScors=new ArrayList<NPSDetailsDTO>();
+        ScoreEntryDTO score = npsService.getFirstScoreEntries(typeId);
+        if(score!=null) {
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(fromDate);
+            Calendar c_=Calendar.getInstance();
+            c_.setTimeInMillis(score.getPostedTime());
+            if(c.before(c_)) c.setTime(c_.getTime());
+            int diff = Calendar.SATURDAY - c.get(Calendar.DAY_OF_WEEK);
+            c.add(Calendar.DATE, diff);
+            while (c.getTimeInMillis() < toDate) {
+                NPSScors.add(calculateNpsByDate(typeId, c.getTimeInMillis()));
+                c.add(Calendar.DATE, 7);
+            }
+            if (c.getTimeInMillis() != toDate) {
+                NPSScors.add(calculateNpsByDate(typeId, toDate));
+            }
+        }
+      return NPSScors;
+
+    }
+
+    public static List<NPSDetailsDTO> getWeeklyNPS(long typeId){
+        NpsService npsService= CommonsUtils.getService(NpsService.class);
+        List<NPSDetailsDTO> NPSScors=new ArrayList<NPSDetailsDTO>();
+        ScoreEntryDTO score = npsService.getFirstScoreEntries(typeId);
+        if(score!=null){
+            Calendar fromDate=Calendar.getInstance();
+            fromDate.setTimeInMillis(score.getPostedTime());
+            int diff= Calendar.SATURDAY-fromDate.get(Calendar.DAY_OF_WEEK);
+            fromDate.add(Calendar.DATE, diff);
+            Calendar toDate=Calendar.getInstance();
+            while(fromDate.before(toDate)){
+                NPSScors.add(calculateNpsByDate (typeId,fromDate.getTimeInMillis()));
+                fromDate.add(Calendar.DATE, 7);
+            }
+            if(fromDate.after(toDate)){
+                NPSScors.add(calculateNpsByDate (typeId,fromDate.getTimeInMillis()));
+            }
+        }
+        return NPSScors;
     }
 
 }

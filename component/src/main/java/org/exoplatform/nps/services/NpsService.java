@@ -82,6 +82,13 @@ public class NpsService {
   }
 
 
+  public ScoreEntryDTO getFirstScoreEntries(long typeId) {
+    List<ScoreEntryEntity> entities =  scoreEntryDAO.getFirstScoreEntries(typeId);
+    if( entities.size()>0){
+      return convert(entities.get(0));
+    } else return null;
+  }
+
 
   public ScoreEntryDTO getScoreEntry(long id) {
     List<ScoreEntryEntity> entities=scoreEntryDAO.getScoreEntrybyId(id);
@@ -123,6 +130,25 @@ public class NpsService {
   public long getScoreCount(long typeId, boolean enabled) {
     return scoreEntryDAO.getScoreEntriesCount(typeId, enabled);
   }
+
+
+  public long getPromotersCountByDate(long typeId, long toDate) {
+
+    return scoreEntryDAO.getPromotersCountByDate(typeId, toDate);
+  }
+
+
+  public long getDetractorsCountByDate(long typeId, long toDate) {
+
+    return scoreEntryDAO.getDetractorsCountByDate(typeId, toDate);
+  }
+
+
+
+  public long getScoreCountByDate(long typeId, long toDate) {
+    return scoreEntryDAO.getScoreEntriesCountByDate(typeId, toDate);
+  }
+
 
 
   private ScoreEntryEntity convert(ScoreEntryDTO dto) {

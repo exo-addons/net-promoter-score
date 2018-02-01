@@ -3,6 +3,8 @@ package org.exoplatform.nps.services.rest;
 
 import org.exoplatform.commons.utils.ListAccess;
 
+import org.exoplatform.nps.dto.NPSDetailsDTO;
+import org.exoplatform.nps.services.Utils;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
@@ -23,6 +25,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -157,5 +161,35 @@ public class NpsRestService implements ResourceContainer {
     }
 
 
+    @GET
+    @Path("scores/weekly")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response findspace(@Context HttpServletRequest request,
+                              @Context UriInfo uriInfo,
+                              @QueryParam("npsTypeId") long npsTypeId,
+                              @QueryParam("fromDate") long fromDate,
+                              @QueryParam("toDate") long toDate) throws Exception {
+
+        MediaType mediaType = RestChecker.checkSupportedFormat("json", SUPPORTED_FORMATS);
+        SimpleDateFormat dt1 = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            JSONArray npsList = new JSONArray();
+
+            List <NPSDetailsDTO> npsDetails =Utils.getWeeklyNPSbyDates(npsTypeId, fromDate, toDate);
+
+            for(NPSDetailsDTO nps : npsDetails){
+                JSONObject nps_ = new JSONObject();
+                nps_.put("npsDate",dt1.format(nps.getNpsDate()));
+                nps_.put("score",String.format("%.2f", nps.getNpScore()));
+                npsList.put(nps_);
+            }
+
+            return Response.ok(npsList.toString(), mediaType).build();
+        } catch (Exception e) {
+            LOG.error(e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("An internal error has occured").build();
+        }
+    }
 
 }

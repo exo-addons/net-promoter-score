@@ -6,10 +6,12 @@ import juzu.plugin.jackson.Jackson;
 import juzu.template.Template;
 import org.exoplatform.commons.juzu.ajax.Ajax;
 import org.exoplatform.commons.utils.PropertyManager;
+import org.exoplatform.nps.dto.NPSDetailsDTO;
 import org.exoplatform.nps.dto.ScoreEntryDTO;
 import org.exoplatform.nps.dto.ScoreTypeDTO;
 import org.exoplatform.nps.services.NpsService;
 import org.exoplatform.nps.services.NpsTypeService;
+import org.exoplatform.nps.services.Utils;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -17,6 +19,8 @@ import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.social.core.identity.model.Profile;
 import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvider;
 import org.exoplatform.social.core.manager.IdentityManager;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -132,7 +136,46 @@ public class NPSAdministrationController {
       data.set("passivesPrc",String.format("%.2f", passivesPrc));
       data.set("npScore",String.format("%.2f", npScore));
 
+
+      JSONArray npsList = new JSONArray();
+
+      List <NPSDetailsDTO> npsDetails = Utils.getWeeklyNPS(typeId);
+
+      for(NPSDetailsDTO nps : npsDetails){
+        JSONObject nps_ = new JSONObject();
+        Calendar c=Calendar.getInstance();
+        c.setTimeInMillis(nps.getNpsDate());
+        nps_.put("npsDate","W "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR));
+        nps_.put("score",String.format("%.2f", nps.getNpScore()));
+        npsList.put(nps_);
+      }
+
+      data.set("weeklyNpScore",npsList);
       return Response.ok(data.toString());
+    } catch (Throwable e) {
+      LOG.error("error while getting context", e);
+      return Response.status(500);
+    }
+  }
+
+
+  @Ajax
+  @juzu.Resource
+  @MimeType.JSON
+  @Jackson
+  public Response getWeeklyNPSForCurrentYear(Long typeId) {
+    try {
+      JSONArray npsList = new JSONArray();
+      List <NPSDetailsDTO> npsDetails = Utils.getWeeklyNPS(typeId);
+      for(NPSDetailsDTO nps : npsDetails){
+        JSONObject nps_ = new JSONObject();
+        Calendar c=Calendar.getInstance();
+        c.setTimeInMillis(nps.getNpsDate());
+        nps_.put("npsDate","W "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR));
+        nps_.put("score",String.format("%.2f", nps.getNpScore()));
+        npsList.put(nps_);
+      }
+      return Response.ok(npsList.toString());
     } catch (Throwable e) {
       LOG.error("error while getting context", e);
       return Response.status(500);
