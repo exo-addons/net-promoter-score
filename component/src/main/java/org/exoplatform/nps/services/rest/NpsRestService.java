@@ -176,7 +176,7 @@ public class NpsRestService implements ResourceContainer {
         try {
             JSONArray npsList = new JSONArray();
 
-            List <NPSDetailsDTO> npsDetails =Utils.getWeeklyNPS(npsTypeId, fromDate, toDate);
+            List <NPSDetailsDTO> npsDetails =Utils.getWeeklyNPSbyDates(npsTypeId, fromDate, toDate);
 
             for(NPSDetailsDTO nps : npsDetails){
                 JSONObject nps_ = new JSONObject();

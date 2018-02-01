@@ -115,34 +115,37 @@ public class Utils
     }
 
 
-    public static List<NPSDetailsDTO> getWeeklyNPS(long typeId,long fromDate, long toDate){
+    public static List<NPSDetailsDTO> getWeeklyNPSbyDates(long typeId,long fromDate, long toDate){
+        NpsService npsService= CommonsUtils.getService(NpsService.class);
         List<NPSDetailsDTO> NPSScors=new ArrayList<NPSDetailsDTO>();
-        Calendar c=Calendar.getInstance();
-        c.setTimeInMillis(fromDate);
-        int diff= Calendar.SATURDAY-c.get(Calendar.DAY_OF_WEEK);
-        c.add(Calendar.DATE, diff);
-        while(c.getTimeInMillis()<toDate){
-            NPSScors.add(calculateNpsByDate (typeId,c.getTimeInMillis()));
-            c.add(Calendar.DATE, 7);
-        }
-        if(c.getTimeInMillis()!=toDate){
-            NPSScors.add(calculateNpsByDate (typeId,toDate));
+        ScoreEntryDTO score = npsService.getFirstScoreEntries(typeId);
+        if(score!=null) {
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(fromDate);
+            Calendar c_=Calendar.getInstance();
+            c_.setTimeInMillis(score.getPostedTime());
+            if(c.before(c_)) c.setTime(c_.getTime());
+            int diff = Calendar.SATURDAY - c.get(Calendar.DAY_OF_WEEK);
+            c.add(Calendar.DATE, diff);
+            while (c.getTimeInMillis() < toDate) {
+                NPSScors.add(calculateNpsByDate(typeId, c.getTimeInMillis()));
+                c.add(Calendar.DATE, 7);
+            }
+            if (c.getTimeInMillis() != toDate) {
+                NPSScors.add(calculateNpsByDate(typeId, toDate));
+            }
         }
       return NPSScors;
 
     }
 
-    public static List<NPSDetailsDTO> getWeeklyNPSForCurrentYear(long typeId){
+    public static List<NPSDetailsDTO> getWeeklyNPS(long typeId){
         NpsService npsService= CommonsUtils.getService(NpsService.class);
         List<NPSDetailsDTO> NPSScors=new ArrayList<NPSDetailsDTO>();
         ScoreEntryDTO score = npsService.getFirstScoreEntries(typeId);
         if(score!=null){
             Calendar fromDate=Calendar.getInstance();
-            fromDate.set(Calendar.DAY_OF_YEAR, 1);
-            fromDate.set(Calendar.YEAR, 2017);
-            Calendar c=Calendar.getInstance();
-            c.setTimeInMillis(score.getPostedTime());
-            if(fromDate.before(c)) fromDate.setTime(c.getTime());
+            fromDate.setTimeInMillis(score.getPostedTime());
             int diff= Calendar.SATURDAY-fromDate.get(Calendar.DAY_OF_WEEK);
             fromDate.add(Calendar.DATE, diff);
             Calendar toDate=Calendar.getInstance();

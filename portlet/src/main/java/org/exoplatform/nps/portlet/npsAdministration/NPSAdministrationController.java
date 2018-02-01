@@ -139,7 +139,7 @@ public class NPSAdministrationController {
 
       JSONArray npsList = new JSONArray();
 
-      List <NPSDetailsDTO> npsDetails = Utils.getWeeklyNPSForCurrentYear(typeId);
+      List <NPSDetailsDTO> npsDetails = Utils.getWeeklyNPS(typeId);
 
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
@@ -166,7 +166,7 @@ public class NPSAdministrationController {
   public Response getWeeklyNPSForCurrentYear(Long typeId) {
     try {
       JSONArray npsList = new JSONArray();
-      List <NPSDetailsDTO> npsDetails = Utils.getWeeklyNPSForCurrentYear(typeId);
+      List <NPSDetailsDTO> npsDetails = Utils.getWeeklyNPS(typeId);
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
         Calendar c=Calendar.getInstance();
