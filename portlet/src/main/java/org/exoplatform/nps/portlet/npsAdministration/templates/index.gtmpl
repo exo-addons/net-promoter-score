@@ -35,7 +35,7 @@
                         <div class="PopupContent popupContent">
 
                             <div class="control-group {{usernameClass}}">
-                                <label class="control-label" for="typeName">{{i18n.typeName}}:</label>
+                                <label class="control-label" for="typeName">{{i18n.typeName}} <span class="redtext">*</span> :</label>
                                 <div class="controls">
                                     <input type="text" name="inputUsername" id="type"
                                            ng-model="newScoreType.typeName">
@@ -109,7 +109,7 @@
                             </div>
 
                             <div class="control-group {{usernameClass}}" ng-show="newScoreType.linkedToSpace">
-                                <label class="control-label" for="spaceId">{{i18n.spaceId}}:</label>
+                                <label class="control-label" for="spaceId">{{i18n.spaceId}} <span class="redtext">*</span> :</label>
                                 <div class="controls">
                                     <input type="text" name="inputUsername" id="spaceId" ng-required="newScoreType.linkedToSpace" class="newSpaceName"
                                            ng-change="getSpace(newScoreType.spaceId)"
@@ -120,7 +120,7 @@
                             </div>
 
                             <div class="control-group {{usernameClass}}" ng-show="newScoreType.linkedToSpace">
-                                <label class="control-label" for="userId">{{i18n.userId}}:</label>
+                                <label class="control-label" for="userId">{{i18n.userId}} <span class="redtext">*</span> :</label>
                                 <div class="controls">
                                     <input type="text" name="inputUsername" id="userId" ng-required="newScoreType.linkedToSpace" class="newUserName"
                                            placeholder="{{i18n.serverUsername}}"
@@ -155,7 +155,7 @@
                         <div class="PopupContent popupContent">
 
                             <div class="control-group {{usernameClass}}">
-                                <label class="control-label" for="typeName">{{i18n.typeName}}:</label>
+                                <label class="control-label" for="typeName">{{i18n.typeName}} <span class="redtext">*</span> :</label>
                                 <div class="controls">
                                     <input type="text" name="inputUsername" id="type"
                                            ng-model="scoreTypeToEdit.typeName" required>
@@ -229,7 +229,7 @@
                             </div>
                         <!-- -->
                             <div class="control-group {{usernameClass}}" ng-show="scoreTypeToEdit.linkedToSpace" >
-                                <label class="control-label" for="spaceId">{{i18n.spaceId}}:</label>
+                                <label class="control-label" for="spaceId">{{i18n.spaceId}} <span class="redtext">*</span> :</label>
                                 <div class="controls">
                                     <input type="text" name="inputSpacename" id="spaceId" class="newSpaceName" ng-required="scoreTypeToEdit.linkedToSpace"
                                            ng-change="getSpace(scoreTypeToEdit.spaceId)"
@@ -240,7 +240,7 @@
                             </div>
 
                             <div class="control-group {{usernameClass}}" ng-show="scoreTypeToEdit.linkedToSpace" >
-                                <label class="control-label" for="userId">{{i18n.userId}}:</label>
+                                <label class="control-label" for="userId">{{i18n.userId}} <span class="redtext">*</span> :</label>
                                 <div class="controls">
                                     <input type="text" name="newUserName" id="userId" class="newUserName" ng-required="scoreTypeToEdit.linkedToSpace"
                                            placeholder="{{i18n.serverUsername}}"

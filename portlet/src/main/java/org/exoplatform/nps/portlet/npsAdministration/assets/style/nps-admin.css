@@ -163,3 +163,8 @@ font-size: 18px;
 /**/
 .npsAdminPopup label, .npsAdminPopup div.controls{display: inline-block; width: 20%}
 .npsAdminPopup div.controls{display: inline-block;width: 75%;}
+
+.redtext{
+color: red;
+    font-weight: bold;
+}

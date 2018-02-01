@@ -166,8 +166,12 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 
         $scope.saveScoreType= function(newScoreType)
         {
-                    $scope.showAlert = false;
-                    // $scope.setResultMessage($scope.i18n.savingScore, "info");
+            $scope.showAlert = false;
+            if(newScoreType){
+               console.warn(((newScoreType.typeName != undefined) && (!newScoreType.linkedToSpace)) || ((newScoreType.linkedToSpace) && (newScoreType.typeName != undefined) && (newScoreType.spaceId != undefined) && (newScoreType.userId != undefined)));
+
+                if(((newScoreType.typeName != undefined) && (!newScoreType.linkedToSpace)) || ((newScoreType.linkedToSpace) && (newScoreType.typeName != undefined) && (newScoreType.spaceId != undefined) && (newScoreType.userId != undefined))){
+
                     $http({
                         data : newScoreType,
                         method : 'POST',
@@ -176,40 +180,47 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                         },
                         url : npsAdminContainer.jzURL('NPSAdministrationController.saveType')
                     }).then(function successCallback(data) {
-//                        $scope.setResultMessage($scope.i18n.typeSaved, "success");
+        //                        $scope.setResultMessage($scope.i18n.typeSaved, "success");
                         $scope.loadScoreTypes(false);
                     }, function errorCallback(data) {
                         $scope.setResultMessage($scope.i18n.defaultError, "error");
                     });
-
+                }else{
+                     $scope.loadScoreTypes(false);
+                    $scope.showAlert = true;
+                    $scope.setResultMessage($scope.i18n.defaultError, "error");
                 }
+            }else{
+                  $scope.loadScoreTypes(false);
+                 $scope.showAlert = true;
+                 $scope.setResultMessage($scope.i18n.defaultError, "error");
+             }
+        }
 
-                 $scope.upadteScoreType= function(newScoreType)
-                 {
-                     $scope.showAlert = false;
-                     // $scope.setResultMessage($scope.i18n.savingScore, "info");
+         $scope.upadteScoreType= function(newScoreType)
+         {
+            $scope.showAlert = false;
+            console.warn(((newScoreType.typeName != undefined) && (!newScoreType.linkedToSpace)) || ((newScoreType.linkedToSpace) && (newScoreType.typeName != undefined) && (newScoreType.spaceId != undefined) && (newScoreType.userId != undefined)));
+            if(((newScoreType.typeName != undefined) && (!newScoreType.linkedToSpace)) || ((newScoreType.linkedToSpace) && (newScoreType.typeName != undefined) && (newScoreType.spaceId != undefined) && (newScoreType.userId != undefined))){
 
-                     $scope.showAlert = false;
-                      if(((newScoreType.typeName) && (!newScoreType.linkedToSpace)) || ((newScoreType.linkedToSpace) && (newScoreType.typeName) && (newScoreType.spaceId) && (newScoreType.userId))){
-
-                     $http({
-                         data : newScoreType,
-                         method : 'POST',
-                         headers : {
-                             'Content-Type' : 'application/json'
-                         },
-                         url : npsAdminContainer.jzURL('NPSAdministrationController.updateType')
-                     }).then(function successCallback(data) {
+             $http({
+                 data : newScoreType,
+                 method : 'POST',
+                 headers : {
+                     'Content-Type' : 'application/json'
+                 },
+                 url : npsAdminContainer.jzURL('NPSAdministrationController.updateType')
+             }).then(function successCallback(data) {
 //                                 $scope.setResultMessage($scope.i18n.typeSaved, "success");
-                         $scope.loadScoreTypes(false, newScoreType.id);
-                     }, function errorCallback(data) {
-                         $scope.setResultMessage($scope.i18n.defaultError, "error");
-                     });
-                    }else{
-                        $scope.showAlert = true;
-                        $scope.setResultMessage("Veuillez entrer ts input", "error");
-                    }
-                 }
+                 $scope.loadScoreTypes(false, newScoreType.id);
+             }, function errorCallback(data) {
+                 $scope.setResultMessage($scope.i18n.defaultError, "error");
+             });
+            }else{
+                $scope.showAlert = true;
+                $scope.setResultMessage($scope.i18n.defaultError, "error");
+            }
+         }
 
 
 
