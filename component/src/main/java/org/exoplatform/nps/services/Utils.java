@@ -84,22 +84,27 @@ public class Utils
                 ActivityManager activityManager= CommonsUtils.getService(ActivityManager.class);
                 Space space = spaceService.getSpaceByPrettyName(scoreType.getSpaceId());
                 Identity spaceIdentity = identityManager.getOrCreateIdentity(SpaceIdentityProvider.NAME, space.getPrettyName(), false);
-                Identity userIdentity = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, scoreType.getUserId(), false);
-                String posterName = "Anonymous";
-                if(score.getUserId()!=null){
-                    Identity posterIdentity = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, score.getUserId(), false);
-                    posterName =userIdentity.getProfile().getFullName();
+                Identity posterIdentity = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, scoreType.getUserId(), false);
+                String userName = "Anonymous";
+                if(score.getUserId()!=null&&!"".equals(score.getUserId())){
+                    Identity userIdentity = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, score.getUserId(), false);
+                    if(userIdentity!=null){
+                        userName =userIdentity.getProfile().getFullName();
+                    }else userName=score.getUserId();
                 }
-
-                ExoSocialActivity activity = new ExoSocialActivityImpl();
-                activity.setType("DEFAULT_ACTIVITY");
-                activity.setTitle("<span id='npsActivity'>\n" +
-                        "A new response has been added to the "+scoreType.getTypeName()+" survey: <br/>\n" +
-                        " <b>User Name : </b>"+posterName+"<br/>\n" +
-                        " <b>Score : </b>"+score.getScore()+"<br/>\n" +
-                        " <b>Comment: </b>"+score.getComment()+ "<br/>");
-                activity.setUserId(userIdentity.getId());
-                activityManager.saveActivityNoReturn(spaceIdentity, activity);
+                if(posterIdentity!=null&&spaceIdentity!=null){
+                    ExoSocialActivity activity = new ExoSocialActivityImpl();
+                    activity.setType("DEFAULT_ACTIVITY");
+                    activity.setTitle("<span id='npsActivity'>\n" +
+                            "A new response has been added to the "+scoreType.getTypeName()+" survey: <br/>\n" +
+                            " <b>User Name : </b>"+userName+"<br/>\n" +
+                            " <b>Score : </b>"+score.getScore()+"<br/>\n" +
+                            " <b>Comment: </b>"+score.getComment()+ "<br/>");
+                    activity.setUserId(posterIdentity.getId());
+                    activityManager.saveActivityNoReturn(spaceIdentity, activity);
+                }else{
+                    log.warn("Not able to create the activity, the Poster or Space Identity is missing");
+                }
             }
         }
 

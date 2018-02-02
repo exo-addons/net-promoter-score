@@ -129,7 +129,8 @@ public class NPSFormController {
     @Jackson
     public void saveScore(@Jackson ScoreEntryDTO obj) {
         obj.setEnabled(true);
-        if(obj.getIsAnonymous()!=null&&obj.getIsAnonymous()){
+        if(obj.getIsAnonymous()==null) obj.setIsAnonymous(false);
+        if(obj.getIsAnonymous()){
             obj.setUserId("");
         }else obj.setUserId(currentUser);
         if(npsService.save(obj, true)){
