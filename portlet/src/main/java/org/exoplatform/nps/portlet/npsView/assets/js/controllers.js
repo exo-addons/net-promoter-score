@@ -72,6 +72,14 @@ define("npsViewControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                         $scope.scoreTypeName=data.data.scoreTypeName;
                         $scope.npScore = data.data.npScore;
                         $scope.dashoffset = data.data.dashoffset;
+                        $scope.npsColor = "yellow";
+                        if($scope.npScore<25){
+                        $scope.npsColor = "red";
+                        }
+                        if($scope.npScore>70){
+                        $scope.npsColor = "green";
+                        }
+
                         deferred.resolve(data);
                         $('#npsView').css('display', 'block');
         //                $scope.setResultMessage(data, "success");
