@@ -1,0 +1,29 @@
+<div id="npsView" class="npsView" style="display: none;">
+
+    <div ng-controller="npsViewCtrl" id="npsFormCtrl">
+
+
+        <div id="npsView">
+
+            <div ng-show="showAlert">
+                <div id="resultMessage"
+                     class="result-message alert {{resultMessageClass}}">
+                    <i class="{{resultMessageClassExt}}"></i>{{resultMessage}} </div>
+
+            </div>
+            <div class="company-circle-container">
+                <div class="brand-circle-large brand-circle-large-positive" value="{{npScore}}">
+                    <h2>NPS</h2>
+                    <img class="circle-background" src="https://npsbenchmarks.com/assets/images/circle-bg-white.png">
+                    <img class="dotted-circle" src="https://npsbenchmarks.com/assets/images/new-dotted-line-dark.svg">
+
+                    <svg viewBox="0 0 100 100" style="display: block; width: 100%;">
+                        <path d="M 50,50 m 0,-48 a 48,48 0 1 1 0,96 a 48,48 0 1 1 0,-96" stroke="#383a3b" stroke-width="1" fill-opacity="0"></path>
+                        <path id="shape" d="M 50,50 m 0,-48 a 48,48 0 1 1 0,96 a 48,48 0 1 1 0,-96" stroke="rgb(99,192,147)" stroke-width="4" fill-opacity="0" style="stroke-dasharray: 301.635, 301.635; stroke-dashoffset: {{dashoffset}};" stroke-linecap="round"></path></svg>
+                    <div class="progressbar-text" style="position: absolute; left: 50%; top: 50%; padding: 0px; margin: 0px; transform: translate(-50%, -50%); color: rgb(56, 58, 59); font-family: &quot;Proxima Nova&quot;, Helvetica, sans-serif; font-size: 100px;">{{npScore}}</div></div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
