@@ -89,7 +89,8 @@ public class Utils
                 if(score.getUserId()!=null&&!"".equals(score.getUserId())){
                     Identity userIdentity = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, score.getUserId(), false);
                     if(userIdentity!=null){
-                        userName =userIdentity.getProfile().getFullName();
+                        //userName =userIdentity.getProfile().getFullName();
+                        userName="<a  href=\""+userIdentity.getProfile().getUrl()+"\">"+userIdentity.getProfile().getFullName()+" </a>";
                     }else userName=score.getUserId();
                 }
                 if(posterIdentity!=null&&spaceIdentity!=null){

@@ -134,9 +134,8 @@ public class NPSFormController {
             obj.setUserId("");
         }else obj.setUserId(currentUser);
         if(npsService.save(obj, true)){
-           if(obj.getComment()!=null){
-                   Utils.createActivity(obj);
-           }
+           Utils.createActivity(obj);
+
         }
 
         /**
