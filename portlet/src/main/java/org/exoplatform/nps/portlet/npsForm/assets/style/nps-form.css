@@ -366,4 +366,7 @@ display: inline-block;
     display: block;
     margin: auto;
 }
-
+#nps.exo_employees_nps div#resultMessage{
+    margin: -20px -15px;
+    padding: 40px 30px;
+}
