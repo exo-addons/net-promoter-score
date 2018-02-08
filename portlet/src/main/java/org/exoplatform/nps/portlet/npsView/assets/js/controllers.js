@@ -65,23 +65,32 @@ define("npsViewControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
         }
 
                 $scope.loadData = function (typeId) {
+
                     $http({
                         method: 'GET',
                         url: npsViewContainer.jzURL('NPSViewController.getData')
                     }).then(function successCallback(data) {
-                        $scope.scoreTypeName=data.data.scoreTypeName;
-                        $scope.npScore = data.data.npScore;
-                        $scope.dashoffset = data.data.dashoffset;
-                        $scope.npsColor = "yellow";
-                        if($scope.npScore<25){
-                        $scope.npsColor = "red";
-                        }
-                        if($scope.npScore>70){
-                        $scope.npsColor = "green";
-                        }
 
-                        deferred.resolve(data);
-                        $('#npsView').css('display', 'block');
+                            $scope.scoreTypeName=data.data.scoreTypeName;
+                            $scope.npScore = data.data.npScore;
+                            $scope.dashoffset = 301;
+                            $scope.npsColor = "#f5ba7f";
+                            if($scope.npScore<25){
+                            $scope.npsColor = "#ce7474";
+                            }
+                            if($scope.npScore>70){
+                            $scope.npsColor = "#4bc0c0";
+                            }
+
+                            deferred.resolve(data);
+
+
+                            $('#npsView').css('display', 'block');
+
+                            $timeout(function () {
+                                $scope.dashoffset = data.data.dashoffset;
+                            }, 10);
+
         //                $scope.setResultMessage(data, "success");
                     }, function errorCallback(data) {
                         $scope.setResultMessage($scope.i18n.defaultError, "error");

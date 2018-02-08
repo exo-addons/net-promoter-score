@@ -14,13 +14,14 @@
             <div class="nps-circle-container">
                 <div class="brand-circle-large brand-circle-large-positive" value="{{npScore}}">
                     <h2>NPS</h2>
-                    <img class="circle-background" src="/nps-addon-portlet/skin/images/circle-bg-white.png">
-                    <img class="dotted-circle" src="/nps-addon-portlet/skin/images/new-dotted-line-dark.svg">
+                    <!--<img class="circle-background" src="/nps-addon-portlet/skin/images/circle-bg-white.png">-->
+                    <!--<img class="dotted-circle" src="/nps-addon-portlet/skin/images/new-dotted-line-dark.svg">-->
 
                     <svg viewBox="0 0 100 100" style="display: block; width: 100%;">
-                        <path d="M 50,50 m 0,-48 a 48,48 0 1 1 0,96 a 48,48 0 1 1 0,-96" stroke="#383a3b" stroke-width="1" fill-opacity="0"></path>
+                        <path d="M 50,50 m 0,-48 a 48,48 0 1 1 0,96 a 48,48 0 1 1 0,-96" stroke="#d0d0d0" stroke-width="1" fill-opacity="0"></path>
                         <path id="shape" d="M 50,50 m 0,-48 a 48,48 0 1 1 0,96 a 48,48 0 1 1 0,-96" stroke="{{npsColor}}" stroke-width="4" fill-opacity="0" style="stroke-dasharray: 301.635, 301.635; stroke-dashoffset: {{dashoffset}};" stroke-linecap="round"></path></svg>
-                    <div class="progressbar-text" style="position: absolute; left: 50%; top: 50%; padding: 0px; margin: 0px; transform: translate(-50%, -50%); color: rgb(56, 58, 59); font-family: &quot;Proxima Nova&quot;, Helvetica, sans-serif; font-size: 50px;">{{npScore}}</div></div>
+                    <div class="progressbar-text" style="position: absolute; left: 50%; top: 50%; padding: 0px; margin: 0px; transform: translate(-50%, -50%); color: #476a9c; font-family: &quot;Proxima Nova&quot;, Helvetica, sans-serif; font-size: 50px;">{{npScore}}</div>
+                </div>
             </div>
 
         </div>
