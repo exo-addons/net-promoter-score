@@ -153,6 +153,8 @@ div#resultMessage {
 .npsAdminPopup input {
     width: 100%;
 }
+
+.nps_week_graph{max-width: 95%}
 /**/
 .no-graph{
 font-size: 18px;
@@ -168,3 +170,4 @@ font-size: 18px;
 color: red;
     font-weight: bold;
 }
+

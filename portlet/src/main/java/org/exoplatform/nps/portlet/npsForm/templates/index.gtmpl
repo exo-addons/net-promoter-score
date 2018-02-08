@@ -3,7 +3,7 @@
 <div ng-controller="npsFormCtrl" id="npsFormCtrl">
 
 
-<div id="nps">
+<div id="nps" class="{{scoreTypeName}}">
 
 <div ng-show="showAlert">
     <span class="close thankyClose"><i class="uiIconClose"></i></span>
@@ -14,7 +14,8 @@ class="result-message alert {{resultMessageClass}}">
 
             </div>
 
-<div ng-show="showForm">
+<div ng-show="showForm" class="{{scoreTypeName}}_form">
+    <img src="/eXoSkin/skin/images/themes/default/platform/skin/ToolbarContainer/HomeIcon.png" alt="eXo" class="{{scoreTypeName}} exoLogo"/>
     <h4 ng-if="newScore.isAnonymous == true">{{i18n.hi}},<br/><br/> {{scoreTypeMessage}}</h4>
     <h4 ng-if="newScore.isAnonymous == false">{{i18n.hi}} {{i18n.fullName}},<br/><br/> {{scoreTypeMessage}}</h4>
                 <span class="close" ng-click="cancel()"><i class="uiIconClose"></i></span>

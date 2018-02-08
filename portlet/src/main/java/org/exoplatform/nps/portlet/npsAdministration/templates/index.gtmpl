@@ -271,7 +271,7 @@
                     <h3 class="scoresDiv no-graph">{{i18n.noScore}}</h3>
                 </div>
             </div>
-            <div class="span12" ng-show="showGraphs">
+            <div class="span12" class="nps_week_graph" ng-show="showGraphs">
                 <h4 class="titleWithBorder pull-left" style="width: 100%">NPS By Week</h4>
                 <div google-chart chart="myChartObject" agc-on-select="hideSeries(selectedItem)" style="height:450px; width:100%;"></div>
             </div>

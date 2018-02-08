@@ -84,8 +84,9 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
 
                         $scope.scoreTypeMessage = data.data.scoreTypeMessage;
                          if ($scope.scoreTypeMessage==null||$scope.scoreTypeMessage==""){
-                         $scope.scoreTypeMessage=data.data.messageForm;
+                             $scope.scoreTypeMessage=data.data.messageForm;
                          }
+                         $scope.scoreTypeName=$scope.slugify(data.data.scoreTypeName);
                          $scope.followUpDetractorPH= data.data.followUpDetractor;
                          if ($scope.followUpDetractorPH==null||$scope.followUpDetractorPH==""){
                          $scope.followUpDetractorPH=data.data.followUpDetractorDefault;
@@ -114,6 +115,14 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
 
         }
 
+        $scope.slugify = function(nameUrl){
+             var slug = nameUrl.toLowerCase().trim();
+             // replace invalid chars with spaces
+             slug = slug.replace(/[^a-z0-9\s-]/g, ' ');
+             // replace multiple spaces or hyphens with a single hyphen
+             slug = slug.replace(/[\s-]+/g, '_');
+             return slug
+        }
         $scope.saveScore = function() {
             $scope.showAlert = false;
             $scope.newScore.typeId=$scope.scoreTypeId;

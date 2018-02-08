@@ -346,3 +346,24 @@ display: inline-block;
 @media all and (max-width: 767px) {
     div.npsFormPopup #npsFormCtrl {width: 90%}
 }
+
+/*---------------
+*  E-NPS STYLE
+----------------*/
+
+#nps.exo_employees_nps{
+    background: url(https://www.exoplatform.com/blog/wp-content/uploads/2018/02/800x533.png);
+    background-position: center;
+}
+#nps.exo_employees_nps .exo_employees_nps_form{
+    background: rgba(255, 255, 255, 0.8);
+    margin: -20px;
+    padding: 20px;
+}
+.exoLogo{display: none}
+#nps.exo_employees_nps .exo_employees_nps.exoLogo{
+    position: relative;
+    display: block;
+    margin: auto;
+}
+
