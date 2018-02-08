@@ -12,10 +12,11 @@ html, body {
   width: 290px;
   background: #e8e8e8;
   border-radius: 50%;
-  float: right;
   z-index: 3;
   position: relative;
-  right: 45px;
+  right: 0;
+  float: none;
+  margin: auto;
 }
 
 .brand-circle-large {
