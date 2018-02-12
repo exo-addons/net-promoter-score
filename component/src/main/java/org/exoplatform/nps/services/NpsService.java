@@ -149,6 +149,24 @@ public class NpsService {
     return scoreEntryDAO.getScoreEntriesCountByDate(typeId, toDate);
   }
 
+  public long getPromotersCountByPeriod(long typeId, long fromDate, long toDate) {
+
+    return scoreEntryDAO.getPromotersCountByPeriod(typeId,fromDate , toDate);
+  }
+
+
+  public long getDetractorsCountByPeriod(long typeId, long fromDate, long toDate) {
+
+    return scoreEntryDAO.getDetractorsCountByPeriod(typeId,fromDate , toDate);
+  }
+
+
+
+  public long getScoreCountByPeriod(long typeId, long fromDate, long toDate) {
+    return scoreEntryDAO.getScoreEntriesCountByPeriod(typeId,fromDate , toDate);
+  }
+
+
 
 
   private ScoreEntryEntity convert(ScoreEntryDTO dto) {

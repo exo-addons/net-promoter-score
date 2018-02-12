@@ -8,7 +8,7 @@
     <page>
         <name>nps-administration</name>
         <title>nps-administration</title>
-        <access-permissions>*:/platform/administrato</access-permissions>
+        <access-permissions>*:/platform/administrators</access-permissions>
         <edit-permission>*:/platform/administrators</edit-permission>
         <show-max-window>false</show-max-window>
         <portlet-application>

@@ -159,11 +159,26 @@ public class NPSAdministrationController {
   }
 
 
+
+
   @Ajax
   @juzu.Resource
   @MimeType.JSON
   @Jackson
-  public Response getWeeklyNPSForCurrentYear(Long typeId) {
+  public Response getNPSLineChart(Long typeId, String chartType) {
+    if(chartType.equals("weekly")){
+      return  getWeeklyNPS(typeId);
+    }else if(chartType.equals("byWeek")){
+      return  getNPSByWeek(typeId);
+    }else return Response.notFound();
+  }
+
+
+  @Ajax
+  @juzu.Resource
+  @MimeType.JSON
+  @Jackson
+  public Response getWeeklyNPS(Long typeId) {
     try {
       JSONArray npsList = new JSONArray();
       List <NPSDetailsDTO> npsDetails = Utils.getWeeklyNPS(typeId);
@@ -181,6 +196,56 @@ public class NPSAdministrationController {
       return Response.status(500);
     }
   }
+
+
+
+  @Ajax
+  @juzu.Resource
+  @MimeType.JSON
+  @Jackson
+  public Response getNPSByWeek(Long typeId) {
+    try {
+      JSONArray npsList = new JSONArray();
+      List <NPSDetailsDTO> npsDetails = Utils.getNPSByWeek(typeId);
+      for(NPSDetailsDTO nps : npsDetails){
+        JSONObject nps_ = new JSONObject();
+        Calendar c=Calendar.getInstance();
+        c.setTimeInMillis(nps.getNpsDate());
+        nps_.put("npsDate","W "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR));
+        nps_.put("score",String.format("%.2f", nps.getNpScore()));
+        npsList.put(nps_);
+      }
+      return Response.ok(npsList.toString());
+    } catch (Throwable e) {
+      LOG.error("error while getting context", e);
+      return Response.status(500);
+    }
+  }
+
+
+  @Ajax
+  @juzu.Resource
+  @MimeType.JSON
+  @Jackson
+  public Response getNPSByMonth(Long typeId) {
+    try {
+      JSONArray npsList = new JSONArray();
+      List <NPSDetailsDTO> npsDetails = Utils.getWeeklyNPS(typeId);
+      for(NPSDetailsDTO nps : npsDetails){
+        JSONObject nps_ = new JSONObject();
+        Calendar c=Calendar.getInstance();
+        c.setTimeInMillis(nps.getNpsDate());
+        nps_.put("npsDate","W "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR));
+        nps_.put("score",String.format("%.2f", nps.getNpScore()));
+        npsList.put(nps_);
+      }
+      return Response.ok(npsList.toString());
+    } catch (Throwable e) {
+      LOG.error("error while getting context", e);
+      return Response.status(500);
+    }
+  }
+
 
 
   @Ajax

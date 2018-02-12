@@ -141,6 +141,48 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
 
 
 
+    public  long getScoreEntriesCountByPeriod(long typeId, long fromDate, long toDate) {
+        try {
+
+            return getEntityManager().createNamedQuery("scoreEntryEntity.countEnabledByPeriod", Long.class)
+                    .setParameter("typeId", typeId)
+                    .setParameter("fromDate", fromDate)
+                    .setParameter("toDate", toDate)
+                    .getSingleResult();
+
+
+        } catch (Exception e) {
+            LOG.warn("Exception while attempting to get scores count.", e);
+            throw e;
+        }
+    }
+
+    public  long getPromotersCountByPeriod(long typeId, long fromDate, long toDate) {
+        try {
+            return getEntityManager().createNamedQuery("scoreEntryEntity.countPromotersByPeriod", Long.class)
+                    .setParameter("typeId", typeId)
+                    .setParameter("fromDate", fromDate)
+                    .setParameter("toDate", toDate)
+                    .getSingleResult();
+        } catch (Exception e) {
+            LOG.warn("Exception while attempting to get scores count.", e);
+            throw e;
+        }
+    }
+
+    public  long getDetractorsCountByPeriod(long typeId, long fromDate, long toDate) {
+        try {
+            return getEntityManager().createNamedQuery("scoreEntryEntity.countDetractorsByPeriod", Long.class)
+                    .setParameter("typeId", typeId)
+                    .setParameter("fromDate", fromDate)
+                    .setParameter("toDate", toDate)
+                    .getSingleResult();
+        } catch (Exception e) {
+            LOG.warn("Exception while attempting to get scores count.", e);
+            throw e;
+        }
+    }
+
 
     public List<ScoreEntryEntity> getScoreEntriesByUserId(long typeId,String userId, int offset, int limit) {
         try {

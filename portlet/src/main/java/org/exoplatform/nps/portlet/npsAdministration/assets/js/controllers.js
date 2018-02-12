@@ -13,6 +13,11 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.scoreTypes  = [];
         $scope.scoresSum=0;
         $scope.weeklyNpScore=[];
+        $scope.chartTypes = [
+            {name : "Weekly", value : "weekly"},
+            {name : "By Week", value : "byWeek"}
+        ];
+        $scope.selectedChartType={name : "Weekly", value : "weekly"};
         $scope.pieChartObject = {};
         $scope.pieChartObject.options = {
             backgroundColor: 'transparent',
@@ -185,7 +190,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                         ]}
                     ]};
                 }
-               $scope.getWeeklyNPSForCurrentYear(typeId);
+               $scope.getNPSLineChart();
                 $scope.pages=$scope.range();
                // $scope.getScoresbyType(typeId);
 
@@ -196,10 +201,10 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             });
         }
 
-       $scope.getWeeklyNPSForCurrentYear = function (typeId) {
+       $scope.getNPSLineChart = function () {
              $http({
                  method: 'GET',
-                 url: npsAdminContainer.jzURL('NPSAdministrationController.getWeeklyNPSForCurrentYear')+ "&typeId="+typeId
+                 url: npsAdminContainer.jzURL('NPSAdministrationController.getNPSLineChart')+ "&typeId="+$scope.typeId + "&chartType="+$scope.selectedChartType.value
              }).then(function successCallback(data) {
                  $scope.weeklyNpScore = data.data;
                 var NPSArray = [];
@@ -234,7 +239,9 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
              }, function errorCallback(data) {
                  $scope.setResultMessage($scope.i18n.defaultError, "error");
              });
-         }
+
+}
+
 
 $scope.hideSeries= function(selectedItem) {
             var col = selectedItem.column;
