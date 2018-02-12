@@ -120,6 +120,16 @@ public class Utils
         return new NPSDetailsDTO(typeId, date, scorsnbr, detractorsNbr,  promotersNbr, passivesNbr);
     }
 
+    public static NPSDetailsDTO calculateNpsByPeriod (long typeId,long from, long to){
+        NpsService npsService= CommonsUtils.getService(NpsService.class);
+        long scorsnbr= npsService.getScoreCountByPeriod(typeId, from, to);
+        long detractorsNbr= npsService.getDetractorsCountByPeriod(typeId, from, to);
+        long promotersNbr= npsService.getPromotersCountByPeriod(typeId, from, to);
+        long passivesNbr= scorsnbr-(promotersNbr+detractorsNbr);
+        return new NPSDetailsDTO(typeId, from, scorsnbr, detractorsNbr,  promotersNbr, passivesNbr);
+    }
+
+
 
     public static List<NPSDetailsDTO> getWeeklyNPSbyDates(long typeId,long fromDate, long toDate){
         NpsService npsService= CommonsUtils.getService(NpsService.class);
@@ -165,5 +175,30 @@ public class Utils
         }
         return NPSScors;
     }
+
+
+    public static List<NPSDetailsDTO> getNPSByWeek(long typeId){
+        NpsService npsService= CommonsUtils.getService(NpsService.class);
+        List<NPSDetailsDTO> NPSScors=new ArrayList<NPSDetailsDTO>();
+        ScoreEntryDTO score = npsService.getFirstScoreEntries(typeId);
+        if(score!=null){
+            Calendar fromDate=Calendar.getInstance();
+            fromDate.setTimeInMillis(score.getPostedTime());
+
+            Calendar toDate=Calendar.getInstance();
+            int diff= Calendar.SATURDAY-fromDate.get(Calendar.DAY_OF_WEEK)+2;
+            Calendar to_=Calendar.getInstance();
+            to_.setTime(fromDate.getTime());
+            to_.add(Calendar.DATE, diff);
+            while(fromDate.before(toDate)){
+                NPSScors.add(calculateNpsByPeriod (typeId,fromDate.getTimeInMillis(), to_.getTimeInMillis()));
+                fromDate.setTime(to_.getTime());
+                to_.add(Calendar.DATE, 7);
+            }
+
+        }
+        return NPSScors;
+    }
+
 
 }

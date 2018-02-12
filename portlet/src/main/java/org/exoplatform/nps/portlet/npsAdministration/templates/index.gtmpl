@@ -271,6 +271,16 @@
                     <h3 class="scoresDiv no-graph">{{i18n.noScore}}</h3>
                 </div>
             </div>
+            <div class="span10" ng-show="showGraphs">
+                <h4 class="titleWithBorder pull-left" style="width: 100%">NPS Line Charts</h4>
+                <div class="">
+                    <div class="">
+                        <select name="lineChart" id="lineChart"
+                                ng-options="chartType.name for chartType in chartTypes track by chartType.value"
+                                ng-model="selectedChartType" ng-change="getNPSLineChart()"></select>
+
+                    </div>
+                </div>
             <div class="span12" class="nps_week_graph" ng-show="showGraphs">
                 <h4 class="titleWithBorder pull-left" style="width: 100%">NPS By Week</h4>
                 <div google-chart chart="myChartObject" agc-on-select="hideSeries(selectedItem)" style="height:450px; width:100%;"></div>
