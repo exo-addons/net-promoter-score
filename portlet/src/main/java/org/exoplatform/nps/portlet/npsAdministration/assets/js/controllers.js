@@ -210,7 +210,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 var NPSArray = [];
                 for(var i = 0; i < $scope.weeklyNpScore.length; i++) {
                     var obj = $scope.weeklyNpScore[i];
-                        NPSArray.push({ c: [{v: obj.npsDate}, {v: obj.score }, { v: 70 }, { v: 25 }]});
+                        NPSArray.push({ c: [{v: obj.npsDate}, {v: obj.score, f: "1 unit (Out of stock this month)" }, { v: 70 }, { v: 25 }]});
                 }
 
                     $scope.myChartObject.data = {

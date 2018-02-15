@@ -1,8 +1,12 @@
-package org.exoplatform.nps.portlet.npsAdministration;
+package org.exoplatform.nps.portlet.npsCharts;
 
 import juzu.*;
+import juzu.bridge.portlet.JuzuPortlet;
+import juzu.impl.bridge.spi.portlet.PortletRequestBridge;
 import juzu.impl.common.JSON;
+import juzu.impl.request.Request;
 import juzu.plugin.jackson.Jackson;
+import juzu.request.RequestContext;
 import juzu.template.Template;
 import org.exoplatform.commons.juzu.ajax.Ajax;
 import org.exoplatform.commons.utils.PropertyManager;
@@ -23,6 +27,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.inject.Inject;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -30,11 +36,12 @@ import java.util.*;
 /**
  * Created by exo on 8/3/16.
  */
-public class NPSAdministrationController {
+public class NPSChartsController {
 
-  private static Log  LOG = ExoLogger.getLogger(NPSAdministrationController.class);
+  private static Log  LOG = ExoLogger.getLogger(NPSChartsController.class);
   private String     bundleString;
   ResourceBundle     bundle;
+  private static String SCORE_TYPE = "exo.nps.addon.selectedType";
 
 
   @Inject
@@ -51,32 +58,45 @@ public class NPSAdministrationController {
   @Path("index.gtmpl")
   Template            indexTmpl;
 
+  @Inject
+  @Path("edit.gtmpl")
+  Template editTmpl;
+
+
   @View
-  public Response.Content index() {
-    return indexTmpl.ok();
+  public Response.Content index(RequestContext requestContext) {
+
+    PortletMode mode = requestContext.getProperty(JuzuPortlet.PORTLET_MODE);
+
+    if (PortletMode.EDIT.equals(mode)) {
+      Request request = Request.getCurrent();
+      PortletRequestBridge bridge = (PortletRequestBridge) request.getBridge();
+      PortletPreferences prefs = bridge.getPortletRequest().getPreferences();
+      String selectedType = prefs.getValue(SCORE_TYPE, "");
+      List<ScoreTypeDTO> scoreTypes=npsTypeService.getScoreTypes(0,0);
+      Map<String, Object> parameters = new HashMap<>();
+      parameters.put("scoreTypes", scoreTypes);
+      parameters.put("selectedType", selectedType);
+
+      return editTmpl.with(parameters).ok();
+    } else {
+      return indexTmpl.ok();
+    }
   }
 
   private final String currentUser = ConversationState.getCurrent().getIdentity().getUserId();
 
-  @Ajax
-  @juzu.Resource
-  @MimeType.JSON
-  @Jackson
-  public List<ScoreEntryDTO> getScores(Long typeId, int offset, int limit) {
-    try {
-      List<ScoreEntryDTO> scores=npsService.getScores(typeId,offset,limit);
-      for (ScoreEntryDTO score : scores){
-        if(score.getUserId()!=null&&!((String)score.getUserId()).equals("")){
-            Profile profile=identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, score.getUserId(), false).getProfile();
-            score.setUserFullName(profile.getFullName());
-        }
-      }
-      return scores;
-    } catch (Throwable e) {
-      LOG.error(e);
-      return null;
-    }
+  @Action
+  @Route("updateSettings")
+  public Response.Content updateSettings(String respondedCookiesExpiration, String reportedCookiesExpiration,String typeId, String firstDisplayDelay , String displayPopup) throws Exception {
+    Request request = Request.getCurrent();
+    PortletRequestBridge bridge = (PortletRequestBridge) request.getBridge();
+    PortletPreferences prefs = bridge.getPortletRequest().getPreferences();
+    prefs.setValue(SCORE_TYPE, typeId);
+    prefs.store();
+    return indexTmpl.ok();
   }
+
 
 
   @Ajax
@@ -113,9 +133,18 @@ public class NPSAdministrationController {
   @juzu.Resource
   @MimeType.JSON
   @Jackson
-  public Response getData(Long typeId) {
+  public Response getData() {
     try {
+      Request request = Request.getCurrent();
+      PortletRequestBridge bridge = (PortletRequestBridge) request.getBridge();
+      PortletPreferences prefs = bridge.getPortletRequest().getPreferences();
+      String scoreTypeId = prefs.getValue(SCORE_TYPE, "");
       JSON data = new JSON();
+      ScoreTypeDTO  sType = npsTypeService.getScoreType(Long.parseLong(scoreTypeId));
+      long typeId=sType.getId();
+
+      data.set("typeId",typeId);
+
       long scorsnbr= npsService.getScoreCount(typeId, true);
       long detractorsNbr= npsService.getDetractorsCount(typeId);
       long promotersNbr= npsService.getPromotersCount(typeId);
@@ -256,84 +285,6 @@ public class NPSAdministrationController {
       return Response.status(500);
     }
   }
-
-
-
-  @Ajax
-  @juzu.Resource
-  @MimeType.JSON
-  @Jackson
-  public List<ScoreTypeDTO> getScoreTypes() {
-    try {
-      return npsTypeService.getScoreTypes(0,0);
-    } catch (Throwable e) {
-      LOG.error(e);
-      return null;
-    }
-  }
-
-  @Ajax
-  @juzu.Resource
-  @MimeType.JSON
-  @Jackson
-  public ScoreTypeDTO getScoreTypeById (Long id) {
-
-    return npsTypeService.getScoreType(id);
-
-  }
-
-  @Ajax
-  @Resource(method = HttpMethod.POST)
-  @MimeType.JSON
-  @Jackson
-  public void saveType(@Jackson ScoreTypeDTO obj) {
-    if (obj.getAnonymous()==null) obj.setAnonymous(false);
-    npsTypeService.save(obj,true);
-  }
-
-  @Ajax
-  @Resource(method = HttpMethod.POST)
-  @MimeType.JSON
-  @Jackson
-  public void updateType(@Jackson ScoreTypeDTO obj) {
-
-    npsTypeService.save(obj,false);
-
-  }
-
-
-  @Ajax
-  @Resource(method = HttpMethod.POST)
-  @MimeType.JSON
-  @Jackson
-  public void deleteScore(@Jackson ScoreEntryDTO obj) {
-
-    npsService.remove(obj);
-
-  }
-
-  @Ajax
-  @Resource(method = HttpMethod.POST)
-  @MimeType.JSON
-  @Jackson
-  public void disableScore(@Jackson ScoreEntryDTO obj) {
-    obj.setEnabled(false);
-    npsService.save(obj,false);
-
-  }
-
-
-  @Ajax
-  @Resource(method = HttpMethod.POST)
-  @MimeType.JSON
-  @Jackson
-  public void enableScore(@Jackson ScoreEntryDTO obj) {
-    obj.setEnabled(true);
-    npsService.save(obj,false);
-
-  }
-
-
 
   private ResourceBundle getResourceBundle(Locale locale) {
     return bundle = ResourceBundle.getBundle("locale.portlet.nps-addon", locale, this.getClass().getClassLoader());

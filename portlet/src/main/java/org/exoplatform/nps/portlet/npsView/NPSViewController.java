@@ -185,7 +185,7 @@ public class NPSViewController {
 
     @Action
     @Route("updateSettings")
-    public Response.Content updateSettings(String respondedCookiesExpiration, String reportedCookiesExpiration,String typeId, String firstDisplayDelay , String displayPopup) throws Exception {
+    public Response.Content updateSettings(String typeId) throws Exception {
         Request request = Request.getCurrent();
         PortletRequestBridge bridge = (PortletRequestBridge) request.getBridge();
         PortletPreferences prefs = bridge.getPortletRequest().getPreferences();

@@ -83,29 +83,34 @@ public class Utils
                 IdentityManager identityManager= CommonsUtils.getService(IdentityManager.class);
                 ActivityManager activityManager= CommonsUtils.getService(ActivityManager.class);
                 Space space = spaceService.getSpaceByPrettyName(scoreType.getSpaceId());
-                Identity spaceIdentity = identityManager.getOrCreateIdentity(SpaceIdentityProvider.NAME, space.getPrettyName(), false);
-                Identity posterIdentity = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, scoreType.getUserId(), false);
-                String userName = "Anonymous";
-                if(score.getUserId()!=null&&!"".equals(score.getUserId())){
-                    Identity userIdentity = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, score.getUserId(), false);
-                    if(userIdentity!=null){
-                        //userName =userIdentity.getProfile().getFullName();
-                        userName="<a  href=\""+userIdentity.getProfile().getUrl()+"\">"+userIdentity.getProfile().getFullName()+" </a>";
-                    }else userName=score.getUserId();
-                }
-                if(posterIdentity!=null&&spaceIdentity!=null){
-                    ExoSocialActivity activity = new ExoSocialActivityImpl();
-                    activity.setType("DEFAULT_ACTIVITY");
-                    activity.setTitle("<span id='npsActivity'>\n" +
-                            "A new response has been added to the "+scoreType.getTypeName()+" survey: <br/>\n" +
-                            " <b>User Name : </b>"+userName+"<br/>\n" +
-                            " <b>Score : </b>"+score.getScore()+"<br/>\n" +
-                            " <b>Comment: </b>"+score.getComment()+ "<br/>");
-                    activity.setUserId(posterIdentity.getId());
-                    activityManager.saveActivityNoReturn(spaceIdentity, activity);
+                if(space==null){
+                    log.warn("Space bot found");
                 }else{
-                    log.warn("Not able to create the activity, the Poster or Space Identity is missing");
+                    Identity spaceIdentity = identityManager.getOrCreateIdentity(SpaceIdentityProvider.NAME, space.getPrettyName(), false);
+                    Identity posterIdentity = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, scoreType.getUserId(), false);
+                    String userName = "Anonymous";
+                    if(score.getUserId()!=null&&!"".equals(score.getUserId())){
+                        Identity userIdentity = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, score.getUserId(), false);
+                        if(userIdentity!=null){
+                            //userName =userIdentity.getProfile().getFullName();
+                            userName="<a  href=\""+userIdentity.getProfile().getUrl()+"\">"+userIdentity.getProfile().getFullName()+" </a>";
+                        }else userName=score.getUserId();
+                    }
+                    if(posterIdentity!=null&&spaceIdentity!=null){
+                        ExoSocialActivity activity = new ExoSocialActivityImpl();
+                        activity.setType("DEFAULT_ACTIVITY");
+                        activity.setTitle("<span id='npsActivity'>\n" +
+                                "A new response has been added to the "+scoreType.getTypeName()+" survey: <br/>\n" +
+                                " <b>User Name : </b>"+userName+"<br/>\n" +
+                                " <b>Score : </b>"+score.getScore()+"<br/>\n" +
+                                " <b>Comment: </b>"+score.getComment()+ "<br/>");
+                        activity.setUserId(posterIdentity.getId());
+                        activityManager.saveActivityNoReturn(spaceIdentity, activity);
+                    }else{
+                        log.warn("Not able to create the activity, the Poster or Space Identity is missing");
+                    }
                 }
+
             }
         }
 
@@ -164,6 +169,9 @@ public class Utils
             fromDate.setTimeInMillis(score.getPostedTime());
             int diff= Calendar.SATURDAY-fromDate.get(Calendar.DAY_OF_WEEK);
             fromDate.add(Calendar.DATE, diff);
+            fromDate.set(Calendar.HOUR_OF_DAY, 0);
+            fromDate.set(Calendar.MINUTE, 0);
+            fromDate.set(Calendar.SECOND, 0);
             Calendar toDate=Calendar.getInstance();
             while(fromDate.before(toDate)){
                 NPSScors.add(calculateNpsByDate (typeId,fromDate.getTimeInMillis()));
@@ -184,7 +192,9 @@ public class Utils
         if(score!=null){
             Calendar fromDate=Calendar.getInstance();
             fromDate.setTimeInMillis(score.getPostedTime());
-
+            fromDate.set(Calendar.HOUR_OF_DAY, 0);
+            fromDate.set(Calendar.MINUTE, 0);
+            fromDate.set(Calendar.SECOND, 0);
             Calendar toDate=Calendar.getInstance();
             int diff= Calendar.SATURDAY-fromDate.get(Calendar.DAY_OF_WEEK)+2;
             Calendar to_=Calendar.getInstance();

@@ -97,4 +97,33 @@
 		</portlet-preferences>
 	</portlet>
 
+	<portlet>
+		<portlet-name>NPSChartsPortlet</portlet-name>
+		<display-name xml:lang="EN">NPS Charts Portlet</display-name>
+		<portlet-class>org.exoplatform.nps.portlet.npsCharts.NPSChartsControllerPortlet</portlet-class>
+		<init-param>
+			<name>juzu.run_mode</name>
+			<value>${juzu.run_mode:prod}</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>edit</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>NPS Charts</title>
+			<keywords>nps-addon</keywords>
+		</portlet-info>
+		<portlet-preferences>
+
+			<preference>
+				<name>exo.nps.addon.selectedType</name>
+				<value></value>
+				<read-only>false</read-only>
+			</preference>
+
+		</portlet-preferences>
+	</portlet>
+
 </portlet-app>

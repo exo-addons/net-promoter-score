@@ -1,0 +1,173 @@
+.npsLoadingBar {
+    background: url("/nps-addon-portlet/skin/images/loading-16x16.gif") no-repeat scroll left center rgba(0, 0, 0, 0);
+    background-size: 25px;
+    padding: 10px 0px 10px 20px;
+    margin: 0 auto;
+    width: 80px;
+    height: 100px;
+}
+
+.npsNumber {
+    position: relative;
+    margin: auto;
+    margin-top: 20px;
+    width: 70px;
+    height: 48px;
+    border-radius: 50%;
+    line-height: 25px;
+    font-size: 25px;
+    padding: 26px 15px;
+    text-align: center;
+    background: #476a9c;
+    color: #FFF;
+}
+.npsStat .alert {
+    font-weight: bold;
+    font-size: 14px;
+}
+.npsStat .alert > span{
+    color: #39c522;
+    float: right;
+    font-size: 20px;
+}
+.npsStat .alert.alert-warning > span{color : #edad00}
+.npsStat .alert.alert-error > span{color : #c72222}
+.scoresDiv{
+    margin: 30px 30px 0 30px;
+    width: initial;
+}
+
+a.actionIconde {
+    float: right;
+}
+/**/
+/* SWICHER*/
+/**/
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 47px!important;
+  height: 21px;
+  margin-bottom: 0;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 19px;
+  width: 19px;
+  left: 1px;
+  bottom: 1px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #578dc9;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+/* SCORE MANAGEMENT */
+.scoresDiv > h4{
+    width: 100%;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.scoreManagement {
+    margin: auto;
+    position: relative;
+}
+.scoreManagement > h3.lead{
+    margin-bottom: 10px;
+    font-size: 16.5px;
+}
+.scoreManagement > select{padding: 2px 4px;min-height: 33px;}
+.scoreManagement > a{margin: -10px 0 0;}
+
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* RESULT MSG */
+div#npsAdminCtrl {
+    position: relative;
+}
+div#resultMessage {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+}
+/* NPS ADMIN POPUP*/
+.npsAdminPopup{
+    position: fixed;
+    width: 100%;
+    top: 62px;
+    left: 0;
+    right: 0;
+    bottom: 5px;
+    z-index: 10;
+}
+.npsAdminPopup > div{
+    position: relative;
+    width: 560px;
+    margin: 0 auto 20px;
+    z-index: 1;
+    max-width: 100%;
+    height: auto;
+    overflow: auto;
+    max-height: 90%;
+}
+.npsAdminPopup input {
+    width: 100%;
+}
+
+.nps_week_graph{max-width: 95%}
+/**/
+.no-graph{
+font-size: 18px;
+}
+.avataruser{width : 26px; height:26px; margin-right: 5px}
+/**/
+/* -- POPUP FORM -- */
+/**/
+.npsAdminPopup label, .npsAdminPopup div.controls{display: inline-block; width: 20%}
+.npsAdminPopup div.controls{display: inline-block;width: 75%;}
+
+.redtext{
+color: red;
+    font-weight: bold;
+}
+
