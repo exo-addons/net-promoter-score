@@ -246,6 +246,7 @@ public class NPSAdministrationController {
         Calendar c=Calendar.getInstance();
         c.setTimeInMillis(nps.getNpsDate());
         nps_.put("npsFullDate",sdf.format(c.getTime()));
+        nps_.put("npsDetails",String.format("%.2f", nps.getNpScore())+" (Detractors: "+nps.getDetractorsNbr()+", Passives: "+nps.getPassivesNb()+", Promoters: "+nps.getPromotersNbr()+")");
         nps_.put("npsDate","W "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR));
         nps_.put("score",String.format("%.2f", nps.getNpScore()));
         npsList.put(nps_);

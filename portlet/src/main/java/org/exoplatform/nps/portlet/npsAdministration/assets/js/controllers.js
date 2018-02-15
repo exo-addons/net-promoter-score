@@ -54,7 +54,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 
            $scope.myChartObject.options = {
                          "title": "NPS per week",
-                         "colors": ['#0000FF', '#009900', '#CC0000'],
+                         "colors": ['#4285f4', '#00b36b', '#db4437'],
                          "defaultColors": ['#0000FF', '#009900', '#CC0000'],
                          "isStacked": "true",
                          "fill": 20,
@@ -210,7 +210,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 var NPSArray = [];
                 for(var i = 0; i < $scope.weeklyNpScore.length; i++) {
                     var obj = $scope.weeklyNpScore[i];
-                        NPSArray.push({ c: [{v: obj.npsDate}, {v: obj.score, f: "1 unit (Out of stock this month)" }, { v: 70 }, { v: 25 }]});
+                        NPSArray.push({ c: [{v: obj.npsDate}, {v: obj.score, f:  obj.npsDetails}, { v: 70 }, { v: 25 }]});
                 }
 
                     $scope.myChartObject.data = {
