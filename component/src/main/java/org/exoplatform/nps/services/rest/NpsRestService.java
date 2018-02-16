@@ -180,7 +180,7 @@ public class NpsRestService implements ResourceContainer {
 
             for(NPSDetailsDTO nps : npsDetails){
                 JSONObject nps_ = new JSONObject();
-                nps_.put("npsDate",dt1.format(nps.getNpsDate()));
+                nps_.put("npsDate",dt1.format(nps.getNpsToDate()));
                 nps_.put("score",String.format("%.2f", nps.getNpScore()));
                 npsList.put(nps_);
             }

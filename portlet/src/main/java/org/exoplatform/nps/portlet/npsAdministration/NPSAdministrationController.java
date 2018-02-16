@@ -146,7 +146,7 @@ public class NPSAdministrationController {
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
         Calendar c=Calendar.getInstance();
-        c.setTimeInMillis(nps.getNpsDate());
+        c.setTimeInMillis(nps.getNpsToDate());
         nps_.put("npsDate","W "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR));
         nps_.put("score",String.format("%.2f", nps.getNpScore()));
         npsList.put(nps_);
@@ -188,7 +188,7 @@ public class NPSAdministrationController {
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
         Calendar c=Calendar.getInstance();
-        c.setTimeInMillis(nps.getNpsDate());
+        c.setTimeInMillis(nps.getNpsToDate());
         nps_.put("npsFullDate",sdf.format(c.getTime()));
         nps_.put("npsDetails",String.format("%.2f", nps.getNpScore())+" (Detractors: "+nps.getDetractorsNbr()+", Passives: "+nps.getPassivesNb()+", Promoters: "+nps.getPromotersNbr()+")");
         nps_.put("npsDate","W "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR));
@@ -217,7 +217,7 @@ public class NPSAdministrationController {
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
         Calendar c=Calendar.getInstance();
-        c.setTimeInMillis(nps.getNpsDate());
+        c.setTimeInMillis(nps.getNpsToDate());
         nps_.put("npsFullDate",sdf.format(c.getTime()));
         nps_.put("npsDetails",String.format("%.2f", nps.getNpScore())+" (Detractors: "+nps.getDetractorsNbr()+", Passives: "+nps.getPassivesNb()+", Promoters: "+nps.getPromotersNbr()+")");
         nps_.put("npsDate","W "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR));
@@ -244,7 +244,7 @@ public class NPSAdministrationController {
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
         Calendar c=Calendar.getInstance();
-        c.setTimeInMillis(nps.getNpsDate());
+        c.setTimeInMillis(nps.getNpsToDate());
         nps_.put("npsFullDate",sdf.format(c.getTime()));
         nps_.put("npsDetails",String.format("%.2f", nps.getNpScore())+" (Detractors: "+nps.getDetractorsNbr()+", Passives: "+nps.getPassivesNb()+", Promoters: "+nps.getPromotersNbr()+")");
         nps_.put("npsDate","W "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR));

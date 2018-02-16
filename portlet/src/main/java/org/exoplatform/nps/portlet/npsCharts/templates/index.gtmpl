@@ -26,15 +26,20 @@
             </div>
             <div class="span10" ng-show="showGraphs">
 
-                <div class="span12" class="nps_weekly_graph" ng-show="showGraphs">
-                    <h4 class="titleWithBorder pull-left" style="width: 100%">NPS By Week</h4>
-                    <div google-chart chart="weeklyChartObject" agc-on-select="hideWeeklySeries(selectedItem)" style="height:450px; width:100%;"></div>
+                <div class="">
+                    <div class="">
+                        <select name="lineChart" id="lineChart"
+                                ng-options="chartType.name for chartType in chartTypes track by chartType.value"
+                                ng-model="selectedChartType" ng-change="getNPSLineChart()"></select>
+
+                    </div>
                 </div>
 
-                <div class="span12" class="nps_by_week_graph" ng-show="showGraphs">
+                <div class="span12" class="nps_weekly_graph" ng-show="showGraphs">
                     <h4 class="titleWithBorder pull-left" style="width: 100%">NPS By Week</h4>
-                    <div google-chart chart="byWeekChartObject" agc-on-select="hideByWeekSeries(selectedItem)" style="height:450px; width:100%;"></div>
+                    <div google-chart chart="lineChartObject" agc-on-select="hideLineChartSeries(selectedItem)" style="height:450px; width:100%;"></div>
                 </div>
+
 
 
 

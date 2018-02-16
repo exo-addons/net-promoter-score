@@ -9,6 +9,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import javax.jcr.Node;
 import javax.jcr.Session;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -122,7 +123,7 @@ public class Utils
         long detractorsNbr= npsService.getDetractorsCountByDate(typeId, date);
         long promotersNbr= npsService.getPromotersCountByDate(typeId, date);
         long passivesNbr= scorsnbr-(promotersNbr+detractorsNbr);
-        return new NPSDetailsDTO(typeId, date, scorsnbr, detractorsNbr,  promotersNbr, passivesNbr);
+        return new NPSDetailsDTO(typeId, 0,date, scorsnbr, detractorsNbr,  promotersNbr, passivesNbr);
     }
 
     public static NPSDetailsDTO calculateNpsByPeriod (long typeId,long from, long to){
@@ -131,7 +132,7 @@ public class Utils
         long detractorsNbr= npsService.getDetractorsCountByPeriod(typeId, from, to);
         long promotersNbr= npsService.getPromotersCountByPeriod(typeId, from, to);
         long passivesNbr= scorsnbr-(promotersNbr+detractorsNbr);
-        return new NPSDetailsDTO(typeId, from, scorsnbr, detractorsNbr,  promotersNbr, passivesNbr);
+        return new NPSDetailsDTO(typeId, from, to, scorsnbr, detractorsNbr,  promotersNbr, passivesNbr);
     }
 
 
@@ -204,6 +205,58 @@ public class Utils
                 NPSScors.add(calculateNpsByPeriod (typeId,fromDate.getTimeInMillis(), to_.getTimeInMillis()));
                 fromDate.setTime(to_.getTime());
                 to_.add(Calendar.DATE, 7);
+            }
+
+        }
+        return NPSScors;
+    }
+
+
+
+    public static List<NPSDetailsDTO> getNPSByMonth(long typeId){
+        NpsService npsService= CommonsUtils.getService(NpsService.class);
+        List<NPSDetailsDTO> NPSScors=new ArrayList<NPSDetailsDTO>();
+        ScoreEntryDTO score = npsService.getFirstScoreEntries(typeId);
+        if(score!=null){
+
+            Calendar fromDate=Calendar.getInstance();
+            fromDate.setTimeInMillis(score.getPostedTime());
+            fromDate.set(Calendar.HOUR_OF_DAY, 0);
+            fromDate.set(Calendar.MINUTE, 0);
+            fromDate.set(Calendar.SECOND, 0);
+            Calendar toDate=Calendar.getInstance();
+            int diff= fromDate.getActualMaximum(Calendar.DAY_OF_MONTH)-fromDate.get(Calendar.DAY_OF_WEEK)+1;
+            Calendar to_=Calendar.getInstance();
+            to_.setTime(fromDate.getTime());
+            to_.add(Calendar.DATE, diff);
+            while(fromDate.before(toDate)){
+                NPSScors.add(calculateNpsByPeriod (typeId,fromDate.getTimeInMillis(), to_.getTimeInMillis()));
+                fromDate.setTime(to_.getTime());
+                to_.add(Calendar.DATE, fromDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+            }
+
+        }
+        return NPSScors;
+    }
+
+    public static List<NPSDetailsDTO> getRollingAvg(long typeId, int period){
+        NpsService npsService= CommonsUtils.getService(NpsService.class);
+        List<NPSDetailsDTO> NPSScors=new ArrayList<NPSDetailsDTO>();
+        ScoreEntryDTO score = npsService.getFirstScoreEntries(typeId);
+        if(score!=null){
+            Calendar fromDate=Calendar.getInstance();
+            fromDate.setTimeInMillis(score.getPostedTime());
+            fromDate.set(Calendar.HOUR_OF_DAY, 0);
+            fromDate.set(Calendar.MINUTE, 0);
+            fromDate.set(Calendar.SECOND, 0);
+            Calendar toDate=Calendar.getInstance();
+            Calendar to_=Calendar.getInstance();
+            to_.setTime(fromDate.getTime());
+            to_.add(Calendar.DATE, period);
+            while(fromDate.before(toDate)){
+                NPSScors.add(calculateNpsByPeriod (typeId,fromDate.getTimeInMillis(), to_.getTimeInMillis()));
+                fromDate.add(Calendar.DATE, 1);
+                to_.add(Calendar.DATE, 1);
             }
 
         }

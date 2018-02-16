@@ -3,14 +3,21 @@ define("npsChartsControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function (
         var npsChartsContainer = $('#npsCharts');
         var deferred = $q.defer();
         $scope.typeId = 0;
-        $scope.weeklyNpScore=[];
-        $scope.byWeeklyNpScore=[];
+        $scope.statNpScore=[];
+
         $scope.showGraphs = false;
         $scope.chartTypes = [
-            {name : "Weekly", value : "weekly"},
-            {name : "By Week", value : "byWeek"}
+            {name : "Global weekly NPS", value : "global"},
+            {name : "Month over Month", value : "monthlyOver"},
+            {name : "Week over week", value : "weeklyOver"},
+            {name : "30-Days rolling Avg", value : "rolling30"},
+            {name : "7-Days rolling Avg", value : "rolling7"},
         ];
-        $scope.selectedChartType={name : "Weekly", value : "weekly"};
+        $scope.periods = [
+            {name : "By week", value : "weekly"},
+            {name : "By month", value : "mounthly"}
+        ];
+        $scope.selectedChartType={name : "Global NPS", value : "global"};
         $scope.pieChartObject = {};
         $scope.pieChartObject.options = {
             backgroundColor: 'transparent',
@@ -37,18 +44,27 @@ define("npsChartsControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function (
                 greenTo: 100,
         };
 
-         $scope.weeklyChartObject = {};
-         $scope.weeklyChartObject.type = "LineChart";
-         $scope.weeklyChartObject.displayed = false;
 
 
-           $scope.weeklyChartObject.options = {
-                         "title": "Weekly NPS",
+         $scope.lineChartObject = {};
+         $scope.lineChartObject.type = "LineChart";
+         $scope.lineChartObject.displayed = false;
+
+
+           $scope.lineChartObject.options = {
                          "colors": ['#4285f4', '#00b36b', '#db4437'],
+						 "series": {
+            0: { lineWidth: 3},
+            1: { lineWidth: 1, lineDashStyle: [5, 4] },
+            2: { lineWidth: 1, lineDashStyle: [5, 4] }
+          },
                          "defaultColors": ['#0000FF', '#009900', '#CC0000'],
-                         "isStacked": "true",
-                         "fill": 20,
+						 "isStacked": "false",
+                         "fill": 100,
                          "displayExactValues": true,
+						 "curveType": "function",
+						 "tooltip": { isHtml: true },
+						 "focusTarget": 'category',
                          "vAxis": {
                              "title": "",
                              "gridlines": {
@@ -56,38 +72,11 @@ define("npsChartsControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function (
                              }
                          },
                          "hAxis": {
-                             "title": ""
+
                          }
                      };
 
-                     $scope.weeklyChartObject.view = {
-                         columns: [0, 1, 2, 3]
-                     };
-
-         $scope.byWeekChartObject = {};
-         $scope.byWeekChartObject.type = "LineChart";
-         $scope.byWeekChartObject.displayed = false;
-
-
-           $scope.byWeekChartObject.options = {
-                         "title": "NPS by week",
-                         "colors": ['#4285f4', '#00b36b', '#db4437'],
-                         "defaultColors": ['#0000FF', '#009900', '#CC0000'],
-                         "isStacked": "true",
-                         "fill": 20,
-                         "displayExactValues": true,
-                         "vAxis": {
-                             "title": "",
-                             "gridlines": {
-                                 "count": 10
-                             }
-                         },
-                         "hAxis": {
-                             "title": ""
-                         }
-                     };
-
-                     $scope.byWeekChartObject.view = {
+                     $scope.lineChartObject.view = {
                          columns: [0, 1, 2, 3]
                      };
 
@@ -150,8 +139,7 @@ define("npsChartsControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function (
 				$scope.passivesPrc = data.data.passivesPrc;
                 $scope.npScore = data.data.npScore;
                 $scope.typeId= data.data.typeId;
-                $scope.weeklyNpScore = data.data.weeklyNpScore;
-                $scope.byWeeklyNpScore = data.data.byWeeklyNpScore;
+                $scope.statNpScore = data.data.statNpScore;
                 if($scope.npScore == "NaN"){
                     $scope.showGraphs = false;
                 }else{
@@ -181,8 +169,8 @@ define("npsChartsControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function (
                     ]};
                 }
 
-               $scope.getByWeekNPSLineChart();
-               $scope.getWeeklyNPSLineChart()
+               $scope.getNPSLineChart();
+
 
 
                 $scope.showGraphs = true;
@@ -193,103 +181,44 @@ define("npsChartsControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function (
         }
 
 
-
-            $scope.hideWeeklySeries= function(selectedItem) {
-            var col = selectedItem.column;
-            if (selectedItem.row === null) {
-                if ($scope.weeklyChartObject.view.columns[col] == col) {
-                    $scope.weeklyChartObject.view.columns[col] = {
-                        label: $scope.weeklyChartObject.data.cols[col].label,
-                        type: $scope.weeklyChartObject.data.cols[col].type,
-                        calc: function() {
-                            return null;
-                        }
-                    };
-                    $scope.weeklyChartObject.options.colors[col - 1] = '#CCCCCC';
-                }
-                else {
-                    $scope.weeklyChartObject.view.columns[col] = col;
-                    $scope.weeklyChartObject.options.colors[col - 1] = $scope.weeklyChartObject.options.defaultColors[col - 1];
-                }
-            }
-        }
-
-                    $scope.hideByWeekSeries= function(selectedItem) {
+                    $scope.hideLineChartSeries= function(selectedItem) {
                     var col = selectedItem.column;
                     if (selectedItem.row === null) {
-                        if ($scope.byWeekChartObject.view.columns[col] == col) {
-                            $scope.byWeekChartObject.view.columns[col] = {
-                                label: $scope.byWeekChartObject.data.cols[col].label,
-                                type: $scope.byWeekChartObject.data.cols[col].type,
+                        if ($scope.lineChartObject.view.columns[col] == col) {
+                            $scope.lineChartObject.view.columns[col] = {
+                                label: $scope.lineChartObject.data.cols[col].label,
+                                type: $scope.lineChartObject.data.cols[col].type,
                                 calc: function() {
                                     return null;
                                 }
                             };
-                            $scope.byWeekChartObject.options.colors[col - 1] = '#CCCCCC';
+                            $scope.lineChartObject.options.colors[col - 1] = '#CCCCCC';
                         }
                         else {
-                            $scope.byWeekChartObject.view.columns[col] = col;
-                            $scope.byWeekChartObject.options.colors[col - 1] = $scope.byWeekChartObject.options.defaultColors[col - 1];
+                            $scope.lineChartObject.view.columns[col] = col;
+                            $scope.lineChartObject.options.colors[col - 1] = $scope.lineChartObject.options.defaultColors[col - 1];
                         }
                     }
                 }
 
-                       $scope.getWeeklyNPSLineChart = function () {
-                             $http({
-                                 method: 'GET',
-                                 url: npsChartsContainer.jzURL('NPSChartsController.getNPSLineChart')+ "&typeId="+$scope.typeId + "&chartType=weekly"
-                             }).then(function successCallback(data) {
-                                 $scope.weeklyNpScore = data.data;
-                                var NPSArray = [];
-                                for(var i = 0; i < $scope.weeklyNpScore.length; i++) {
-                                    var obj = $scope.weeklyNpScore[i];
-                                        NPSArray.push({ c: [{v: obj.npsDate}, {v: obj.score, f: obj.npsDetails }, { v: 70 }, { v: 25 }]});
-                                }
 
-                                    $scope.weeklyChartObject.data = {
-                                                         "cols": [{
-                                                             id: "week",
-                                                             label: "Week",
-                                                             type: "string"
-                                                         }, {
-                                                             id: "nps-id",
-                                                             label: "NPS",
-                                                             type: "number"
-                                                         }, {
-                                                             id: "industry-high",
-                                                             label: "Industry High",
-                                                             type: "number"
-                                                         }, {
-                                                             id: "industry-low",
-                                                             label: "Industry Low",
-                                                             type: "number"
-                                                         }                         ],
-                                                         "rows": NPSArray
-                                                     };
 
-                                 deferred.resolve(data);
-                 //                $scope.setResultMessage(data, "success");
-                             }, function errorCallback(data) {
-                                 $scope.setResultMessage($scope.i18n.defaultError, "error");
-                             });
-                             }
-
-                        $scope.getByWeekNPSLineChart = function () {
+                        $scope.getNPSLineChart = function () {
                               $http({
                                   method: 'GET',
-                                  url: npsChartsContainer.jzURL('NPSChartsController.getNPSLineChart')+ "&typeId="+$scope.typeId + "&chartType=byWeek"
+                                  url: npsChartsContainer.jzURL('NPSChartsController.getNPSLineChart')+ "&typeId="+$scope.typeId + "&chartType="+$scope.selectedChartType.value
                               }).then(function successCallback(data) {
-                                  $scope.weeklyNpScore = data.data;
+                                  $scope.statNpScore = data.data;
                                  var NPSArray = [];
-                                 for(var i = 0; i < $scope.weeklyNpScore.length; i++) {
-                                     var obj = $scope.weeklyNpScore[i];
-                                         NPSArray.push({ c: [{v: obj.npsDate}, {v: obj.score, f: obj.npsDetails }, { v: 70 }, { v: 25 }]});
+                                 for(var i = 0; i < $scope.statNpScore.length; i++) {
+                                     var obj = $scope.statNpScore[i];
+                                         NPSArray.push({ c: [{v: ""}, {v: obj.score, f: obj.npsDetails }, { v: 70 }, { v: 25 }]});
                                  }
 
-                                     $scope.byWeekChartObject.data = {
+                                     $scope.lineChartObject.data = {
                                                           "cols": [{
-                                                              id: "week",
-                                                              label: "Week",
+                                                              id: "day",
+                                                              label: "Day",
                                                               type: "string"
                                                           }, {
                                                               id: "nps-id",

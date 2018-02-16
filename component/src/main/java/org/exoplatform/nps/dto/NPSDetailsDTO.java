@@ -3,7 +3,8 @@ package org.exoplatform.nps.dto;
 public class NPSDetailsDTO {
 
     private long typeId;
-    private long npsDate;
+    private long npsFromDate;
+    private long npsToDate;
     private long scorsnbr;
     private long detractorsNbr;
     private long promotersNbr;
@@ -21,12 +22,20 @@ public class NPSDetailsDTO {
         this.typeId = typeId;
     }
 
-    public long getNpsDate() {
-        return npsDate;
+    public long getNpsFromDate() {
+        return npsFromDate;
     }
 
-    public void setNpsDate(long npsDate) {
-        this.npsDate = npsDate;
+    public void setNpsFromDate(long npsFromDate) {
+        this.npsFromDate = npsFromDate;
+    }
+
+    public long getNpsToDate() {
+        return npsToDate;
+    }
+
+    public void setNpsToDate(long npsToDate) {
+        this.npsToDate = npsToDate;
     }
 
     public long getScorsnbr() {
@@ -93,9 +102,10 @@ public class NPSDetailsDTO {
         this.npScore = npScore;
     }
 
-    public NPSDetailsDTO(long typeId,long npsDate,long scorsnbr,long detractorsNbr, long promotersNbr,long passivesNbr){
+    public NPSDetailsDTO(long typeId,long npsFromDate,long npsToDate ,long scorsnbr,long detractorsNbr, long promotersNbr,long passivesNbr){
         this.typeId=typeId;
-        this.npsDate=npsDate;
+        this.npsFromDate=npsFromDate;
+        this.npsToDate=npsToDate;
         this.scorsnbr=scorsnbr;
         this.detractorsNbr=detractorsNbr;
         this.promotersNbr=promotersNbr;

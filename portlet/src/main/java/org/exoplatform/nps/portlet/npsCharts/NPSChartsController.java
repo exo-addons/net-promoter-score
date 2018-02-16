@@ -175,13 +175,13 @@ public class NPSChartsController {
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
         Calendar c=Calendar.getInstance();
-        c.setTimeInMillis(nps.getNpsDate());
+        c.setTimeInMillis(nps.getNpsToDate());
         nps_.put("npsDate","W "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR));
         nps_.put("score",String.format("%.2f", nps.getNpScore()));
         npsList.put(nps_);
       }
 
-      data.set("weeklyNpScore",npsList);
+      data.set("statNpScore",npsList);
       return Response.ok(data.toString());
     } catch (Throwable e) {
       LOG.error("error while getting context", e);
@@ -197,10 +197,16 @@ public class NPSChartsController {
   @MimeType.JSON
   @Jackson
   public Response getNPSLineChart(Long typeId, String chartType) {
-    if(chartType.equals("weekly")){
+    if(chartType.equals("global")){
       return  getWeeklyNPS(typeId);
-    }else if(chartType.equals("byWeek")){
+    }else if(chartType.equals("weeklyOver")){
       return  getNPSByWeek(typeId);
+    }else if(chartType.equals("monthlyOver")){
+      return  getNPSByMonth(typeId);
+    }else if(chartType.equals("rolling30")){
+      return  getRollingAvg(typeId,30);
+    }else if(chartType.equals("rolling7")){
+      return  getRollingAvg(typeId,7);
     }else return Response.notFound();
   }
 
@@ -211,16 +217,14 @@ public class NPSChartsController {
   @Jackson
   public Response getWeeklyNPS(Long typeId) {
     try {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         JSONArray npsList = new JSONArray();
       List <NPSDetailsDTO> npsDetails = Utils.getWeeklyNPS(typeId);
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
         Calendar c=Calendar.getInstance();
-        c.setTimeInMillis(nps.getNpsDate());
-        nps_.put("npsFullDate",sdf.format(c.getTime()));
-        nps_.put("npsDetails",String.format("%.2f", nps.getNpScore())+" (Detractors: "+nps.getDetractorsNbr()+", Passives: "+nps.getPassivesNb()+", Promoters: "+nps.getPromotersNbr()+")");
-        nps_.put("npsDate","W "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR));
+        c.setTimeInMillis(nps.getNpsToDate());
+        nps_.put("npsDetails",String.format("%.2f", nps.getNpScore())+" ( Week: "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR)+"Detractors: "+nps.getDetractorsNbr()+", Passives: "+nps.getPassivesNb()+", Promoters: "+nps.getPromotersNbr()+")");
         nps_.put("score",String.format("%.2f", nps.getNpScore()));
         npsList.put(nps_);
       }
@@ -240,17 +244,12 @@ public class NPSChartsController {
   public Response getNPSByWeek(Long typeId) {
     try {
 
-      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
       JSONArray npsList = new JSONArray();
       List <NPSDetailsDTO> npsDetails = Utils.getNPSByWeek(typeId);
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
-        Calendar c=Calendar.getInstance();
-        c.setTimeInMillis(nps.getNpsDate());
-        nps_.put("npsFullDate",sdf.format(c.getTime()));
-        nps_.put("npsDetails",String.format("%.2f", nps.getNpScore())+" (Detractors: "+nps.getDetractorsNbr()+", Passives: "+nps.getPassivesNb()+", Promoters: "+nps.getPromotersNbr()+")");
-        nps_.put("npsDate","W "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR));
-        nps_.put("score",String.format("%.2f", nps.getNpScore()));
+          nps_.put("npsDetails",npsToString(nps));
+          nps_.put("score",String.format("%.2f", nps.getNpScore()));
         npsList.put(nps_);
       }
       return Response.ok(npsList.toString());
@@ -267,15 +266,36 @@ public class NPSChartsController {
   @Jackson
   public Response getNPSByMonth(Long typeId) {
     try {
+
       JSONArray npsList = new JSONArray();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        List <NPSDetailsDTO> npsDetails = Utils.getWeeklyNPS(typeId);
+      List <NPSDetailsDTO> npsDetails = Utils.getNPSByMonth(typeId);
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
-        Calendar c=Calendar.getInstance();
-        c.setTimeInMillis(nps.getNpsDate());
-        nps_.put("npsFullDate",sdf.format(c.getTime()));
-        nps_.put("npsDate","W "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR));
+          nps_.put("npsDetails",npsToString(nps));
+          nps_.put("score",String.format("%.2f", nps.getNpScore()));
+        npsList.put(nps_);
+      }
+      return Response.ok(npsList.toString());
+    } catch (Throwable e) {
+      LOG.error("error while getting context", e);
+      return Response.status(500);
+    }
+  }
+
+
+  @Ajax
+  @juzu.Resource
+  @MimeType.JSON
+  @Jackson
+  public Response getRollingAvg(Long typeId, int period) {
+    try {
+
+      JSONArray npsList = new JSONArray();
+      List <NPSDetailsDTO> npsDetails = Utils.getRollingAvg(typeId, period);
+      for(NPSDetailsDTO nps : npsDetails){
+        JSONObject nps_ = new JSONObject();
+
+        nps_.put("npsDetails",npsToString(nps));
         nps_.put("score",String.format("%.2f", nps.getNpScore()));
         npsList.put(nps_);
       }
@@ -285,6 +305,7 @@ public class NPSChartsController {
       return Response.status(500);
     }
   }
+
 
   private ResourceBundle getResourceBundle(Locale locale) {
     return bundle = ResourceBundle.getBundle("locale.portlet.nps-addon", locale, this.getClass().getClassLoader());
@@ -297,4 +318,17 @@ public class NPSChartsController {
     return bundle;
   }
 
+
+  private String npsToString(NPSDetailsDTO nps){
+      SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+      Calendar from=Calendar.getInstance();
+      from.setTimeInMillis(nps.getNpsFromDate());
+      Calendar to=Calendar.getInstance();
+      to.setTimeInMillis(nps.getNpsToDate());
+      return                  "Period : from "+sdf.format(from.getTime())+" to "+sdf.format(to.getTime())+"\n" +
+                                "Score : "+String.format("%.2f", nps.getNpScore())+"\n" +
+                                "Detractors: "+nps.getDetractorsNbr()+ "\n"+
+                                "Passives: "+nps.getPassivesNb()+ "\n"+
+                                "Promoters: "+nps.getPromotersNbr()+ "\n";
+    }
 }
