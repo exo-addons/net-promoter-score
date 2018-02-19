@@ -351,16 +351,14 @@ display: inline-block;
 *  E-NPS STYLE
 ----------------*/
 
-#nps.exo_employees_nps{
-    background: url(https://www.exoplatform.com/blog/wp-content/uploads/2018/02/800x533.png);
-    background-position: center;
-}
+#nps.exo_employees_nps{background: #FFF;}
 #nps.exo_employees_nps .exo_employees_nps_form{
     background: rgba(255, 255, 255, 0.8);
     margin: -20px;
     padding: 20px;
 }
-.exoLogo{display: none}
+#nps.exo_employees_nps .salutation{display: none}
+.exoLogo, .exoers, .mask{display: none}
 #nps.exo_employees_nps .exo_employees_nps.exoLogo{
     position: relative;
     display: block;
@@ -369,4 +367,27 @@ display: inline-block;
 #nps.exo_employees_nps div#resultMessage{
     margin: -20px -15px;
     padding: 40px 30px;
+}
+/**/
+#nps.exo_employees_nps .exoers {
+    display: block;
+    background: url(https://www.exoplatform.com/blog/wp-content/uploads/2018/02/800x533.png);
+    background-size: 100% auto;
+    background-position: center;
+    margin: -15px;
+    margin-bottom: 0
+}
+
+#nps.exo_employees_nps .mask {
+    display: block;
+    height: 52px;
+    margin: 0;
+    margin-bottom: 0;
+    padding: 30px 15px 40px;
+    vertical-align: middle;
+    background: rgba(0, 0, 0, 0.24);
+}
+#nps.exo_employees_nps .mask h4 {
+    color: #FFF;
+    text-shadow: 0px 0px 9px rgb(0, 0, 0);
 }

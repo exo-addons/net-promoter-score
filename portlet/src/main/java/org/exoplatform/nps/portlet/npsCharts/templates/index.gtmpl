@@ -35,7 +35,8 @@
                     </div>
                 </div>
 
-                <div class="span12" class="nps_weekly_graph" ng-show="showGraphs">
+                <div class="span10" class="nps_weekly_graph" ng-show="showGraphs" style="margin: 0;    overflow: hidden;">
+                    <!--<h4 class="titleWithBorder pull-left graphTitle" style="width: 100%">{{i18n.selectedChartType}}</h4>-->
                     <div google-chart chart="lineChartObject" agc-on-select="hideLineChartSeries(selectedItem)" style="height:450px; width:100%;"></div>
                 </div>
 

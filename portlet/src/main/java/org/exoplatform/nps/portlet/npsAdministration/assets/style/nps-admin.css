@@ -33,10 +33,10 @@
 .npsStat .alert.alert-warning > span{color : #edad00}
 .npsStat .alert.alert-error > span{color : #c72222}
 .scoresDiv{
-    margin: 30px 30px 0 30px;
+    margin: 30px 0;
     width: initial;
 }
-
+.scoresDiv .scoreManagement{margin-left: 30px}
 a.actionIconde {
     float: right;
 }

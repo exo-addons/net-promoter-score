@@ -160,6 +160,14 @@ div#resultMessage {
 font-size: 18px;
 }
 .avataruser{width : 26px; height:26px; margin-right: 5px}
+
+.graphTitle{
+    z-index: 1;
+    padding: 15px 20px;
+}
+.graphTitle:after{
+    border-bottom: none;
+}
 /**/
 /* -- POPUP FORM -- */
 /**/
@@ -170,4 +178,3 @@ font-size: 18px;
 color: red;
     font-weight: bold;
 }
-

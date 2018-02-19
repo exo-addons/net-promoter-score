@@ -283,7 +283,7 @@
 
                     </div>
                 </div>
-            <div class="span12" class="nps_week_graph" ng-show="showGraphs">
+            <div class="span10" class="nps_week_graph" ng-show="showGraphs" style="margin: 0; margin-bottom: 15px">
                 <h4 class="titleWithBorder pull-left" style="width: 100%">NPS By Week</h4>
                 <div google-chart chart="lineChartObject" agc-on-select="hideSeries(selectedItem)" style="height:450px; width:100%;"></div>
             </div>

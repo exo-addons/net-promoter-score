@@ -15,9 +15,14 @@ class="result-message alert {{resultMessageClass}}">
             </div>
 
 <div ng-show="showForm" class="{{scoreTypeName}}_form">
-    <img src="/eXoSkin/skin/images/themes/default/platform/skin/ToolbarContainer/HomeIcon.png" alt="eXo" class="{{scoreTypeName}} exoLogo"/>
-    <h4 ng-if="newScore.isAnonymous == true">{{i18n.hi}},<br/><br/> {{scoreTypeMessage}}</h4>
-    <h4 ng-if="newScore.isAnonymous == false">{{i18n.hi}} {{i18n.fullName}},<br/><br/> {{scoreTypeMessage}}</h4>
+    <div class="exoers">
+        <div class="mask">
+            <img src="/eXoSkin/skin/images/themes/default/platform/skin/ToolbarContainer/HomeIcon.png" alt="eXo" class="exoLogo exo_employees_nps">
+            <h4>{{i18n.exoer}}</h4>
+        </div>
+    </div>
+    <h4 ng-if="newScore.isAnonymous == true"><span class="salutation">{{i18n.hi}}</span>,<br/><br/> {{scoreTypeMessage}}</h4>
+    <h4 ng-if="newScore.isAnonymous == false"><span class="salutation">{{i18n.hi}} {{i18n.fullName}}</span>,<br/><br/> {{scoreTypeMessage}}</h4>
                 <span class="close" ng-click="cancel()"><i class="uiIconClose"></i></span>
                 <form id="npsForm">
                     <div class="npsRadio">
