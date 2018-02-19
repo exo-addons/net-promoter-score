@@ -111,7 +111,6 @@ define("npsChartsControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function (
                 $scope.i18n = data.data;
                 $scope.chartTypes = [
                   {name : data.data.rolling30, value : "rolling30"},
-                  {name : data.data.rolling7, value : "rolling7"},
                   {name : data.data.global, value : "global"},
                   {name : data.data.monthlyOver, value : "monthlyOver"},
                   {name : data.data.weeklyOver, value : "weeklyOver"},
