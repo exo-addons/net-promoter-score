@@ -13,13 +13,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.scoreTypes  = [];
         $scope.scoresSum=0;
         $scope.weeklyNpScore=[];
-        $scope.chartTypes = [
-            {name : "30-Days rolling Avg", value : "rolling30"},
-            {name : "7-Days rolling Avg", value : "rolling7"},
-			{name : "Global weekly NPS", value : "global"},
-            {name : "Month over Month", value : "monthlyOver"},
-            {name : "Week over week", value : "weeklyOver"},
-        ];
+        $scope.chartTypes = [];
+        $scope.selectedChartType={};
         $scope.periods = [
             {name : "By week", value : "weekly"},
             {name : "By month", value : "mounthly"}
@@ -64,7 +59,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             1: { lineWidth: 1, lineDashStyle: [5, 4] },
             2: { lineWidth: 1, lineDashStyle: [5, 4] }
           },
-                         "defaultColors": ['#0000FF', '#009900', '#CC0000'],
+                         "defaultColors": ['#4285f4', '#00b36b', '#db4437'],
 						 "isStacked": "false",
                          "fill": 100,
                          "displayExactValues": true,
@@ -138,6 +133,16 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 url: npsAdminContainer.jzURL('NPSAdministrationController.getBundle') + "&locale=" + eXo.env.portal.language
             }).then(function successCallback(data) {
                 $scope.i18n = data.data;
+                $scope.chartTypes = [
+                  {name : data.data.rolling30, value : "rolling30"},
+                  {name : data.data.rolling7, value : "rolling7"},
+                  {name : data.data.global, value : "global"},
+                  {name : data.data.monthlyOver, value : "monthlyOver"},
+                  {name : data.data.weeklyOver, value : "weeklyOver"},
+
+                ];
+
+                $scope.selectedChartType={name : data.data.rolling30, value : "rolling30"};
                 deferred.resolve(data);
                 /*$scope.setResultMessage(data, "success");*/
                 $scope.showAlert = false;

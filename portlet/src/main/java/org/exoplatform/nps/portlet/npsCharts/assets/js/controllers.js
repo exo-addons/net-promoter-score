@@ -4,20 +4,14 @@ define("npsChartsControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function (
         var deferred = $q.defer();
         $scope.typeId = 0;
         $scope.statNpScore=[];
-
         $scope.showGraphs = false;
-        $scope.chartTypes = [
-            {name : "Global weekly NPS", value : "global"},
-            {name : "Month over Month", value : "monthlyOver"},
-            {name : "Week over week", value : "weeklyOver"},
-            {name : "30-Days rolling Avg", value : "rolling30"},
-            {name : "7-Days rolling Avg", value : "rolling7"},
-        ];
+        $scope.chartTypes = [];
+        $scope.selectedChartType={};
         $scope.periods = [
             {name : "By week", value : "weekly"},
             {name : "By month", value : "mounthly"}
         ];
-        $scope.selectedChartType={name : "Global NPS", value : "global"};
+
         $scope.pieChartObject = {};
         $scope.pieChartObject.options = {
             backgroundColor: 'transparent',
@@ -58,7 +52,7 @@ define("npsChartsControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function (
             1: { lineWidth: 1, lineDashStyle: [5, 4] },
             2: { lineWidth: 1, lineDashStyle: [5, 4] }
           },
-                         "defaultColors": ['#0000FF', '#009900', '#CC0000'],
+                         "defaultColors": ['#4285f4', '#00b36b', '#db4437'],
 						 "isStacked": "false",
                          "fill": 100,
                          "displayExactValues": true,
@@ -140,6 +134,17 @@ define("npsChartsControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function (
                 $scope.npScore = data.data.npScore;
                 $scope.typeId= data.data.typeId;
                 $scope.statNpScore = data.data.statNpScore;
+                $scope.chartTypes = [
+                  {name : data.data.rolling30, value : "rolling30"},
+                  {name : data.data.rolling7, value : "rolling7"},
+                  {name : data.data.global, value : "global"},
+                  {name : data.data.monthlyOver, value : "monthlyOver"},
+                  {name : data.data.weeklyOver, value : "weeklyOver"},
+
+                ];
+
+                $scope.selectedChartType={name : data.data.rolling30, value : "rolling30"};
+
                 if($scope.npScore == "NaN"){
                     $scope.showGraphs = false;
                 }else{

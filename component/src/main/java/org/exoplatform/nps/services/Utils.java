@@ -226,14 +226,16 @@ public class Utils
             fromDate.set(Calendar.MINUTE, 0);
             fromDate.set(Calendar.SECOND, 0);
             Calendar toDate=Calendar.getInstance();
-            int diff= fromDate.getActualMaximum(Calendar.DAY_OF_MONTH)-fromDate.get(Calendar.DAY_OF_WEEK)+1;
             Calendar to_=Calendar.getInstance();
             to_.setTime(fromDate.getTime());
-            to_.add(Calendar.DATE, diff);
+            to_.set(Calendar.DAY_OF_MONTH, fromDate.getActualMaximum(Calendar.DAY_OF_MONTH));
             while(fromDate.before(toDate)){
                 NPSScors.add(calculateNpsByPeriod (typeId,fromDate.getTimeInMillis(), to_.getTimeInMillis()));
-                fromDate.setTime(to_.getTime());
-                to_.add(Calendar.DATE, fromDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+                fromDate.set(Calendar.MONTH,fromDate.get(Calendar.MONTH)+1);
+                fromDate.set(Calendar.DAY_OF_MONTH,1);
+                to_.setTime(fromDate.getTime());
+                to_.set(Calendar.DAY_OF_MONTH, fromDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+
             }
 
         }
