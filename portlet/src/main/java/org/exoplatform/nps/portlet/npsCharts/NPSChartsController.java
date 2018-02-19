@@ -248,7 +248,7 @@ public class NPSChartsController {
       List <NPSDetailsDTO> npsDetails = Utils.getNPSByWeek(typeId);
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
-          nps_.put("npsDetails",npsToString(nps));
+          nps_.put("npsDetails",Utils.npsToString(nps));
           nps_.put("score",String.format("%.2f", nps.getNpScore()));
         npsList.put(nps_);
       }
@@ -271,7 +271,7 @@ public class NPSChartsController {
       List <NPSDetailsDTO> npsDetails = Utils.getNPSByMonth(typeId);
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
-          nps_.put("npsDetails",npsToString(nps));
+          nps_.put("npsDetails",Utils.npsToString(nps));
           nps_.put("score",String.format("%.2f", nps.getNpScore()));
         npsList.put(nps_);
       }
@@ -295,7 +295,7 @@ public class NPSChartsController {
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
 
-        nps_.put("npsDetails",npsToString(nps));
+        nps_.put("npsDetails",Utils.npsToString(nps));
         nps_.put("score",String.format("%.2f", nps.getNpScore()));
         npsList.put(nps_);
       }
@@ -319,16 +319,5 @@ public class NPSChartsController {
   }
 
 
-  private String npsToString(NPSDetailsDTO nps){
-      SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-      Calendar from=Calendar.getInstance();
-      from.setTimeInMillis(nps.getNpsFromDate());
-      Calendar to=Calendar.getInstance();
-      to.setTimeInMillis(nps.getNpsToDate());
-      return                  "Period : from "+sdf.format(from.getTime())+" to "+sdf.format(to.getTime())+"\n" +
-                                "Score : "+String.format("%.2f", nps.getNpScore())+"\n" +
-                                "Detractors: "+nps.getDetractorsNbr()+ "\n"+
-                                "Passives: "+nps.getPassivesNb()+ "\n"+
-                                "Promoters: "+nps.getPromotersNbr()+ "\n";
-    }
+
 }

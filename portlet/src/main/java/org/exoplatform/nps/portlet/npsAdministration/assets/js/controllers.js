@@ -14,10 +14,17 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.scoresSum=0;
         $scope.weeklyNpScore=[];
         $scope.chartTypes = [
-            {name : "Weekly", value : "weekly"},
-            {name : "By Week", value : "byWeek"}
+            {name : "30-Days rolling Avg", value : "rolling30"},
+            {name : "7-Days rolling Avg", value : "rolling7"},
+			{name : "Global weekly NPS", value : "global"},
+            {name : "Month over Month", value : "monthlyOver"},
+            {name : "Week over week", value : "weeklyOver"},
         ];
-        $scope.selectedChartType={name : "Weekly", value : "weekly"};
+        $scope.periods = [
+            {name : "By week", value : "weekly"},
+            {name : "By month", value : "mounthly"}
+        ];
+        $scope.selectedChartType={name : "30-Days rolling Avg", value : "rolling30"};
         $scope.pieChartObject = {};
         $scope.pieChartObject.options = {
             backgroundColor: 'transparent',
@@ -44,21 +51,26 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 greenTo: 100,
         };
 
-         $scope.myChartObject = {};
-         $scope.myChartObject.type = "LineChart";
+
+         $scope.lineChartObject = {};
+         $scope.lineChartObject.type = "LineChart";
+         $scope.lineChartObject.displayed = false;
 
 
-                     $scope.myChartObject.type = "LineChart";
-                     $scope.myChartObject.displayed = false;
-
-
-           $scope.myChartObject.options = {
-                         "title": "NPS per week",
+           $scope.lineChartObject.options = {
                          "colors": ['#4285f4', '#00b36b', '#db4437'],
+						 "series": {
+            0: { lineWidth: 3},
+            1: { lineWidth: 1, lineDashStyle: [5, 4] },
+            2: { lineWidth: 1, lineDashStyle: [5, 4] }
+          },
                          "defaultColors": ['#0000FF', '#009900', '#CC0000'],
-                         "isStacked": "true",
-                         "fill": 20,
+						 "isStacked": "false",
+                         "fill": 100,
                          "displayExactValues": true,
+						 "curveType": "function",
+						 "tooltip": { isHtml: true },
+						 "focusTarget": 'category',
                          "vAxis": {
                              "title": "",
                              "gridlines": {
@@ -66,13 +78,14 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                              }
                          },
                          "hAxis": {
-                             "title": ""
+
                          }
                      };
 
-                     $scope.myChartObject.view = {
+                     $scope.lineChartObject.view = {
                          columns: [0, 1, 2, 3]
                      };
+
 
 
         $scope.itemsPerPage = 10;
@@ -201,64 +214,65 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             });
         }
 
-       $scope.getNPSLineChart = function () {
-             $http({
-                 method: 'GET',
-                 url: npsAdminContainer.jzURL('NPSAdministrationController.getNPSLineChart')+ "&typeId="+$scope.typeId + "&chartType="+$scope.selectedChartType.value
-             }).then(function successCallback(data) {
-                 $scope.weeklyNpScore = data.data;
-                var NPSArray = [];
-                for(var i = 0; i < $scope.weeklyNpScore.length; i++) {
-                    var obj = $scope.weeklyNpScore[i];
-                        NPSArray.push({ c: [{v: obj.npsDate}, {v: obj.score, f:  obj.npsDetails}, { v: 70 }, { v: 25 }]});
-                }
+                        $scope.getNPSLineChart = function () {
+                              $http({
+                                  method: 'GET',
+                                  url: npsAdminContainer.jzURL('NPSAdministrationController.getNPSLineChart')+ "&typeId="+$scope.typeId + "&chartType="+$scope.selectedChartType.value
+                              }).then(function successCallback(data) {
+                                  $scope.statNpScore = data.data;
+                                 var NPSArray = [];
+                                 for(var i = 0; i < $scope.statNpScore.length; i++) {
+                                     var obj = $scope.statNpScore[i];
+                                         NPSArray.push({ c: [{v: ""}, {v: obj.score, f: obj.npsDetails }, { v: 70 }, { v: 25 }]});
+                                 }
 
-                    $scope.myChartObject.data = {
-                                         "cols": [{
-                                             id: "week",
-                                             label: "Week",
-                                             type: "string"
-                                         }, {
-                                             id: "nps-id",
-                                             label: "NPS",
-                                             type: "number"
-                                         }, {
-                                             id: "industry-high",
-                                             label: "Industry High",
-                                             type: "number"
-                                         }, {
-                                             id: "industry-low",
-                                             label: "Industry Low",
-                                             type: "number"
-                                         }                         ],
-                                         "rows": NPSArray
-                                     };
+                                     $scope.lineChartObject.data = {
+                                                          "cols": [{
+                                                              id: "day",
+                                                              label: "Day",
+                                                              type: "string"
+                                                          }, {
+                                                              id: "nps-id",
+                                                              label: "NPS",
+                                                              type: "number"
+                                                          }, {
+                                                              id: "industry-high",
+                                                              label: "Industry High",
+                                                              type: "number"
+                                                          }, {
+                                                              id: "industry-low",
+                                                              label: "Industry Low",
+                                                              type: "number"
+                                                          }                         ],
+                                                          "rows": NPSArray
+                                                      };
 
-                 deferred.resolve(data);
- //                $scope.setResultMessage(data, "success");
-             }, function errorCallback(data) {
-                 $scope.setResultMessage($scope.i18n.defaultError, "error");
-             });
+                                  deferred.resolve(data);
+                  //                $scope.setResultMessage(data, "success");
+                              }, function errorCallback(data) {
+                                  $scope.setResultMessage($scope.i18n.defaultError, "error");
+                              });
+                              }
 
-}
+
 
 
 $scope.hideSeries= function(selectedItem) {
             var col = selectedItem.column;
             if (selectedItem.row === null) {
-                if ($scope.myChartObject.view.columns[col] == col) {
-                    $scope.myChartObject.view.columns[col] = {
-                        label: $scope.myChartObject.data.cols[col].label,
-                        type: $scope.myChartObject.data.cols[col].type,
+                if ($scope.lineChartObject.view.columns[col] == col) {
+                    $scope.lineChartObject.view.columns[col] = {
+                        label: $scope.lineChartObject.data.cols[col].label,
+                        type: $scope.lineChartObject.data.cols[col].type,
                         calc: function() {
                             return null;
                         }
                     };
-                    $scope.myChartObject.options.colors[col - 1] = '#CCCCCC';
+                    $scope.lineChartObject.options.colors[col - 1] = '#CCCCCC';
                 }
                 else {
-                    $scope.myChartObject.view.columns[col] = col;
-                    $scope.myChartObject.options.colors[col - 1] = $scope.myChartObject.options.defaultColors[col - 1];
+                    $scope.lineChartObject.view.columns[col] = col;
+                    $scope.lineChartObject.options.colors[col - 1] = $scope.lineChartObject.options.defaultColors[col - 1];
                 }
             }
         }

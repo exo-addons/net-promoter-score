@@ -9,6 +9,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import javax.jcr.Node;
 import javax.jcr.Session;
+import java.text.SimpleDateFormat;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -263,5 +264,16 @@ public class Utils
         return NPSScors;
     }
 
-
+    public static  String npsToString(NPSDetailsDTO nps){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Calendar from=Calendar.getInstance();
+        from.setTimeInMillis(nps.getNpsFromDate());
+        Calendar to=Calendar.getInstance();
+        to.setTimeInMillis(nps.getNpsToDate());
+        return                  "Period : from "+sdf.format(from.getTime())+" to "+sdf.format(to.getTime())+"\n" +
+                "Score : "+String.format("%.2f", nps.getNpScore())+"\n" +
+                "Detractors: "+nps.getDetractorsNbr()+ "\n"+
+                "Passives: "+nps.getPassivesNb()+ "\n"+
+                "Promoters: "+nps.getPromotersNbr()+ "\n";
+    }
 }

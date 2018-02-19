@@ -10,9 +10,9 @@
                 <!--<div class="scoresDiv">-->
                 <!--<h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsAdmin}}</h4>-->
                 <!--</div>-->
-                <div class="scoresDiv">
+<!--                <div class="scoresDiv">
                     <h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsChart}}</h4>
-                </div>
+                </div>-->
                 <div class="scoresDiv">
                     <div class="scoreManagement">
                         <select name="types" id="types"
@@ -272,7 +272,9 @@
                 </div>
             </div>
             <div class="span10" ng-show="showGraphs">
+<!--
                 <h4 class="titleWithBorder pull-left" style="width: 100%">NPS Line Charts</h4>
+-->
                 <div class="">
                     <div class="">
                         <select name="lineChart" id="lineChart"
@@ -283,7 +285,7 @@
                 </div>
             <div class="span12" class="nps_week_graph" ng-show="showGraphs">
                 <h4 class="titleWithBorder pull-left" style="width: 100%">NPS By Week</h4>
-                <div google-chart chart="myChartObject" agc-on-select="hideSeries(selectedItem)" style="height:450px; width:100%;"></div>
+                <div google-chart chart="lineChartObject" agc-on-select="hideSeries(selectedItem)" style="height:450px; width:100%;"></div>
             </div>
             <div class="scoresDiv" ng-show="showGraphs">
                 <h4 class="titleWithBorder pull-left" style="width: 100%">{{scorsnbr}} {{i18n.rates}} </h4>
