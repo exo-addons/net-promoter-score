@@ -25,7 +25,7 @@
   </scm>
   <properties>
     <juzu.jackson.version>1.1.0</juzu.jackson.version>
-    <org.exoplatform.platform.version>5.0.0-M12</org.exoplatform.platform.version>
+    <org.exoplatform.platform.version>5.0.0-RC10</org.exoplatform.platform.version>
   </properties>
   <dependencyManagement>
     <dependencies>
