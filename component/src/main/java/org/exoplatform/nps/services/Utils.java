@@ -1,5 +1,6 @@
 package org.exoplatform.nps.services;
 
+import com.google.common.collect.Lists;
 import org.exoplatform.commons.utils.CommonsUtils;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.nps.dto.NPSDetailsDTO;
@@ -241,7 +242,7 @@ public class Utils
         }
         return NPSScors;
     }
-
+/*
     public static List<NPSDetailsDTO> getRollingAvg(long typeId, int period){
         NpsService npsService= CommonsUtils.getService(NpsService.class);
         List<NPSDetailsDTO> NPSScors=new ArrayList<NPSDetailsDTO>();
@@ -258,12 +259,38 @@ public class Utils
             to_.add(Calendar.DATE, period);
             while(fromDate.before(toDate)){
                 NPSScors.add(calculateNpsByPeriod (typeId,fromDate.getTimeInMillis(), to_.getTimeInMillis()));
-                fromDate.add(Calendar.DATE, 1);
-                to_.add(Calendar.DATE, 1);
+                fromDate.add(Calendar.DATE, 7);
+                to_.add(Calendar.DATE, 7);
+                if(to_.after(Calendar.getInstance()))to_.setTime(Calendar.getInstance().getTime());
             }
 
         }
-        return NPSScors;
+       // List<NPSDetailsDTO> reverseNPSScors = Lists.reverse(NPSScors);
+        return reverseNPSScors;
+    }*/
+
+    public static List<NPSDetailsDTO> getRollingAvg(long typeId, int period){
+        NpsService npsService= CommonsUtils.getService(NpsService.class);
+        List<NPSDetailsDTO> NPSScors=new ArrayList<NPSDetailsDTO>();
+        ScoreEntryDTO score = npsService.getFirstScoreEntries(typeId);
+        if(score!=null){
+            Calendar fromDate=Calendar.getInstance();
+            fromDate.setTimeInMillis(score.getPostedTime());
+            fromDate.set(Calendar.HOUR_OF_DAY, 0);
+            fromDate.set(Calendar.MINUTE, 0);
+            fromDate.set(Calendar.SECOND, 0);
+            Calendar toDate=Calendar.getInstance();
+            Calendar from_=Calendar.getInstance();
+            from_.add(Calendar.DATE, - period);
+            while(toDate.after(fromDate)){
+                NPSScors.add(calculateNpsByPeriod (typeId,from_.getTimeInMillis(), toDate.getTimeInMillis()));
+                from_.add(Calendar.DATE, -7);
+                toDate.add(Calendar.DATE, -7);
+            }
+
+        }
+        List<NPSDetailsDTO> reverseNPSScors = Lists.reverse(NPSScors);
+        return reverseNPSScors;
     }
 
     public static  String npsToString(NPSDetailsDTO nps){
