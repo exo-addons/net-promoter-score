@@ -166,22 +166,6 @@ public class NPSChartsController {
       data.set("promotersPrc",String.format("%.2f", promotersPrc));
       data.set("passivesPrc",String.format("%.2f", passivesPrc));
       data.set("npScore",String.format("%.2f", npScore));
-
-
-      JSONArray npsList = new JSONArray();
-
-      List <NPSDetailsDTO> npsDetails = Utils.getWeeklyNPS(typeId);
-
-      for(NPSDetailsDTO nps : npsDetails){
-        JSONObject nps_ = new JSONObject();
-        Calendar c=Calendar.getInstance();
-        c.setTimeInMillis(nps.getNpsToDate());
-        nps_.put("npsDate","W "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR));
-        nps_.put("score",String.format("%.2f", nps.getNpScore()));
-        npsList.put(nps_);
-      }
-
-      data.set("statNpScore",npsList);
       return Response.ok(data.toString());
     } catch (Throwable e) {
       LOG.error("error while getting context", e);
@@ -224,7 +208,7 @@ public class NPSChartsController {
         JSONObject nps_ = new JSONObject();
         Calendar c=Calendar.getInstance();
         c.setTimeInMillis(nps.getNpsToDate());
-        nps_.put("npsDetails",String.format("%.2f", nps.getNpScore())+" ( Week: "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR)+"Detractors: "+nps.getDetractorsNbr()+", Passives: "+nps.getPassivesNb()+", Promoters: "+nps.getPromotersNbr()+")");
+        nps_.put("npsDetails",String.format("%.2f", nps.getNpScore())+" ( Week: "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR)+" Detractors: "+nps.getDetractorsNbr()+", Passives: "+nps.getPassivesNb()+", Promoters: "+nps.getPromotersNbr()+")");
         nps_.put("score",String.format("%.2f", nps.getNpScore()));
         npsList.put(nps_);
       }

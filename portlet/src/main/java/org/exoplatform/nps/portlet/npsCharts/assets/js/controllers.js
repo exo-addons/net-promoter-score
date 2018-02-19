@@ -109,6 +109,15 @@ define("npsChartsControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function (
                 url: npsChartsContainer.jzURL('NPSChartsController.getBundle') + "&locale=" + eXo.env.portal.language
             }).then(function successCallback(data) {
                 $scope.i18n = data.data;
+                $scope.chartTypes = [
+                  {name : data.data.rolling30, value : "rolling30"},
+                  {name : data.data.rolling7, value : "rolling7"},
+                  {name : data.data.global, value : "global"},
+                  {name : data.data.monthlyOver, value : "monthlyOver"},
+                  {name : data.data.weeklyOver, value : "weeklyOver"},
+
+                ];
+                $scope.selectedChartType={name : data.data.rolling30, value : "rolling30"};
                 deferred.resolve(data);
                 /*$scope.setResultMessage(data, "success");*/
                 $scope.showAlert = false;
@@ -134,17 +143,6 @@ define("npsChartsControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function (
                 $scope.npScore = data.data.npScore;
                 $scope.typeId= data.data.typeId;
                 $scope.statNpScore = data.data.statNpScore;
-                $scope.chartTypes = [
-                  {name : data.data.rolling30, value : "rolling30"},
-                  {name : data.data.rolling7, value : "rolling7"},
-                  {name : data.data.global, value : "global"},
-                  {name : data.data.monthlyOver, value : "monthlyOver"},
-                  {name : data.data.weeklyOver, value : "weeklyOver"},
-
-                ];
-
-                $scope.selectedChartType={name : data.data.rolling30, value : "rolling30"};
-
                 if($scope.npScore == "NaN"){
                     $scope.showGraphs = false;
                 }else{

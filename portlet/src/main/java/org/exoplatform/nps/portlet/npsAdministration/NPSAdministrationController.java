@@ -121,38 +121,18 @@ public class NPSAdministrationController {
       long promotersNbr= npsService.getPromotersCount(typeId);
       long passivesNbr= scorsnbr-(promotersNbr+detractorsNbr);
 
-
       float detractorsPrc=((float)detractorsNbr/(float)scorsnbr)*100;
       float promotersPrc=((float)promotersNbr/(float)scorsnbr)*100;
       float passivesPrc=((float)passivesNbr/(float)scorsnbr)*100;
-
       float npScore= promotersPrc-detractorsPrc;
-
       data.set("scorsnbr",npsService.getScoreCount(typeId,false));
       data.set("detractorsNbr",detractorsNbr);
       data.set("promotersNbr",promotersNbr);
       data.set("passivesNbr",passivesNbr);
-
       data.set("detractorsPrc",String.format("%.2f", detractorsPrc));
       data.set("promotersPrc",String.format("%.2f", promotersPrc));
       data.set("passivesPrc",String.format("%.2f", passivesPrc));
       data.set("npScore",String.format("%.2f", npScore));
-
-
-      JSONArray npsList = new JSONArray();
-
-      List <NPSDetailsDTO> npsDetails = Utils.getWeeklyNPS(typeId);
-
-      for(NPSDetailsDTO nps : npsDetails){
-        JSONObject nps_ = new JSONObject();
-        Calendar c=Calendar.getInstance();
-        c.setTimeInMillis(nps.getNpsToDate());
-        nps_.put("npsDate","W "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR));
-        nps_.put("score",String.format("%.2f", nps.getNpScore()));
-        npsList.put(nps_);
-      }
-
-      data.set("statNpScore",npsList);
       return Response.ok(data.toString());
     } catch (Throwable e) {
       LOG.error("error while getting context", e);
