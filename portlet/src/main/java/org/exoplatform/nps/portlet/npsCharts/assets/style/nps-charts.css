@@ -178,3 +178,8 @@ font-size: 18px;
 color: red;
     font-weight: bold;
 }
+/**/
+
+#npsChartsApplication .span10 {width: 95%!important;}
+#npsChartsApplication .span10 .span10 {width: 100%!important;}
+

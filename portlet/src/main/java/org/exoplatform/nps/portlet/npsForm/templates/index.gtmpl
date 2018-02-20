@@ -21,8 +21,8 @@ class="result-message alert {{resultMessageClass}}">
             <h4>{{i18n.exoer}}</h4>
         </div>
     </div>
-    <h4 ng-if="newScore.isAnonymous == true"><span class="salutation">{{i18n.hi}}</span>,<br/><br/> {{scoreTypeMessage}}</h4>
-    <h4 ng-if="newScore.isAnonymous == false"><span class="salutation">{{i18n.hi}} {{i18n.fullName}},</span><br/><br/> {{scoreTypeMessage}}</h4>
+    <h4 ng-if="newScore.isAnonymous == true"><span class="salutation">{{i18n.hi}},</span><br/> {{scoreTypeMessage}}</h4>
+    <h4 ng-if="newScore.isAnonymous == false"><span class="salutation">{{i18n.hi}} {{i18n.fullName}},</span><br/> {{scoreTypeMessage}}</h4>
                 <span class="close" ng-click="cancel()"><i class="uiIconClose"></i></span>
                 <form id="npsForm">
                     <div class="npsRadio">
