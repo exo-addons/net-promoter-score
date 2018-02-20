@@ -175,7 +175,3 @@ color: red;
 #npsAdminApplication [ng-show=showGraphs].span12 {max-width: 95%}
 div#npsAdminApplication .span10 {width: 95%!important;}
 div#npsAdminApplication .span10 .span10 {width: 100%!important;}
-div#npsAdminApplication .span10 h4.titleWithBorder {
-    z-index: 1;
-}
-div#npsAdminApplication .span10 [chart=lineChartObject]{margin-top: 50px;}
