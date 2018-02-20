@@ -80,7 +80,6 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                              }
                          }
                      };
-cd
                      $scope.lineChartObject.view = {
                          columns: [0, 1, 2, 3]
                      };
