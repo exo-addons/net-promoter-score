@@ -73,10 +73,14 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                              }
                          },
                          "hAxis": {
+                             "title": "",
 
+							"gridlines": {
+                                 "count": 10
+                             }
                          }
                      };
-
+cd
                      $scope.lineChartObject.view = {
                          columns: [0, 1, 2, 3]
                      };
@@ -227,7 +231,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                                  var NPSArray = [];
                                  for(var i = 0; i < $scope.statNpScore.length; i++) {
                                      var obj = $scope.statNpScore[i];
-                                         NPSArray.push({ c: [{v: ""}, {v: obj.score, f: obj.npsDetails }, { v: 70 }, { v: 25 }]});
+                                         NPSArray.push({ c: [{v: obj.npsDate}, {v: obj.score, f: obj.npsDetails }, { v: 70 }, { v: 25 }]});
                                  }
 
                                      $scope.lineChartObject.data = {

@@ -57,6 +57,7 @@ public class NPSAdministrationController {
   }
 
   private final String currentUser = ConversationState.getCurrent().getIdentity().getUserId();
+  SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
   @Ajax
   @juzu.Resource
@@ -174,6 +175,7 @@ public class NPSAdministrationController {
         JSONObject nps_ = new JSONObject();
         Calendar c=Calendar.getInstance();
         c.setTimeInMillis(nps.getNpsToDate());
+        nps_.put("npsDate","W: "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR));
         nps_.put("npsDetails",String.format("%.2f", nps.getNpScore())+" ( Week: "+c.get(Calendar.WEEK_OF_YEAR)+"-"+c.get(Calendar.YEAR)+"Detractors: "+nps.getDetractorsNbr()+", Passives: "+nps.getPassivesNb()+", Promoters: "+nps.getPromotersNbr()+")");
         nps_.put("score",String.format("%.2f", nps.getNpScore()));
         npsList.put(nps_);
@@ -198,6 +200,7 @@ public class NPSAdministrationController {
       List <NPSDetailsDTO> npsDetails = Utils.getNPSByWeek(typeId);
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
+        nps_.put("npsDate",sdf.format(nps.getNpsToDate()));
         nps_.put("npsDetails",Utils.npsToString(nps));
         nps_.put("score",String.format("%.2f", nps.getNpScore()));
         npsList.put(nps_);
@@ -221,6 +224,7 @@ public class NPSAdministrationController {
       List <NPSDetailsDTO> npsDetails = Utils.getNPSByMonth(typeId);
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
+        nps_.put("npsDate",sdf.format(nps.getNpsToDate()));
         nps_.put("npsDetails",Utils.npsToString(nps));
         nps_.put("score",String.format("%.2f", nps.getNpScore()));
         npsList.put(nps_);
@@ -244,7 +248,7 @@ public class NPSAdministrationController {
       List <NPSDetailsDTO> npsDetails = Utils.getRollingAvg(typeId, period);
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
-
+        nps_.put("npsDate",sdf.format(nps.getNpsToDate()));
         nps_.put("npsDetails",Utils.npsToString(nps));
         nps_.put("score",String.format("%.2f", nps.getNpScore()));
         npsList.put(nps_);
