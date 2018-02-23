@@ -63,13 +63,39 @@ public class NPSAdministrationController {
   @juzu.Resource
   @MimeType.JSON
   @Jackson
-  public List<ScoreEntryDTO> getScores(Long typeId, int offset, int limit) {
+  public List<ScoreEntryDTO> getScores(Long typeId, String respCat, int offset, int limit) {
     try {
-      List<ScoreEntryDTO> scores=npsService.getScores(typeId,offset,limit);
+      List<ScoreEntryDTO> scores= new ArrayList<>();
+       if(respCat.equals("detractors")){
+         scores=npsService.getDetractorScores(typeId,offset,limit);
+       } else if(respCat.equals("passives")){
+         scores=npsService.getPassiveScores(typeId,offset,limit);
+       } else if(respCat.equals("promoters")){
+         scores=npsService.getPromotesScores(typeId,offset,limit);
+       } else{
+         scores=npsService.getScores(typeId,offset,limit);
+       }
       for (ScoreEntryDTO score : scores){
+          score.setUserFullName("Anonymous");
+          score.setUserProfile("#");
         if(score.getUserId()!=null&&!((String)score.getUserId()).equals("")){
             Profile profile=identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, score.getUserId(), false).getProfile();
             score.setUserFullName(profile.getFullName());
+            score.setUserProfile("/portal/intranet/profile/"+score.getUserId());
+            if(profile.getAvatarUrl()!=null){
+                score.setPosterAvatar(profile.getAvatarUrl());
+            }else{
+                score.setPosterAvatar("/eXoSkin/skin/images/system/UserAvtDefault.png");
+            }
+        }else{
+            score.setPosterAvatar("/eXoSkin/skin/images/system/UserAvtDefault.png");
+        }
+        if(score.getScore()>8) {
+          score.setCategory("promoter");
+        }else if(score.getScore()<6) {
+          score.setCategory("detractor");
+        }else {
+          score.setCategory("passive");
         }
       }
       return scores;
@@ -118,15 +144,15 @@ public class NPSAdministrationController {
     try {
       JSON data = new JSON();
       long scorsnbr= npsService.getScoreCount(typeId, true);
-      long detractorsNbr= npsService.getDetractorsCount(typeId);
-      long promotersNbr= npsService.getPromotersCount(typeId);
+      long detractorsNbr= npsService.getDetractorsCount(typeId, true);
+      long promotersNbr= npsService.getPromotersCount(typeId, true);
       long passivesNbr= scorsnbr-(promotersNbr+detractorsNbr);
 
       float detractorsPrc=((float)detractorsNbr/(float)scorsnbr)*100;
       float promotersPrc=((float)promotersNbr/(float)scorsnbr)*100;
       float passivesPrc=((float)passivesNbr/(float)scorsnbr)*100;
       float npScore= promotersPrc-detractorsPrc;
-      data.set("scorsnbr",npsService.getScoreCount(typeId,false));
+
       data.set("detractorsNbr",detractorsNbr);
       data.set("promotersNbr",promotersNbr);
       data.set("passivesNbr",passivesNbr);
@@ -134,6 +160,18 @@ public class NPSAdministrationController {
       data.set("promotersPrc",String.format("%.2f", promotersPrc));
       data.set("passivesPrc",String.format("%.2f", passivesPrc));
       data.set("npScore",String.format("%.2f", npScore));
+
+
+        long allScorsnbr= npsService.getScoreCount(typeId, false);
+        long allDetractorsNbr= npsService.getDetractorsCount(typeId, false);
+        long allPromotersNbr= npsService.getPromotersCount(typeId, false);
+        long allPassivesNbr= allScorsnbr-(allDetractorsNbr+allPromotersNbr);
+        data.set("scorsnbr",allScorsnbr);
+        data.set("allDetractorsNbr",allDetractorsNbr);
+        data.set("allPromotersNbr",allPromotersNbr);
+        data.set("allPassivesNbr",allPassivesNbr);
+
+
       return Response.ok(data.toString());
     } catch (Throwable e) {
       LOG.error("error while getting context", e);
@@ -260,6 +298,27 @@ public class NPSAdministrationController {
     }
   }
 
+  @Ajax
+  @juzu.Resource
+  @MimeType.JSON
+  @Jackson
+  public Response getRespCountByScore(Long typeId) {
+    try {
+      JSONArray resposesByScores = new JSONArray();
+      List<Object[]> results =npsService.countGroupdByScores(typeId);
+      for (int i = 0; i < results.size(); i++) {
+        JSONObject data = new JSONObject();
+        Object[] arr = results.get(i);
+        data.put("score",arr[0]);
+        data.put("count",arr[1]);
+        resposesByScores.put(data);
+      }
+      return Response.ok(resposesByScores.toString());
+    } catch (Throwable e) {
+      LOG.error("error while getting context", e);
+      return Response.status(500);
+    }
+  }
 
 
 

@@ -49,6 +49,64 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
         }
     }
 
+    public List<ScoreEntryEntity> getPassiveScoreEntries(long typeId, int offset, int limit) {
+        try {
+            if (offset >= 0 && limit > 0) {
+                return getEntityManager().createNamedQuery("scoreEntryEntity.findPassives", ScoreEntryEntity.class)
+                        .setFirstResult(offset)
+                        .setMaxResults(limit)
+                        .setParameter("typeId", typeId)
+                        .getResultList();
+            } else {
+                return getEntityManager().createNamedQuery("scoreEntryEntity.findPassives", ScoreEntryEntity.class)
+                        .setParameter("typeId", typeId)
+                        .getResultList();
+            }
+        } catch (Exception e) {
+            LOG.warn("Exception while attempting to get scores with offset = '" + offset + "' and limit = '" + limit + "'.", e);
+            throw e;
+        }
+    }
+
+    public List<ScoreEntryEntity> getPromoterScoreEntries(long typeId, int offset, int limit) {
+        try {
+            if (offset >= 0 && limit > 0) {
+                return getEntityManager().createNamedQuery("scoreEntryEntity.findPromoters", ScoreEntryEntity.class)
+                        .setFirstResult(offset)
+                        .setMaxResults(limit)
+                        .setParameter("typeId", typeId)
+                        .getResultList();
+            } else {
+                return getEntityManager().createNamedQuery("scoreEntryEntity.findPromoters", ScoreEntryEntity.class)
+                        .setParameter("typeId", typeId)
+                        .getResultList();
+            }
+        } catch (Exception e) {
+            LOG.warn("Exception while attempting to get scores with offset = '" + offset + "' and limit = '" + limit + "'.", e);
+            throw e;
+        }
+    }
+
+    public List<ScoreEntryEntity> getDetractorScoreEntries(long typeId, int offset, int limit) {
+        try {
+            if (offset >= 0 && limit > 0) {
+                return getEntityManager().createNamedQuery("scoreEntryEntity.findDetractors", ScoreEntryEntity.class)
+                        .setFirstResult(offset)
+                        .setMaxResults(limit)
+                        .setParameter("typeId", typeId)
+                        .getResultList();
+            } else {
+                return getEntityManager().createNamedQuery("scoreEntryEntity.findDetractors", ScoreEntryEntity.class)
+                        .setParameter("typeId", typeId)
+                        .getResultList();
+            }
+        } catch (Exception e) {
+            LOG.warn("Exception while attempting to get scores with offset = '" + offset + "' and limit = '" + limit + "'.", e);
+            throw e;
+        }
+    }
+
+
     public List<ScoreEntryEntity> getFirstScoreEntries(long typeId) {
         try {
 
@@ -71,7 +129,9 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
                         .setParameter("typeId", typeId)
                         .getSingleResult();
             }else{
-                return getEntityManager().createNamedQuery("scoreEntryEntity.count", Long.class).setParameter("typeId", typeId).getSingleResult();
+                return getEntityManager().createNamedQuery("scoreEntryEntity.count", Long.class)
+                        .setParameter("typeId", typeId)
+                        .getSingleResult();
             }
 
         } catch (Exception e) {
@@ -80,18 +140,40 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
         }
     }
 
-    public  long getPromotersCount(long typeId) {
+    public  long getPromotersCount(long typeId,boolean enabled) {
         try {
-            return getEntityManager().createNamedQuery("scoreEntryEntity.countPromoters", Long.class).setParameter("typeId", typeId).getSingleResult();
+
+            if(enabled==true){
+                return getEntityManager().createNamedQuery("scoreEntryEntity.countPromoters", Long.class)
+                        .setParameter("typeId", typeId)
+                        .getSingleResult();
+            }else{
+                return getEntityManager().createNamedQuery("scoreEntryEntity.countAllPromoters", Long.class)
+                        .setParameter("typeId", typeId)
+                        .getSingleResult();
+            }
+
         } catch (Exception e) {
             LOG.warn("Exception while attempting to get scores count.", e);
             throw e;
         }
+
+
+
     }
 
-    public  long getDetractorsCount(long typeId) {
+    public  long getDetractorsCount(long typeId,boolean enabled) {
         try {
-            return getEntityManager().createNamedQuery("scoreEntryEntity.countDetractors", Long.class).setParameter("typeId", typeId).getSingleResult();
+            if(enabled==true){
+                return getEntityManager().createNamedQuery("scoreEntryEntity.countDetractors", Long.class)
+                        .setParameter("typeId", typeId)
+                        .getSingleResult();
+            }else{
+                return getEntityManager().createNamedQuery("scoreEntryEntity.countAllDetractors", Long.class)
+                        .setParameter("typeId", typeId)
+                        .getSingleResult();
+            }
+
         } catch (Exception e) {
             LOG.warn("Exception while attempting to get scores count.", e);
             throw e;
@@ -218,5 +300,17 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
             throw e;
         }
     }
+
+    public List<Object[]> countGroupdByScores(long typeId) {
+        try {
+            return getEntityManager().createNamedQuery("scoreEntryEntity.countGroupdByScores", Object[].class)
+                    .setParameter("typeId", typeId)
+                    .getResultList();
+        }  catch (Exception e) {
+            LOG.warn("Exception while attempting to get request", e);
+            throw e;
+        }
+    }
+
 
 }

@@ -18,13 +18,20 @@
  */
 package org.exoplatform.nps.services;
 
+import org.apache.commons.collections.map.LinkedMap;
+import org.eclipse.jetty.util.ajax.JSON;
 import org.exoplatform.nps.dao.ScoreEntryDAO;
 import org.exoplatform.nps.dto.ScoreEntryDTO;
 import org.exoplatform.nps.entity.ScoreEntryEntity;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.log.ExoLogger;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -81,6 +88,50 @@ public class NpsService {
     return dtos;
   }
 
+  public List<ScoreEntryDTO> getPromotesScores(long typeId, int offset, int limit) {
+
+    if (offset < 0) {
+      throw new IllegalArgumentException("Method getScores - Parameter 'offset' must be positive");
+    }
+    List<ScoreEntryEntity> entities = scoreEntryDAO.getPromoterScoreEntries(typeId, offset, limit);
+    List<ScoreEntryDTO> dtos = new ArrayList<ScoreEntryDTO>();
+    for (ScoreEntryEntity entity : entities) {
+      if(entity.getEnabled()==null) entity.setEnabled(true);
+      dtos.add(convert(entity));
+    }
+    return dtos;
+  }
+
+
+  public List<ScoreEntryDTO> getDetractorScores(long typeId, int offset, int limit){
+
+    if (offset < 0) {
+      throw new IllegalArgumentException("Method getScores - Parameter 'offset' must be positive");
+    }
+    List<ScoreEntryEntity> entities = scoreEntryDAO.getDetractorScoreEntries(typeId, offset, limit);
+    List<ScoreEntryDTO> dtos = new ArrayList<ScoreEntryDTO>();
+    for (ScoreEntryEntity entity : entities) {
+      if(entity.getEnabled()==null) entity.setEnabled(true);
+      dtos.add(convert(entity));
+    }
+    return dtos;
+  }
+
+
+  public List<ScoreEntryDTO> getPassiveScores(long typeId, int offset, int limit) {
+
+    if (offset < 0) {
+      throw new IllegalArgumentException("Method getScores - Parameter 'offset' must be positive");
+    }
+    List<ScoreEntryEntity> entities = scoreEntryDAO.getPassiveScoreEntries(typeId, offset, limit);
+    List<ScoreEntryDTO> dtos = new ArrayList<ScoreEntryDTO>();
+    for (ScoreEntryEntity entity : entities) {
+      if(entity.getEnabled()==null) entity.setEnabled(true);
+      dtos.add(convert(entity));
+    }
+    return dtos;
+  }
+
 
   public ScoreEntryDTO getFirstScoreEntries(long typeId) {
     List<ScoreEntryEntity> entities =  scoreEntryDAO.getFirstScoreEntries(typeId);
@@ -112,17 +163,24 @@ public class NpsService {
     return dtos;
   }
 
+  public List<Object[]>  countGroupdByScores(long typeId) {
 
+    return scoreEntryDAO.countGroupdByScores(typeId);
 
-  public long getPromotersCount(long typeId) {
-
-    return scoreEntryDAO.getPromotersCount(typeId);
   }
 
 
-  public long getDetractorsCount(long typeId) {
 
-    return scoreEntryDAO.getDetractorsCount(typeId);
+
+  public long getPromotersCount(long typeId, boolean enabled) {
+
+    return scoreEntryDAO.getPromotersCount(typeId, enabled);
+  }
+
+
+  public long getDetractorsCount(long typeId, boolean enabled) {
+
+    return scoreEntryDAO.getDetractorsCount(typeId, enabled);
   }
 
 

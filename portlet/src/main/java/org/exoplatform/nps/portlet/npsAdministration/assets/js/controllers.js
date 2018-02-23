@@ -6,6 +6,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.scoreTypeToEdit = null;
         $scope.showEditForm = false;
         $scope.typeId = 0;
+        $scope.respCat="all";
         $scope.selectModel = {};
         $scope.showForm = false;
         $scope.showGraphs = false;
@@ -84,9 +85,17 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                          columns: [0, 1, 2, 3]
                      };
 
+                         $scope.ColumnChartObject = {};
+
+                         $scope.ColumnChartObject.type = "ColumnChart";
+
+                             $scope.ColumnChartObject.options = {
+                                 'title': ''
+                             };
 
 
-        $scope.itemsPerPage = 10;
+        $scope.itemsPerPageSugg = [5,10,20,50];
+        $scope.itemsPerPage = 5;
         $scope.currentPage = 0;
         $scope.pages=[];
         $scope.scoreToDelete=null;
@@ -100,6 +109,29 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             $scope.resultMessage = text;
         }
 
+
+        $scope.openTab = function (tabName) {
+
+            $("#dashboard").css("display", "none");
+            $("#trends").css("display", "none");
+            $("#feedbacks").css("display", "none");
+
+            $("#dashboardTab").removeClass("active");
+            $("#trendsTab").removeClass("active");
+            $("#feedbacksTab").removeClass("active");
+
+            $("#" + tabName).css("display", "block");
+            $("#" + tabName + "Tab").addClass("active");
+        }
+
+         $scope.setCategory = function (category) {
+            $scope.scorstoShownbr=$scope.scorsnbr ;
+            if(category=="promoters")$scope.scorstoShownbr=$scope.allPromotersNbr;
+            if(category=="detractors")$scope.scorstoShownbr=$scope.allDetractorsNbr;
+            if(category=="passives")$scope.scorstoShownbr=$scope.allPassivesNbr;
+            $scope.respCat=category;
+            $scope.setPage(0);
+          }
 
         $scope.loadScoreTypes = function (isDefault, question = null) {
             $http({
@@ -154,10 +186,10 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         }
 
 
-        $scope.loadScores = function (typeId,offset,limit) {
+        $scope.loadScores = function (typeId,offset,limit,respCat) {
             $http({
                 method: 'GET',
-                url: npsAdminContainer.jzURL('NPSAdministrationController.getScores')+ "&typeId="+typeId+ "&offset="+offset+ "&limit="+limit
+                url: npsAdminContainer.jzURL('NPSAdministrationController.getScores')+ "&typeId="+typeId+ "&respCat="+respCat+ "&offset="+offset+ "&limit="+limit
             }).then(function successCallback(data) {
                 $scope.scores = data.data;
                 $scope.showAlert = false;
@@ -180,7 +212,11 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 				$scope.detractorsPrc = data.data.detractorsPrc;
 				$scope.promotersPrc = data.data.promotersPrc;
 				$scope.passivesPrc = data.data.passivesPrc;
+				$scope.allDetractorsNbr = data.data.allDetractorsNbr;
+				$scope.allPromotersNbr = data.data.allPromotersNbr;
+				$scope.allPassivesNbr = data.data.allPassivesNbr;
                 $scope.npScore = data.data.npScore;
+                $scope.scorstoShownbr=$scope.scorsnbr ;
 
                 if($scope.npScore == "NaN"){
                     $scope.showGraphs = false;
@@ -211,6 +247,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                     ]};
                 }
                $scope.getNPSLineChart();
+               $scope.getResponsesByScoreChart();
                 $scope.pages=$scope.range();
                // $scope.getScoresbyType(typeId);
 
@@ -261,6 +298,30 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                               });
                               }
 
+
+                        $scope.getResponsesByScoreChart = function () {
+                              $http({
+                                  method: 'GET',
+                                  url: npsAdminContainer.jzURL('NPSAdministrationController.getRespCountByScore')+ "&typeId="+$scope.typeId
+                              }).then(function successCallback(data) {
+                                  $scope.statNpScore = data.data;
+                                 var NPSArray = [];
+                                 for(var i = 0; i < $scope.statNpScore.length; i++) {
+                                     var obj = $scope.statNpScore[i];
+                                         NPSArray.push({c: [ {v:obj.score },{v:obj.count },]});
+                                 }
+
+                                        $scope.ColumnChartObject.data = {"cols": [
+                                            {id: "t", label: "", type: "number"},
+                                            {id: "s", label: "", type: "number"}
+                                        ], "rows": NPSArray};
+
+                                  deferred.resolve(data);
+                  //                $scope.setResultMessage(data, "success");
+                              }, function errorCallback(data) {
+                                  $scope.setResultMessage($scope.i18n.defaultError, "error");
+                              });
+                              }
 
 
 
@@ -378,7 +439,7 @@ $scope.hideSeries= function(selectedItem) {
                 url : npsAdminContainer.jzURL('NPSAdministrationController.deleteScore')
             }).then(function successCallback(data) {
                 $scope.loadData($scope.typeId);
-                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
+                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage,$scope.respCat);
                 $scope.setResultMessage($scope.i18n.scoreDeleted, "success");
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
@@ -398,7 +459,7 @@ $scope.hideSeries= function(selectedItem) {
                 url : npsAdminContainer.jzURL('NPSAdministrationController.disableScore')
             }).then(function successCallback(data) {
                 $scope.loadData($scope.typeId);
-                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
+                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage,$scope.respCat);
                 $scope.setResultMessage($scope.i18n.scoreEnabled, "success");
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
@@ -418,7 +479,7 @@ $scope.hideSeries= function(selectedItem) {
                 url : npsAdminContainer.jzURL('NPSAdministrationController.enableScore')
             }).then(function successCallback(data) {
                 $scope.loadData($scope.typeId);
-                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
+                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage, $scope.respCat);
                 $scope.setResultMessage($scope.i18n.scoreDisabled, "success");
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
@@ -451,7 +512,7 @@ $scope.hideSeries= function(selectedItem) {
             if ($scope.currentPage > 0) {
                 $scope.currentPage--;
                 $scope.pages=$scope.range();
-                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
+                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage, $scope.respCat);
             }
         };
 
@@ -463,7 +524,7 @@ $scope.hideSeries= function(selectedItem) {
             if ($scope.currentPage < $scope.pageCount() - 1) {
                 $scope.currentPage++;
                 $scope.pages=$scope.range();
-                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage);
+                $scope.loadScores($scope.typeId,$scope.currentPage*$scope.itemsPerPage, $scope.itemsPerPage, $scope.respCat);
             }
         };
 
@@ -472,21 +533,21 @@ $scope.hideSeries= function(selectedItem) {
         };
 
         $scope.pageCount = function() {
-            return Math.ceil($scope.scorsnbr/$scope.itemsPerPage);
+            return Math.ceil($scope.scorstoShownbr/$scope.itemsPerPage);
         };
 
         $scope.setPage = function(n) {
             if (n >= 0 && n < $scope.pageCount()) {
                 $scope.currentPage = n;
                 $scope.pages=$scope.range();
-                $scope.loadScores($scope.typeId,n*$scope.itemsPerPage, $scope.itemsPerPage);
+                $scope.loadScores($scope.typeId,n*$scope.itemsPerPage, $scope.itemsPerPage, $scope.respCat);
             }
         };
 
         $scope.getScoresbyType = function (typeId) {
                 $scope.typeId=typeId;
                 $scope.loadData(typeId);
-                $scope.loadScores(typeId,0, $scope.itemsPerPage);
+                $scope.loadScores(typeId,0, $scope.itemsPerPage, $scope.respCat);
 
                 $scope.showGraphs = true;
         };

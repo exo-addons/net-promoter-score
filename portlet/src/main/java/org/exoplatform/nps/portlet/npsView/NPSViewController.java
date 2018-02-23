@@ -145,8 +145,8 @@ public class NPSViewController {
                 ScoreTypeDTO  sType = npsTypeService.getScoreType(Long.parseLong(scoreTypeId));
                 long typeId=sType.getId();
                 long scorsnbr= npsService.getScoreCount(typeId, true);
-                long detractorsNbr= npsService.getDetractorsCount(typeId);
-                long promotersNbr= npsService.getPromotersCount(typeId);
+                long detractorsNbr= npsService.getDetractorsCount(typeId, true);
+                long promotersNbr= npsService.getPromotersCount(typeId,true);
                 long passivesNbr= scorsnbr-(promotersNbr+detractorsNbr);
 
 

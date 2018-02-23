@@ -146,8 +146,8 @@ public class NPSChartsController {
       data.set("typeId",typeId);
 
       long scorsnbr= npsService.getScoreCount(typeId, true);
-      long detractorsNbr= npsService.getDetractorsCount(typeId);
-      long promotersNbr= npsService.getPromotersCount(typeId);
+      long detractorsNbr= npsService.getDetractorsCount(typeId, true);
+      long promotersNbr= npsService.getPromotersCount(typeId, true);
       long passivesNbr= scorsnbr-(promotersNbr+detractorsNbr);
 
 
