@@ -304,6 +304,7 @@
                 <div class="span10" style="float: none; margin: auto; height: auto" ng-show="showGraphs">
                     <div google-chart class="span4" chart="gaugeChartObject" style="height:450px"></div>
                     <div google-chart class="span4" chart="pieChartObject" style="height:450px;float: right"></div>
+                    <h3 class="">Mean Score: {{meanScore}}</h3>
                     <div google-chart class="span10" chart="ColumnChartObject" style="height:600px; width:100%;"></div>
                 </div>
                 <div class="span12" style="float: none; margin: auto; height: auto" ng-show="!showGraphs">

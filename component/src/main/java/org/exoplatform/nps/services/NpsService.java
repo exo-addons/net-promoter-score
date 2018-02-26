@@ -224,6 +224,9 @@ public class NpsService {
     return scoreEntryDAO.getScoreEntriesCountByPeriod(typeId,fromDate , toDate);
   }
 
+  public double getMeanScore(long typeId) {
+    return scoreEntryDAO.getScoresAvg(typeId);
+  }
 
 
 

@@ -313,4 +313,16 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
     }
 
 
+    public double getScoresAvg(long typeId) {
+        try {
+            return getEntityManager().createNamedQuery("scoreEntryEntity.avgEnabled", Double.class)
+                    .setParameter("typeId", typeId)
+                    .getSingleResult();
+        }  catch (Exception e) {
+            LOG.warn("Exception while attempting to get request", e);
+            throw e;
+        }
+    }
+
+
 }

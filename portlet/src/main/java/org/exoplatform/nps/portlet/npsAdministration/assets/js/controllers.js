@@ -5,7 +5,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.newScoreType = null;
         $scope.scoreTypeToEdit = null;
         $scope.showEditForm = false;
-        $scope.typeId = 0;
+        $scope.typeId = 1;
+        $scope.meanScore = 0;
         $scope.respCat="all";
         $scope.selectModel = {};
         $scope.showForm = false;
@@ -180,6 +181,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 deferred.resolve(data);
                 /*$scope.setResultMessage(data, "success");*/
                 $scope.showAlert = false;
+                $scope.loadScoreTypes(true);
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
             });
@@ -217,6 +219,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 				$scope.allPassivesNbr = data.data.allPassivesNbr;
                 $scope.npScore = data.data.npScore;
                 $scope.scorstoShownbr=$scope.scorsnbr ;
+                $scope.meanScore = data.data.meanScore;
 
                 if($scope.npScore == "NaN"){
                     $scope.showGraphs = false;
@@ -552,10 +555,7 @@ $scope.hideSeries= function(selectedItem) {
                 $scope.showGraphs = true;
         };
 
-        $scope.loadBundle();
-        $scope.loadScoreTypes(true);
-        $('#npsAdmin').css('visibility', 'visible');
-        $(".npsLoadingBar").remove();
+
 
         $scope.getSpace = function (nameToSearch) {
             var rsetUrl = "/rest/nps/spaces/find?nameToSearch=" + nameToSearch + "&currentUser=" + $scope.i18n.currentUser;
@@ -646,6 +646,11 @@ $scope.hideSeries= function(selectedItem) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
             });
         }
+
+
+                $scope.loadBundle();
+                $('#npsAdmin').css('visibility', 'visible');
+                $(".npsLoadingBar").remove();
     };
 
         return npsAdminCtrl;

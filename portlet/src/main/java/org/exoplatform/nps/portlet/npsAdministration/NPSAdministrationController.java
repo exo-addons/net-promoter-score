@@ -23,7 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.inject.Inject;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -135,7 +134,6 @@ public class NPSAdministrationController {
     }
   }
 
-
   @Ajax
   @juzu.Resource
   @MimeType.JSON
@@ -171,6 +169,7 @@ public class NPSAdministrationController {
         data.set("allPromotersNbr",allPromotersNbr);
         data.set("allPassivesNbr",allPassivesNbr);
 
+      data.set("meanScore",npsService.getMeanScore(typeId));
 
       return Response.ok(data.toString());
     } catch (Throwable e) {
@@ -178,8 +177,6 @@ public class NPSAdministrationController {
       return Response.status(500);
     }
   }
-
-
 
   @Ajax
   @juzu.Resource
