@@ -169,7 +169,7 @@ public class NPSAdministrationController {
         data.set("allPromotersNbr",allPromotersNbr);
         data.set("allPassivesNbr",allPassivesNbr);
 
-      data.set("meanScore",npsService.getMeanScore(typeId));
+      data.set("meanScore",String.format("%.2f",npsService.getMeanScore(typeId)));
 
       return Response.ok(data.toString());
     } catch (Throwable e) {
