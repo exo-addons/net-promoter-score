@@ -240,6 +240,12 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                         ['NPS', parseFloat($scope.npScore)]
                     ];
 
+                    $scope.npScore = parseFloat($scope.npScore);
+
+                    if($scope.npScore <= 6){$scope.npsColor = "rgba(144, 19, 21, 0.7)"}
+                    else if(($scope.npScore >= 7) && ($scope.npScore < 8)){$scope.npsColor = "rgba(239, 149, 13,  0.7)"}
+                    else if($scope.npScore >= 8){$scope.npsColor = "rgba(60, 175, 140, 0.7)"}
+
 
                     $scope.pieChartObject.data = {"cols": [
                             {id: "t", label: "Topping", type: "string"},
@@ -283,6 +289,10 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                     NPSArray.push({c: [{v: obj.npsDate}, {v: obj.score, f: obj.npsDetails}, {v: 70}, {v: 25}]});
                 }
 
+                $scope.lineChartObject.options = {
+                    width: 900,
+                    height: 350,
+                }
                 $scope.lineChartObject.data = {
                     "cols": [{
                             id: "day",

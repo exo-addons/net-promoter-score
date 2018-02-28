@@ -371,7 +371,7 @@ display: inline-block;
 /**/
 #nps.exo_employees_nps .exoers {
     display: block;
-    background: url("../img/banner.png");
+    background: url("/nps-addon-portlet/skin/images/banner.png");
     background-size: 100% auto;
     background-position: center;
     margin: -15px;

@@ -313,6 +313,20 @@
             <div id="dashboard" class="tabcontent active" style="display: block;">
                 <div class="span10" style="margin: auto; height: auto" ng-show="showGraphs">
                     <div google-chart class="span4" chart="gaugeChartObject" style="height:450px"></div>
+                    <!--<div class="span4 npsScore">-->
+                        <!--<div class="nps-circle-container">-->
+                            <!--<div class="brand-circle-large brand-circle-large-positive" value="{{npScore}}">-->
+                                <!--<h2>NPS</h2>-->
+                                <!--&lt;!&ndash;<img class="circle-background" src="/nps-addon-portlet/skin/images/circle-bg-white.png">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<img class="dotted-circle" src="/nps-addon-portlet/skin/images/new-dotted-line-dark.svg">&ndash;&gt;-->
+
+                                <!--<svg viewBox="0 0 100 100" style="display: block; width: 100%;">-->
+                                    <!--<path d="M 50,50 m 0,-48 a 48,48 0 1 1 0,96 a 48,48 0 1 1 0,-96" stroke="#d0d0d0" stroke-width="1" fill-opacity="0"></path>-->
+                                    <!--<path id="shape" d="M 50,50 m 0,-48 a 48,48 0 1 1 0,96 a 48,48 0 1 1 0,-96" stroke="{{npsColor}}" stroke-width="4" fill-opacity="0" style="stroke-dasharray: 301.635, 301.635; stroke-dashoffset: {{dashoffset}};" stroke-linecap="round"></path></svg>-->
+                                <!--<div class="progressbar-text" style="position: absolute; left: 50%; top: 50%; padding: 0px; margin: 0px; transform: translate(-50%, -50%); color: #476a9c; font-family: &quot;Proxima Nova&quot;, Helvetica, sans-serif; font-size: 50px;">{{npScore}}</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
                     <div google-chart class="span4" chart="pieChartObject" style="height:450px;float: right"></div>
                 </div>
                 <div class="row-fluid">
@@ -337,18 +351,18 @@
 
             <!--begin trends tab-->
             <div id="trends" class="tabcontent" style="display: none;">
-                <div ng-show="showGraphs" class="container-fluid">
+                <div ng-show="showGraphs" class="row-fluid trends_page">
                     <!--
                                     <h4 class="titleWithBorder pull-left" style="width: 100%">NPS Line Charts</h4>
                     -->
-                    <div class="span12">
+                    <div class="container-fluid">
                         <select name="lineChart" id="lineChart"
                                 ng-options="chartType.name for chartType in chartTypes track by chartType.value"
                                 ng-model="selectedChartType" ng-change="getNPSLineChart()"></select>
 
                     </div>
-                    <div  class="nps_week_graph span12" ng-show="showGraphs">
-                        <div google-chart chart="lineChartObject" agc-on-select="hideSeries(selectedItem)"></div>
+                    <div  class="nps_week_graph" ng-show="showGraphs">
+                        <div google-chart chart="lineChartObject" agc-on-select="hideSeries(selectedItem)" width="800" height="350"></div>
                     </div>
 
 
