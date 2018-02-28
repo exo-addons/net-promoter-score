@@ -319,10 +319,9 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             }).then(function successCallback(data) {
                 $scope.statNpScore = data.data;
                 var NPSArray = [];
+                var color = "#476a9c";
                 for (var i = 0; i < $scope.statNpScore.length; i++) {
                     var obj = $scope.statNpScore[i];
-                    var color = "#476a9c"
-
                     NPSArray.push({c: [{v: obj.score}, {v: obj.count}, {v: color}]});
                 }
 

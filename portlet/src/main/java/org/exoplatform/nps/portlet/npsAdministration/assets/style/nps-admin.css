@@ -198,7 +198,7 @@ ul#addonMenu {
     -webkit-box-shadow: inset;
     -moz-box-shadow: inset;
     box-shadow: inset;
-    height: 90px;
+    min-height: 90px;
 }
 ul#addonMenu > .active > a{
     background-color: #578dc9;
@@ -526,7 +526,9 @@ a.actionIconde {
     color: #7f7c7d;
 }
 .metric .description {
-    color: #4e484a;
+    color: #7f7c7d;
+    font-size: 15px;
+    font-weight: bold;
 }
 .separator {
     float: left;
@@ -537,14 +539,24 @@ a.actionIconde {
     margin: 5px 0;
 }
 
-.metric .value.detractor {
-    color: rgba(144, 19, 21, 0.7);
-}
+.metric .value.detractor { color: rgba(144, 19, 21, 0.7);}
 
-.metric .value.passive {
-    color: rgba(239, 149, 13,  0.7);
-}
+.metric .value.passive { color: rgba(239, 149, 13,  0.7);}
 
-.metric .value.promoter {
-    color: rgba(60, 175, 140,  0.7);
+.metric .value.promoter {color: rgba(60, 175, 140,  0.7);}
+/**/
+.separator.detractor {border-bottom-color: rgba(144, 19, 21, 0.7);}
+.separator.passive {border-bottom-color: rgba(239, 149, 13,  0.7);}
+.separator.promoter {border-bottom-color: rgba(60, 175, 140,  0.7);}
+/**/
+#dashboardTab, #trendsTab, #feedbacksTab{
+    margin-right: -20px;
+    min-width: 100px;
 }
+.datepickerMenu {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.datepickerMenu:nth-child(1) {margin-top: 15px;}
+.datepickerMenu label{float: left; margin-right: 5px;    text-align: center;}

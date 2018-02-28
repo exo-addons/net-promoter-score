@@ -276,20 +276,30 @@
 
 
                 </li>
-                <li class="span2"></li>
-                <li class="item active span2" id="dashboardTab">
+                <li class="span4">
+                    <div class="datepickerMenu">
+                        <label for="fromDatepicker" class="span2">From</label>
+                        <input type="text" id="fromDatepicker" name="from">
+                    </div>
+                    <div class="datepickerMenu">
+                        <label for="toDatepicker" class="span2">to</label>
+                        <input type="text" id="toDatepicker" name="to">
+                    </div>
+                </li>
+
+                <li class="item active span1" id="dashboardTab">
                     <a class="" ng-click="openTab('dashboard')">
                         <i class="uiIconPLFDashboard"></i>
                         <span class="tabName">{{i18n.dashboard}}</span>
                     </a>
                 </li>
-                <li class="item span2" id="trendsTab">
+                <li class="item span1" id="trendsTab">
                     <a class="" ng-click="openTab('trends')">
                         <i class="uiIconViewByChart"></i>
                         <span class="tabName show-calender">{{i18n.trends}}</span>
                     </a>
                 </li>
-                <li class="item span2" id="feedbacksTab">
+                <li class="item span1" id="feedbacksTab">
                     <a class="" ng-click="openTab('feedbacks')">
                         <i class="uiIconComment"></i>
                         <span class="tabName show-calender">{{i18n.feedbacks}}</span>
@@ -312,10 +322,11 @@
                             {{meanScore}}
                         </h2>
                         <h5 class="description">NPS Mean Score</h5>
-                        <div class="separator"></div>
+                        <div class="separator {{classMeanScore}}"></div>
                     </div>
 
-                    <div google-chart class="span9" chart="ColumnChartObject" style="height:600px"></div>
+                    <div google-chart class="span9" chart="ColumnChartObject" style="height:500px"></div>
+
                 </div>
                 <div class="span12" style="float: none; margin: auto; height: auto" ng-show="!showGraphs">
                     <h3 class="scoresDiv no-graph">{{i18n.noScore}}</h3>
