@@ -9,10 +9,10 @@
 
 
 
-            <ul class="nav nav-tabs addonMenu " id="addonMenu">
+            <ul class="nav nav-tabs addonMenu row-fluid" id="addonMenu">
 
 
-                <li>
+                <li class="span4">
 
                     <div style="padding-bottom: 20px;position: relative">
                         <!--<div class="scoresDiv">-->
@@ -276,20 +276,20 @@
 
 
                 </li>
-
-                <li class="item active" id="dashboardTab">
+                <li class="span2"></li>
+                <li class="item active span2" id="dashboardTab">
                     <a class="" ng-click="openTab('dashboard')">
                         <i class="uiIconPLFDashboard"></i>
                         <span class="tabName">{{i18n.dashboard}}</span>
                     </a>
                 </li>
-                <li class="item" id="trendsTab">
+                <li class="item span2" id="trendsTab">
                     <a class="" ng-click="openTab('trends')">
                         <i class="uiIconViewByChart"></i>
                         <span class="tabName show-calender">{{i18n.trends}}</span>
                     </a>
                 </li>
-                <li class="item" id="feedbacksTab">
+                <li class="item span2" id="feedbacksTab">
                     <a class="" ng-click="openTab('feedbacks')">
                         <i class="uiIconComment"></i>
                         <span class="tabName show-calender">{{i18n.feedbacks}}</span>
@@ -301,11 +301,21 @@
 
             <!--begin Dashbord tab-->
             <div id="dashboard" class="tabcontent active" style="display: block;">
-                <div class="span10" style="float: none; margin: auto; height: auto" ng-show="showGraphs">
+                <div class="span10" style="margin: auto; height: auto" ng-show="showGraphs">
                     <div google-chart class="span4" chart="gaugeChartObject" style="height:450px"></div>
                     <div google-chart class="span4" chart="pieChartObject" style="height:450px;float: right"></div>
-                    <h3 class="">Mean Score: {{meanScore}}</h3>
-                    <div google-chart class="span10" chart="ColumnChartObject" style="height:600px; width:100%;"></div>
+                </div>
+                <div class="row-fluid">
+
+                    <div class="metric span2">
+                        <h2 class="value nps {{classMeanScore}}">
+                            {{meanScore}}
+                        </h2>
+                        <h5 class="description">NPS Mean Score</h5>
+                        <div class="separator"></div>
+                    </div>
+
+                    <div google-chart class="span9" chart="ColumnChartObject" style="height:600px"></div>
                 </div>
                 <div class="span12" style="float: none; margin: auto; height: auto" ng-show="!showGraphs">
                     <h3 class="scoresDiv no-graph">{{i18n.noScore}}</h3>
@@ -316,20 +326,18 @@
 
             <!--begin trends tab-->
             <div id="trends" class="tabcontent" style="display: none;">
-                <div class="span10" ng-show="showGraphs">
+                <div ng-show="showGraphs" class="container-fluid">
                     <!--
                                     <h4 class="titleWithBorder pull-left" style="width: 100%">NPS Line Charts</h4>
                     -->
-                    <div class="">
-                        <div class="">
-                            <select name="lineChart" id="lineChart"
-                                    ng-options="chartType.name for chartType in chartTypes track by chartType.value"
-                                    ng-model="selectedChartType" ng-change="getNPSLineChart()"></select>
+                    <div class="span12">
+                        <select name="lineChart" id="lineChart"
+                                ng-options="chartType.name for chartType in chartTypes track by chartType.value"
+                                ng-model="selectedChartType" ng-change="getNPSLineChart()"></select>
 
-                        </div>
                     </div>
-                    <div class="span10" class="nps_week_graph" ng-show="showGraphs" style="margin: 0; margin-bottom: 15px">
-                        <div google-chart chart="lineChartObject" agc-on-select="hideSeries(selectedItem)" style="height:450px; width:100%;"></div>
+                    <div  class="nps_week_graph span12" ng-show="showGraphs">
+                        <div google-chart chart="lineChartObject" agc-on-select="hideSeries(selectedItem)"></div>
                     </div>
 
 
@@ -346,7 +354,7 @@
                     <button class="responses-btn"  ng-click="setCategory('all')">{{scorsnbr}} Responses</button>
                     <button class="responses-btn promoter"  ng-click="setCategory('promoters')">{{allPromotersNbr}} Promoters</button>
                     <button class="responses-btn detractor"  ng-click="setCategory('detractors')">{{allDetractorsNbr}} Detractors</button>
-                    <button class="responses-btn pssive"  ng-click="setCategory('passives')">{{allPassivesNbr}} Passives</button>
+                    <button class="responses-btn passive"  ng-click="setCategory('passives')">{{allPassivesNbr}} Passives</button>
                 </div>
 
                 <div class="scoresDiv" ng-show="showGraphs">
@@ -357,8 +365,10 @@
                                 <div class="score_authorImg pull-left">
                                     <div class="activityAvatar avatarCircle"><a href="#"><img alt="score.userId" src="{{score.posterAvatar}}"> </a></div>
                                 </div>
-                                <div class="owner"><a href="{{score.userProfile}}">{{score.userFullName}}</a></div>
-                                <span class="dateTime"><i class="uiIconClock  uiIconLightGray"></i>{{score.postedTime | date:'d MMM y HH:mm:ss'}}</span>
+                                <div class="author_info">
+                                    <div class="owner"><a href="{{score.userProfile}}">{{score.userFullName}}</a></div>
+                                    <div class="dateTime"><i class="uiIconClock  uiIconLightGray"></i> {{score.postedTime | date:'d MMM y HH:mm:ss'}}</div>
+                                </div>
                             </div>
 
                             <div class="pull-right score_manage">
@@ -407,27 +417,26 @@
                         </div>
                         <!-- -->
                     </div>
+                    <div class="container-fluid">
 
-                    <select name="types" id="types"
+                        <div class="pagination pull-left">
+                            <ul>
+                                <li ng-class="prevPageDisabled()">
+                                    <a href ng-click="prevPage()"><i class="uiIconArrowLeft"></i> Prev</a>
+                                </li>
+                                <li ng-repeat="n in pages" ng-class="{active: n == currentPage}" ng-click="setPage(n)">
+                                    <a href="#">{{n+1}}</a>
+                                </li>
+                                <li ng-class="nextPageDisabled()">
+                                    <a href ng-click="nextPage()">Next <i class="uiIconArrowRight"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <select name="types" id="types" class="pull-right"
                             ng-options="nbPages for nbPages in itemsPerPageSugg "
                             ng-model="itemsPerPage" ng-change="setPage(0)"></select>
 
-                    <div class="pagination">
-                        <ul>
-                            <li ng-class="prevPageDisabled()">
-                                <a href ng-click="prevPage()"><i class="uiIconArrowLeft"></i> Prev</a>
-                            </li>
-                            <li ng-repeat="n in pages" ng-class="{active: n == currentPage}" ng-click="setPage(n)">
-                                <a href="#">{{n+1}}</a>
-                            </li>
-                            <li ng-class="nextPageDisabled()">
-                                <a href ng-click="nextPage()">Next <i class="uiIconArrowRight"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-
-
-                </div>
             </div>
             <!--end feedbacks tab-->
 
