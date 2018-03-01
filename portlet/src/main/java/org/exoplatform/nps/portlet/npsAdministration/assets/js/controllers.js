@@ -384,7 +384,7 @@ alert('hey, selectedTemplateName has changed!');
 
                 for (var i = 0; i < $scope.statNpScore.length; i++) {
                     var obj = $scope.statNpScore[i];
-                    NPSArray.push({c: [{v: obj.score}, {v: obj.count}, {v: color}]});
+                    NPSArray.push({c: [{v: obj.score}, {v: obj.count}]});
                 }
 
                 $scope.ColumnChartObject.data =
