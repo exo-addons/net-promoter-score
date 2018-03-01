@@ -64,7 +64,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.pieChartObject.options = {
             backgroundColor: 'transparent',
             legend: {position: 'bottom'},
-            chartArea: {top: 0, width: '85%', height: '85%'},
+            width: '370', height: '450',
+            chartArea: {top: 0, width: '80%', height: '80%'},
             pieSliceText: 'label',
             slices: {
                 0: {color: '#6ccbae'},
@@ -128,9 +129,10 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 
         $scope.ColumnChartObject.type = "ColumnChart";
 
+
         $scope.ColumnChartObject.options = {
-            'title': '',
-            colors: ['#1b9e77', '#d95f02', '#7570b3']
+            width:817,height:500,
+            colors: ['#476a9c']
         };
 
 
@@ -378,7 +380,8 @@ alert('hey, selectedTemplateName has changed!');
             }).then(function successCallback(data) {
                 $scope.statNpScore = data.data;
                 var NPSArray = [];
-                var color = "#476a9c";
+
+
                 for (var i = 0; i < $scope.statNpScore.length; i++) {
                     var obj = $scope.statNpScore[i];
                     NPSArray.push({c: [{v: obj.score}, {v: obj.count}, {v: color}]});
@@ -386,8 +389,8 @@ alert('hey, selectedTemplateName has changed!');
 
                 $scope.ColumnChartObject.data =
                     {"cols": [
-                        {id: "t", label: "", type: "number", color: ""},
-                        {id: "s", label: "", type: "number", color: ""}
+                        {id: "t", label: "", type: "number"},
+                        {id: "s", label: "", type: "number"}
                     ], "rows": NPSArray};
 
                 deferred.resolve(data);

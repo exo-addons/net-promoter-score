@@ -519,8 +519,8 @@ a.actionIconde {
     padding: 10px 20px;
 }
 /* MEAN SCORE */
-.metric.span2 {
-    padding-left: 3%;
+.metric {
+    padding-left: 4%;
 }
 .metric .value {
     color: #7f7c7d;
@@ -550,8 +550,10 @@ a.actionIconde {
 .separator.promoter {border-bottom-color: rgba(60, 175, 140,  0.7);}
 /**/
 #dashboardTab, #trendsTab, #feedbacksTab{
-    margin-right: -20px;
+    margin-right: 0;
     min-width: 105px;
+    float: right;
+    margin-left: 10px;
 }
 .datepickerMenu {
     display: flex;
@@ -570,7 +572,7 @@ a.actionIconde {
 [chart=lineChartObject] svg,
 [chart=lineChartObject] svg rect
 {width: 90%!important; height: 350px!important; margin:auto}*/
-[chart=lineChartObject],[chart=lineChartObject] > div > div{margin:auto}
+[chart=lineChartObject],[chart=lineChartObject] > div > div{    margin: 20px auto;}
 .RightBodyTDContainer {
     overflow: hidden;
 }
@@ -582,8 +584,8 @@ a.actionIconde {
 }
 
 .nps-circle-container {
-  height: 310px;
-  width: 310px;
+  height: 320px;
+  width: 320px;
   background: #e8e8e8;
   border-radius: 50%;
   z-index: 3;
@@ -730,3 +732,13 @@ color: #efefef; }
     margin: 40px auto;
     text-align: center;
 }
+/**/
+.timerangPicker{margin: 30px 0; text-align: center}
+.md-select-value{
+    color: #578dc9;
+    font-weight: bold;
+    font-size: 15px;
+    margin: 0 30px;
+    border-bottom-width: 2px;
+}
+.md-custom-menu-content > span{font-size: 15px;}

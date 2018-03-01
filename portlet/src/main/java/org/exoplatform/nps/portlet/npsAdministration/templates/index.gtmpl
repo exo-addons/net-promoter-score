@@ -278,15 +278,14 @@
                 </li>
 
 
-                <li><md-date-range ng-model="pickerModel" md-on-select="hello($dates)" auto-confirm="true"> </md-date-range></li>
+                <li class="span4 timerangPicker"><md-date-range ng-model="pickerModel" md-on-select="hello($dates)" auto-confirm="true"> </md-date-range></li>
 
 
 
-
-                <li class="item active span1" id="dashboardTab">
-                    <a class="" ng-click="openTab('dashboard')">
-                        <i class="uiIconPLFDashboard"></i>
-                        <span class="tabName">{{i18n.dashboard}}</span>
+                <li class="item span1" id="feedbacksTab">
+                    <a class="" ng-click="openTab('feedbacks')">
+                        <i class="uiIconComment"></i>
+                        <span class="tabName show-calender">{{i18n.feedbacks}}</span>
                     </a>
                 </li>
                 <li class="item span1" id="trendsTab">
@@ -295,10 +294,10 @@
                         <span class="tabName show-calender">{{i18n.trends}}</span>
                     </a>
                 </li>
-                <li class="item span1" id="feedbacksTab">
-                    <a class="" ng-click="openTab('feedbacks')">
-                        <i class="uiIconComment"></i>
-                        <span class="tabName show-calender">{{i18n.feedbacks}}</span>
+                <li class="item active span1" id="dashboardTab">
+                    <a class="" ng-click="openTab('dashboard')">
+                        <i class="uiIconPLFDashboard"></i>
+                        <span class="tabName">{{i18n.dashboard}}</span>
                     </a>
                 </li>
 
@@ -309,9 +308,9 @@
             <div id="dashboard" class="tabcontent active" style="display: block;">
 
 
-                <div class="span10" style="margin: auto; height: auto" ng-show="showGraphs">
+                <div class="row-fluid" style="margin: auto; height: auto" ng-show="showGraphs">
                     <!--<div google-chart class="span4" chart="gaugeChartObject" style="height:450px"></div>-->
-                    <div class="span4 npsScore">
+                    <div class="span5 npsScore">
                     <div class="nps-circle-container">
                     <div class="brand-circle-large brand-circle-large-positive" value="{{npScore}}">
                     <h2>NPS</h2>
@@ -325,11 +324,11 @@
                     </div>
                     </div>
                     </div>
-                    <div google-chart class="span4" chart="pieChartObject" style="height:450px;float: right"></div>
+                    <div google-chart class="span5" chart="pieChartObject" width="370" height="450" style="height:450px;width:370px;float: right"></div>
                 </div>
                 <div class="row-fluid">
 
-                    <div class="metric span2">
+                    <div class="metric span3">
                         <h2 class="value nps {{classMeanScore}}">
                             {{meanScore}}
                         </h2>
@@ -337,7 +336,7 @@
                         <div class="separator {{classMeanScore}}"></div>
                     </div>
 
-                    <div google-chart class="span9" chart="ColumnChartObject" style="height:500px"></div>
+                    <div google-chart class="span9" chart="ColumnChartObject" style="width:74.35897436%!important;height:500px"></div>
 
                 </div>
                 <div class="span12" style="float: none; margin: auto; height: auto" ng-show="!showGraphs">

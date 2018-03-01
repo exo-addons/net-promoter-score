@@ -9,4 +9,7 @@ require( ["SHARED/jquery", "npsAdminControllers"], function ( $,  npsAdminContro
         } catch(e) {
             console.log(e);
         }
+
+    });
+
 });
