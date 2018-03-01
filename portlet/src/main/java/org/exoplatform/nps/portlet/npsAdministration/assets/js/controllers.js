@@ -18,6 +18,43 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.weeklyNpScore = [];
         $scope.chartTypes = [];
         $scope.selectedChartType = {};
+
+
+              var lessThan3Day = new Date();
+              lessThan3Day.setDate(lessThan3Day.getDate() - 2);
+              $scope.customTemplates = [
+                {
+                  name: 'Last 3 Days',
+                  dateStart: lessThan3Day,
+                  dateEnd: new Date(),
+                }
+              ];
+              $scope.calendarModel = { selectedTemplate: 'Last 3 Days' };
+              $scope.pickerModel = { selectedTemplate: 'Last 3 Days' };
+              $scope.advancedModel = { selectedTemplate: 'Last 3 Days' };
+              $scope.serviceModel = { selectedTemplate: 'Last 3 Days' };
+              $scope.selectedDate = {};
+              $scope.selectedDates = [];
+              $scope.selectDateRange = function ($event, autoConfirm) {
+                $mdDateRangePicker.show({
+                  model: $scope.serviceModel,
+                  autoConfirm: autoConfirm,
+                  targetEvent: $event,
+                  customTemplates: $scope.customTemplates,
+                }).then(function (result) {
+                  Object.assign($scope.serviceModel, result);
+                }).catch(function () {
+                  console.log('Cancelled');
+                });
+              }
+              $scope.format = function (dateStart, dateEnd, template, templateName) {
+                return template ? 'Range of ' + (templateName || template) : (dateStart && dateEnd && (dateStart.toLocaleDateString() + ' to ' + dateEnd.toLocaleDateString()));
+              }
+              $scope.isDisabledDate = function (d) {
+                return d.getDay() === 0 || d.getDay() === 6;
+              }
+
+
         $scope.periods = [
             {name: "By week", value: "weekly"},
             {name: "By month", value: "mounthly"}
@@ -112,6 +149,9 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             $scope.resultMessage = text;
         }
 
+        $scope.hello = function (dates) {
+alert('hey, selectedTemplateName has changed!');
+        }
 
         $scope.openTab = function (tabName) {
 
@@ -241,6 +281,15 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                     ];
 
                     $scope.npScore = parseFloat($scope.npScore);
+                            $scope.dashoffset = data.data.dashoffset;
+                            $scope.npsColor = "#f5ba7f";
+                            if($scope.npScore<25){
+                            $scope.npsColor = "#ce7474";
+                            }
+                            if($scope.npScore>70){
+                            $scope.npsColor = "#4bc0c0";
+                            }
+
 
                     if($scope.npScore <= 6){$scope.npsColor = "rgba(144, 19, 21, 0.7)"}
                     else if(($scope.npScore >= 7) && ($scope.npScore < 8)){$scope.npsColor = "rgba(239, 149, 13,  0.7)"}

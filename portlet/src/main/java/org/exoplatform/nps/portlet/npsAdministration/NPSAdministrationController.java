@@ -168,6 +168,8 @@ public class NPSAdministrationController {
         data.set("allDetractorsNbr",allDetractorsNbr);
         data.set("allPromotersNbr",allPromotersNbr);
         data.set("allPassivesNbr",allPassivesNbr);
+        float dashoffset = 300-(3*npScore);
+        data.set("dashoffset",String.format("%.2f", dashoffset));
 
       data.set("meanScore",String.format("%.2f",npsService.getMeanScore(typeId)));
 
