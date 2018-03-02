@@ -14,7 +14,7 @@
 
                 <li class="span4">
 
-                    <div style="padding-bottom: 20px;position: relative">
+                    <div style="position: relative">
                         <!--<div class="scoresDiv">-->
                         <!--<h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsAdmin}}</h4>-->
                         <!--</div>-->
@@ -278,7 +278,10 @@
                 </li>
 
 
-                <li class="span4 timerangPicker"><md-date-range ng-model="pickerModel" md-on-select="setRange($dates)" auto-confirm="true"> </md-date-range></li>
+                <li class="span4 timerangPicker">
+                    <md-date-range ng-model="pickerModel" md-on-select="setRange($dates)" auto-confirm="true"> </md-date-range>
+                    <!--<i class="uiIconAppCalendarPortlet uiIconDefaultApp"></i>-->
+                </li>
 
 
 
@@ -330,41 +333,64 @@
                     <div class="span7" style="height:450px,padding: 50px;float: right" >
                         <div class="charts" >
                             <div class="chart chart--dev">
-                                <ul class="chart--horiz">
-                                    <li class="chart__bar chart__promoter" style="width: {{promotersPrc}}%;">
-          <span class="chart__label">
-            {{promotersNbr}} Promoters : {{promotersPrc}}%
-          </span>
-                                    </li>
-                                    <li class="chart__bar chart__passive" style="width: {{passivesPrc}}%;">
-          <span class="chart__label">
-            {{passivesNbr}} Passives : {{passivesPrc}}%
-          </span>
-                                    </li>
-                                    <li class="chart__bar chart__detractor" style="width: {{detractorsPrc}}%;">
-          <span class="chart__label">
-            {{detractorsNbr}} Detractors : {{detractorsPrc}}%
-          </span>
-                                    </li>
+                                <div class="chart--horiz">
+                                    <div>
+                                        <div class="chart__bar chart__promoter" style="width: {{promotersPrc}}%;display: inline-block;">
+                                          <span class="chart__label">
 
-                                </ul>
+                                          </span>
+                                        </div>
+                                        <span style="display: inline-block; color:#3caf8c">
+                                            {{promotersNbr}} Promoters <br/>
+                                            <b style="font-size: 16px;">{{promotersPrc}}%</b>
+                                        </span>
+                                    </div>
+                                    <div>
+                                    <div class="chart__bar chart__passive" style="width: {{passivesPrc}}%;display: inline-block;">
+                                      <span class="chart__label">
+
+                                      </span>
+                                    </div>
+                                    <span style="display: inline-block; color:#ef950d">
+                                        {{passivesNbr}} Passives <br/>
+                                        <b style="font-size: 16px;">{{passivesPrc}}%</b>
+                                    </span>
+                                    </div>
+
+                                    <div>
+                                    <div class="chart__bar chart__detractor" style="width: {{detractorsPrc}}%;display: inline-block;">
+                                      <span class="chart__label">
+
+                                      </span>
+                                    </div>
+                                    <span style="display: inline-block; color:#901315">
+                                        {{detractorsNbr}} Detractors <br/>
+                                        <b style="font-size: 16px;">{{detractorsPrc}}%</b>
+                                    </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row-fluid">
-
-                        <div class="metric span3">
+                    <div class="span12 meanings">
+                    <div class="span3">
+                        <div class="metric">
                             <h2 class="value nps {{classMeanScore}}">
                                 {{meanScore}}
                             </h2>
                             <h5 class="description">NPS Mean Score</h5>
                             <div class="separator {{classMeanScore}}"></div>
                         </div>
+                    </div>
 
+                    <div class="span3"></div>
+                    <div class="span3"></div>
+                    <div class="span3"></div>
                         <!--
                                             <div google-chart class="span9" chart="ColumnChartObject" style="width:74.35897436%!important;height:500px"></div>
                         -->
-                        <div  class="span9"  style="width:74.35897436%!important;height:500px">
+                    </div>
+                        <div  class="span11"  style="    margin-bottom: 50px;">
 
                             <div class="verticalChart">
 
@@ -373,7 +399,7 @@
                                     <div class="bar-{{score.category}}">
 
                                         <div class="value-{{score.category}}" style="height: {{score.percent}}%;">
-                                            <span class="value-span" style="color: rgb(45, 137, 239); display: inline;">{{score.count}}</span>
+                                            <span class="value-span" style="color: #fff; display: inline;"><b>{{score.count}}</b></span>
                                         </div>
 
                                     </div>
