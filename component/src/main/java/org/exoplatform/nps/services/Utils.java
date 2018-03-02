@@ -100,13 +100,16 @@ public class Utils
                         }else userName=score.getUserId();
                     }
                     if(posterIdentity!=null&&spaceIdentity!=null){
+                        String comment="";
+                        if(score.getComment()!=null&&!"".equals(score.getComment())) comment=" <b>Comment: </b>"+score.getComment()+ "<br/>";
                         ExoSocialActivity activity = new ExoSocialActivityImpl();
                         activity.setType("DEFAULT_ACTIVITY");
                         activity.setTitle("<span id='npsActivity'>\n" +
                                 "A new response has been added to the "+scoreType.getTypeName()+" survey: <br/>\n" +
                                 " <b>User Name : </b>"+userName+"<br/>\n" +
                                 " <b>Score : </b>"+score.getScore()+"<br/>\n" +
-                                " <b>Comment: </b>"+score.getComment()+ "<br/>");
+                                        comment
+                                 );
                         activity.setUserId(posterIdentity.getId());
                         activityManager.saveActivityNoReturn(spaceIdentity, activity);
                     }else{
