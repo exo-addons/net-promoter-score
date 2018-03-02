@@ -9,7 +9,6 @@ define("npsViewControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
         $scope.npScore=0;
         $scope.scoreTypeMessage = "";
         $scope.dashoffset=0;
-
         $scope.setResultMessage = function (text, type) {
             $scope.resultMessageClass = "alert-" + type;
             $scope.resultMessageClassExt = "uiIcon" + type.charAt(0).toUpperCase()

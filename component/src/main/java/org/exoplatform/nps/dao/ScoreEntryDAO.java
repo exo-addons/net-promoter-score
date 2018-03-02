@@ -30,17 +30,21 @@ import java.util.List;
 public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
     private static final Logger LOG = LoggerFactory.getLogger(ScoreEntryDAO.class);
 
-    public List<ScoreEntryEntity> getScoreEntries(long typeId, int offset, int limit) {
+    public List<ScoreEntryEntity> getScoreEntries(long typeId, int offset, int limit, long startDate, long endDate) {
         try {
             if (offset >= 0 && limit > 0) {
                 return getEntityManager().createNamedQuery("scoreEntryEntity.findAllOrderByDesc", ScoreEntryEntity.class)
                         .setFirstResult(offset)
                         .setMaxResults(limit)
                         .setParameter("typeId", typeId)
+                        .setParameter("startDate", startDate)
+                        .setParameter("endDate", endDate)
                         .getResultList();
             } else {
                 return getEntityManager().createNamedQuery("scoreEntryEntity.findAllOrderByDesc", ScoreEntryEntity.class)
                         .setParameter("typeId", typeId)
+                        .setParameter("startDate", startDate)
+                        .setParameter("endDate", endDate)
                         .getResultList();
             }
         } catch (Exception e) {
@@ -49,17 +53,21 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
         }
     }
 
-    public List<ScoreEntryEntity> getPassiveScoreEntries(long typeId, int offset, int limit) {
+    public List<ScoreEntryEntity> getPassiveScoreEntries(long typeId, int offset, int limit, long startDate, long endDate) {
         try {
             if (offset >= 0 && limit > 0) {
                 return getEntityManager().createNamedQuery("scoreEntryEntity.findPassives", ScoreEntryEntity.class)
                         .setFirstResult(offset)
                         .setMaxResults(limit)
                         .setParameter("typeId", typeId)
+                        .setParameter("startDate", startDate)
+                        .setParameter("endDate", endDate)
                         .getResultList();
             } else {
                 return getEntityManager().createNamedQuery("scoreEntryEntity.findPassives", ScoreEntryEntity.class)
                         .setParameter("typeId", typeId)
+                        .setParameter("startDate", startDate)
+                        .setParameter("endDate", endDate)
                         .getResultList();
             }
         } catch (Exception e) {
@@ -68,17 +76,21 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
         }
     }
 
-    public List<ScoreEntryEntity> getPromoterScoreEntries(long typeId, int offset, int limit) {
+    public List<ScoreEntryEntity> getPromoterScoreEntries(long typeId, int offset, int limit, long startDate, long endDate) {
         try {
             if (offset >= 0 && limit > 0) {
                 return getEntityManager().createNamedQuery("scoreEntryEntity.findPromoters", ScoreEntryEntity.class)
                         .setFirstResult(offset)
                         .setMaxResults(limit)
                         .setParameter("typeId", typeId)
+                        .setParameter("startDate", startDate)
+                        .setParameter("endDate", endDate)
                         .getResultList();
             } else {
                 return getEntityManager().createNamedQuery("scoreEntryEntity.findPromoters", ScoreEntryEntity.class)
                         .setParameter("typeId", typeId)
+                        .setParameter("startDate", startDate)
+                        .setParameter("endDate", endDate)
                         .getResultList();
             }
         } catch (Exception e) {
@@ -87,17 +99,21 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
         }
     }
 
-    public List<ScoreEntryEntity> getDetractorScoreEntries(long typeId, int offset, int limit) {
+    public List<ScoreEntryEntity> getDetractorScoreEntries(long typeId, int offset, int limit, long startDate, long endDate) {
         try {
             if (offset >= 0 && limit > 0) {
                 return getEntityManager().createNamedQuery("scoreEntryEntity.findDetractors", ScoreEntryEntity.class)
                         .setFirstResult(offset)
                         .setMaxResults(limit)
                         .setParameter("typeId", typeId)
+                        .setParameter("startDate", startDate)
+                        .setParameter("endDate", endDate)
                         .getResultList();
             } else {
                 return getEntityManager().createNamedQuery("scoreEntryEntity.findDetractors", ScoreEntryEntity.class)
                         .setParameter("typeId", typeId)
+                        .setParameter("startDate", startDate)
+                        .setParameter("endDate", endDate)
                         .getResultList();
             }
         } catch (Exception e) {
@@ -122,15 +138,19 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
         }
     }
 
-    public  long getScoreEntriesCount(long typeId,boolean enabled) {
+    public  long getScoreEntriesCount(long typeId,boolean enabled, long startDate, long endDate) {
         try {
             if(enabled==true){
                 return getEntityManager().createNamedQuery("scoreEntryEntity.countEnabled", Long.class)
                         .setParameter("typeId", typeId)
+                        .setParameter("startDate", startDate)
+                        .setParameter("endDate", endDate)
                         .getSingleResult();
             }else{
                 return getEntityManager().createNamedQuery("scoreEntryEntity.count", Long.class)
                         .setParameter("typeId", typeId)
+                        .setParameter("startDate", startDate)
+                        .setParameter("endDate", endDate)
                         .getSingleResult();
             }
 
@@ -140,16 +160,20 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
         }
     }
 
-    public  long getPromotersCount(long typeId,boolean enabled) {
+    public  long getPromotersCount(long typeId,boolean enabled, long startDate, long endDate) {
         try {
 
             if(enabled==true){
                 return getEntityManager().createNamedQuery("scoreEntryEntity.countPromoters", Long.class)
                         .setParameter("typeId", typeId)
+                        .setParameter("startDate", startDate)
+                        .setParameter("endDate", endDate)
                         .getSingleResult();
             }else{
                 return getEntityManager().createNamedQuery("scoreEntryEntity.countAllPromoters", Long.class)
                         .setParameter("typeId", typeId)
+                        .setParameter("startDate", startDate)
+                        .setParameter("endDate", endDate)
                         .getSingleResult();
             }
 
@@ -162,15 +186,19 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
 
     }
 
-    public  long getDetractorsCount(long typeId,boolean enabled) {
+    public  long getDetractorsCount(long typeId,boolean enabled, long startDate, long endDate) {
         try {
             if(enabled==true){
                 return getEntityManager().createNamedQuery("scoreEntryEntity.countDetractors", Long.class)
                         .setParameter("typeId", typeId)
+                        .setParameter("startDate", startDate)
+                        .setParameter("endDate", endDate)
                         .getSingleResult();
             }else{
                 return getEntityManager().createNamedQuery("scoreEntryEntity.countAllDetractors", Long.class)
                         .setParameter("typeId", typeId)
+                        .setParameter("startDate", startDate)
+                        .setParameter("endDate", endDate)
                         .getSingleResult();
             }
 
@@ -266,7 +294,7 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
     }
 
 
-    public List<ScoreEntryEntity> getScoreEntriesByUserId(long typeId,String userId, int offset, int limit) {
+    public List<ScoreEntryEntity> getScoreEntriesByUserId(long typeId,String userId, int offset, int limit, long startDate, long endDate) {
         try {
             if (offset >= 0 && limit > 0) {
                 return getEntityManager().createNamedQuery("scoreEntryEntity.findByUserId", ScoreEntryEntity.class)
@@ -274,11 +302,15 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
                         .setMaxResults(limit)
                         .setParameter("userId", userId)
                         .setParameter("typeId", typeId)
+                        .setParameter("startDate", startDate)
+                        .setParameter("endDate", endDate)
                         .getResultList();
             } else {
                 return getEntityManager().createNamedQuery("scoreEntryEntity.findByUserId", ScoreEntryEntity.class)
                         .setParameter("userId", userId)
                         .setParameter("typeId", typeId)
+                        .setParameter("startDate", startDate)
+                        .setParameter("endDate", endDate)
                         .getResultList();
             }
         } catch (Exception e) {
@@ -301,10 +333,12 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
         }
     }
 
-    public List<Object[]> countGroupdByScores(long typeId) {
+    public List<Object[]> countGroupdByScores(long typeId, Long startDate, Long endDate) {
         try {
             return getEntityManager().createNamedQuery("scoreEntryEntity.countGroupdByScores", Object[].class)
                     .setParameter("typeId", typeId)
+                    .setParameter("startDate", startDate)
+                    .setParameter("endDate", endDate)
                     .getResultList();
         }  catch (Exception e) {
             LOG.warn("Exception while attempting to get request", e);
@@ -313,12 +347,16 @@ public class ScoreEntryDAO extends GenericDAOJPAImpl<ScoreEntryEntity, String> {
     }
 
 
-    public double getScoresAvg(long typeId) {
+    public double getScoresAvg(long typeId, long startDate, long endDate) {
         try {
             return getEntityManager().createNamedQuery("scoreEntryEntity.avgEnabled", Double.class)
                     .setParameter("typeId", typeId)
+                    .setParameter("startDate", startDate)
+                    .setParameter("endDate", endDate)
                     .getSingleResult();
-        }  catch (Exception e) {
+        }  catch (NullPointerException e) {
+            return 0;
+        }   catch (Exception e) {
             LOG.warn("Exception while attempting to get request", e);
             throw e;
         }

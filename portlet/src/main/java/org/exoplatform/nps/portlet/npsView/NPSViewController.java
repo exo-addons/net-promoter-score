@@ -144,9 +144,11 @@ public class NPSViewController {
             try {
                 ScoreTypeDTO  sType = npsTypeService.getScoreType(Long.parseLong(scoreTypeId));
                 long typeId=sType.getId();
-                long scorsnbr= npsService.getScoreCount(typeId, true);
-                long detractorsNbr= npsService.getDetractorsCount(typeId, true);
-                long promotersNbr= npsService.getPromotersCount(typeId,true);
+                long firstScoreDate=npsService.getFirstScoreEntries(typeId).getPostedTime();
+                long today= new Date().getTime();
+                long scorsnbr= npsService.getScoreCount(typeId, true,firstScoreDate,today);
+                long detractorsNbr= npsService.getDetractorsCount(typeId, true,firstScoreDate,today);
+                long promotersNbr= npsService.getPromotersCount(typeId,true,firstScoreDate,today);
                 long passivesNbr= scorsnbr-(promotersNbr+detractorsNbr);
 
 
@@ -158,7 +160,7 @@ public class NPSViewController {
 
                 float dashoffset = 300-(3*npScore);
 
-                data.set("scorsnbr",npsService.getScoreCount(typeId,false));
+                data.set("scorsnbr",npsService.getScoreCount(typeId,false,firstScoreDate,today));
                 data.set("detractorsNbr",detractorsNbr);
                 data.set("promotersNbr",promotersNbr);
                 data.set("passivesNbr",passivesNbr);

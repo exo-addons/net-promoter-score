@@ -42,6 +42,8 @@ public class ScoreEntryDTO {
 
   private long        typeId;
 
+  private Boolean           responded;
+
   private Boolean        isAnonymous;
 
   private String        category;

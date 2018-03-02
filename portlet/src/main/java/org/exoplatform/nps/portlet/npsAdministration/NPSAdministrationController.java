@@ -62,17 +62,17 @@ public class NPSAdministrationController {
   @juzu.Resource
   @MimeType.JSON
   @Jackson
-  public List<ScoreEntryDTO> getScores(Long typeId, String respCat, int offset, int limit) {
+  public List<ScoreEntryDTO> getScores(Long typeId, String respCat, int offset, int limit, Long startDate, Long endDate) {
     try {
       List<ScoreEntryDTO> scores= new ArrayList<>();
        if(respCat.equals("detractors")){
-         scores=npsService.getDetractorScores(typeId,offset,limit);
+         scores=npsService.getDetractorScores(typeId,offset,limit,startDate,endDate);
        } else if(respCat.equals("passives")){
-         scores=npsService.getPassiveScores(typeId,offset,limit);
+         scores=npsService.getPassiveScores(typeId,offset,limit,startDate,endDate);
        } else if(respCat.equals("promoters")){
-         scores=npsService.getPromotesScores(typeId,offset,limit);
+         scores=npsService.getPromotesScores(typeId,offset,limit,startDate,endDate);
        } else{
-         scores=npsService.getScores(typeId,offset,limit);
+         scores=npsService.getScores(typeId,offset,limit,startDate,endDate);
        }
       for (ScoreEntryDTO score : scores){
           score.setUserFullName("Anonymous");
@@ -138,19 +138,23 @@ public class NPSAdministrationController {
   @juzu.Resource
   @MimeType.JSON
   @Jackson
-  public Response getData(Long typeId) {
+  public Response getData(Long typeId, Long startDate, Long endDate) {
     try {
       JSON data = new JSON();
-      long scorsnbr= npsService.getScoreCount(typeId, true);
-      long detractorsNbr= npsService.getDetractorsCount(typeId, true);
-      long promotersNbr= npsService.getPromotersCount(typeId, true);
+      if(startDate==0){
+        startDate =npsService.getFirstScoreEntries(typeId).getPostedTime();
+      }
+
+      long scorsnbr= npsService.getScoreCount(typeId, true, startDate, endDate);
+      long detractorsNbr= npsService.getDetractorsCount(typeId, true, startDate, endDate);
+      long promotersNbr= npsService.getPromotersCount(typeId, true, startDate, endDate);
       long passivesNbr= scorsnbr-(promotersNbr+detractorsNbr);
 
       float detractorsPrc=((float)detractorsNbr/(float)scorsnbr)*100;
       float promotersPrc=((float)promotersNbr/(float)scorsnbr)*100;
       float passivesPrc=((float)passivesNbr/(float)scorsnbr)*100;
       float npScore= promotersPrc-detractorsPrc;
-
+      data.set("startDate",startDate);
       data.set("detractorsNbr",detractorsNbr);
       data.set("promotersNbr",promotersNbr);
       data.set("passivesNbr",passivesNbr);
@@ -160,9 +164,9 @@ public class NPSAdministrationController {
       data.set("npScore",String.format("%.2f", npScore));
 
 
-        long allScorsnbr= npsService.getScoreCount(typeId, false);
-        long allDetractorsNbr= npsService.getDetractorsCount(typeId, false);
-        long allPromotersNbr= npsService.getPromotersCount(typeId, false);
+        long allScorsnbr= npsService.getScoreCount(typeId, false, startDate, endDate);
+        long allDetractorsNbr= npsService.getDetractorsCount(typeId, false, startDate, endDate);
+        long allPromotersNbr= npsService.getPromotersCount(typeId, false, startDate, endDate);
         long allPassivesNbr= allScorsnbr-(allDetractorsNbr+allPromotersNbr);
         data.set("scorsnbr",allScorsnbr);
         data.set("allDetractorsNbr",allDetractorsNbr);
@@ -171,7 +175,7 @@ public class NPSAdministrationController {
         float dashoffset = 300-(3*npScore);
         data.set("dashoffset",String.format("%.2f", dashoffset));
 
-      data.set("meanScore",String.format("%.2f",npsService.getMeanScore(typeId)));
+      data.set("meanScore",String.format("%.2f",npsService.getMeanScore(typeId, startDate, endDate)));
 
       return Response.ok(data.toString());
     } catch (Throwable e) {
@@ -184,17 +188,17 @@ public class NPSAdministrationController {
   @juzu.Resource
   @MimeType.JSON
   @Jackson
-  public Response getNPSLineChart(Long typeId, String chartType) {
+  public Response getNPSLineChart(Long typeId, String chartType, Long startDate, Long endDate) {
     if(chartType.equals("global")){
-      return  getWeeklyNPS(typeId);
+      return  getWeeklyNPS(typeId, startDate, endDate);
     }else if(chartType.equals("weeklyOver")){
-      return  getNPSByWeek(typeId);
+      return  getNPSByWeek(typeId, startDate, endDate);
     }else if(chartType.equals("monthlyOver")){
-      return  getNPSByMonth(typeId);
+      return  getNPSByMonth(typeId, startDate, endDate);
     }else if(chartType.equals("rolling30")){
-      return  getRollingAvg(typeId,30);
+      return  getRollingAvg(typeId,30, startDate, endDate);
     }else if(chartType.equals("rolling7")){
-      return  getRollingAvg(typeId,7);
+      return  getRollingAvg(typeId,7, startDate, endDate);
     }else return Response.notFound();
   }
 
@@ -203,7 +207,7 @@ public class NPSAdministrationController {
   @juzu.Resource
   @MimeType.JSON
   @Jackson
-  public Response getWeeklyNPS(Long typeId) {
+  public Response getWeeklyNPS(Long typeId, Long startDate, Long endDate) {
     try {
       SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
       JSONArray npsList = new JSONArray();
@@ -230,7 +234,7 @@ public class NPSAdministrationController {
   @juzu.Resource
   @MimeType.JSON
   @Jackson
-  public Response getNPSByWeek(Long typeId) {
+  public Response getNPSByWeek(Long typeId, Long startDate, Long endDate) {
     try {
 
       JSONArray npsList = new JSONArray();
@@ -254,7 +258,7 @@ public class NPSAdministrationController {
   @juzu.Resource
   @MimeType.JSON
   @Jackson
-  public Response getNPSByMonth(Long typeId) {
+  public Response getNPSByMonth(Long typeId, Long startDate, Long endDate) {
     try {
 
       JSONArray npsList = new JSONArray();
@@ -278,7 +282,7 @@ public class NPSAdministrationController {
   @juzu.Resource
   @MimeType.JSON
   @Jackson
-  public Response getRollingAvg(Long typeId, int period) {
+  public Response getRollingAvg(Long typeId, int period, Long startDate, Long endDate) {
     try {
 
       JSONArray npsList = new JSONArray();
@@ -298,18 +302,44 @@ public class NPSAdministrationController {
   }
 
   @Ajax
-  @juzu.Resource
+  @Resource
   @MimeType.JSON
   @Jackson
-  public Response getRespCountByScore(Long typeId) {
+  public Response getRespCountByScore(Long typeId, Long startDate, Long endDate) {
     try {
+      Map<String, Long> scores = new HashMap<String, Long>();
+
+      scores.put("0", (long) 0);
+      scores.put("1", (long) 0);
+      scores.put("2", (long) 0);
+      scores.put("3", (long) 0);
+      scores.put("4", (long) 0);
+      scores.put("5", (long) 0);
+      scores.put("6", (long) 0);
+      scores.put("7", (long) 0);
+      scores.put("8", (long) 0);
+      scores.put("9", (long) 0);
+      scores.put("10", (long) 0);
+
+
+
       JSONArray resposesByScores = new JSONArray();
-      List<Object[]> results =npsService.countGroupdByScores(typeId);
+      List<Object[]> results =npsService.countGroupdByScores(typeId, startDate, endDate);
+      long total=npsService.getScoreCount(typeId, true, startDate, endDate);
       for (int i = 0; i < results.size(); i++) {
-        JSONObject data = new JSONObject();
         Object[] arr = results.get(i);
-        data.put("score",arr[0]);
-        data.put("count",arr[1]);
+        scores.put(((Integer) arr[0]).toString(),(Long)arr[1]);
+      }
+      for(String key: scores.keySet()){
+        JSONObject data = new JSONObject();
+        data.put("score",key);
+        data.put("count",scores.get(key));
+        data.put("percent",(((Long)scores.get(key)).longValue()*100)/total);
+        if(Integer.parseInt(key)>8){
+          data.put("category","promoter");
+        }else if(Integer.parseInt(key)<7){
+          data.put("category","detractor");
+        }else data.put("category","passive");
         resposesByScores.put(data);
       }
       return Response.ok(resposesByScores.toString());

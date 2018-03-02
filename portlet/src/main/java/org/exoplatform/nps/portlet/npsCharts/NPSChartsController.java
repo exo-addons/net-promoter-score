@@ -144,10 +144,11 @@ public class NPSChartsController {
       long typeId=sType.getId();
 
       data.set("typeId",typeId);
-
-      long scorsnbr= npsService.getScoreCount(typeId, true);
-      long detractorsNbr= npsService.getDetractorsCount(typeId, true);
-      long promotersNbr= npsService.getPromotersCount(typeId, true);
+      long firstScoreDate=npsService.getFirstScoreEntries(typeId).getPostedTime();
+      long today= new Date().getTime();
+      long scorsnbr= npsService.getScoreCount(typeId, true,firstScoreDate,today);
+      long detractorsNbr= npsService.getDetractorsCount(typeId, true,firstScoreDate,today);
+      long promotersNbr= npsService.getPromotersCount(typeId, true,firstScoreDate,today);
       long passivesNbr= scorsnbr-(promotersNbr+detractorsNbr);
 
 
@@ -157,7 +158,7 @@ public class NPSChartsController {
 
       float npScore= promotersPrc-detractorsPrc;
 
-      data.set("scorsnbr",npsService.getScoreCount(typeId,false));
+      data.set("scorsnbr",npsService.getScoreCount(typeId,false,firstScoreDate,today));
       data.set("detractorsNbr",detractorsNbr);
       data.set("promotersNbr",promotersNbr);
       data.set("passivesNbr",passivesNbr);

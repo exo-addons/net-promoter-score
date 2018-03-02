@@ -29,26 +29,26 @@ import java.util.Date;
 @ExoEntity
 @Table(name = "NPS_SCORE_ENTRY")
 @NamedQueries({
-        @NamedQuery(name = "scoreEntryEntity.findAllOrderByDesc", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId order by a.id desc"),
-        @NamedQuery(name = "scoreEntryEntity.findAllOrderByAsc", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId order by a.id asc"),
-        @NamedQuery(name = "scoreEntryEntity.findEnabledOrderByDesc", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.enabled = true order by a.id desc"),
-        @NamedQuery(name = "scoreEntryEntity.findPromoters", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId  and a.score >= 9  order by a.id desc"),
-        @NamedQuery(name = "scoreEntryEntity.findDetractors", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.score <= 6  order by a.id desc"),
-        @NamedQuery(name = "scoreEntryEntity.findPassives", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId  and a.score < 9 and  a.score > 6  order by a.id desc"),
-        @NamedQuery(name = "scoreEntryEntity.count", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId "),
-        @NamedQuery(name = "scoreEntryEntity.countGroupdByScores", query = "SELECT a.score, count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId group by a.score"),
-        @NamedQuery(name = "scoreEntryEntity.countAllPromoters", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId  and a.score >= 9"),
-        @NamedQuery(name = "scoreEntryEntity.countAllDetractors", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.score <= 6"),
-        @NamedQuery(name = "scoreEntryEntity.countEnabled", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.enabled = true"),
-        @NamedQuery(name = "scoreEntryEntity.countPromoters", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId  and a.score >= 9 and  a.enabled = true"),
-        @NamedQuery(name = "scoreEntryEntity.countDetractors", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.score <= 6 and  a.enabled = true"),
+        @NamedQuery(name = "scoreEntryEntity.findAllOrderByDesc", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.postedTime > :startDate and a.postedTime < :endDate order by a.id desc"),
+        @NamedQuery(name = "scoreEntryEntity.findAllOrderByAsc", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId  order by a.id asc"),
+        @NamedQuery(name = "scoreEntryEntity.findEnabledOrderByDesc", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.enabled = true and a.postedTime > :startDate and a.postedTime < :endDate  order by a.id desc"),
+        @NamedQuery(name = "scoreEntryEntity.findPromoters", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId  and a.score >= 9 and a.postedTime > :startDate and a.postedTime < :endDate   order by a.id desc"),
+        @NamedQuery(name = "scoreEntryEntity.findDetractors", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.score <= 6 and a.postedTime > :startDate and a.postedTime < :endDate   order by a.id desc"),
+        @NamedQuery(name = "scoreEntryEntity.findPassives", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId  and a.score < 9 and  a.score > 6 and a.postedTime > :startDate and a.postedTime < :endDate   order by a.id desc"),
+        @NamedQuery(name = "scoreEntryEntity.count", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId  and a.postedTime > :startDate and a.postedTime < :endDate "),
+        @NamedQuery(name = "scoreEntryEntity.countGroupdByScores", query = "SELECT a.score, count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.postedTime > :startDate and a.postedTime < :endDate and a.enabled = true  group by a.score"),
+        @NamedQuery(name = "scoreEntryEntity.countAllPromoters", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId  and a.score >= 9 and a.postedTime > :startDate and a.postedTime < :endDate "),
+        @NamedQuery(name = "scoreEntryEntity.countAllDetractors", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.score <= 6 and a.postedTime > :startDate and a.postedTime < :endDate "),
+        @NamedQuery(name = "scoreEntryEntity.countEnabled", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.enabled = true and a.postedTime > :startDate and a.postedTime < :endDate "),
+        @NamedQuery(name = "scoreEntryEntity.countPromoters", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId  and a.score >= 9 and  a.enabled = true and a.postedTime > :startDate and a.postedTime < :endDate "),
+        @NamedQuery(name = "scoreEntryEntity.countDetractors", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.score <= 6 and  a.enabled = true and a.postedTime > :startDate and a.postedTime < :endDate "),
         @NamedQuery(name = "scoreEntryEntity.countEnabledByDate", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.postedTime < :toDate and a.enabled = true"),
         @NamedQuery(name = "scoreEntryEntity.countPromotersByDate", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId  and a.score >= 9 and a.postedTime < :toDate and  a.enabled = true"),
         @NamedQuery(name = "scoreEntryEntity.countDetractorsByDate", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.score <= 6 and a.postedTime < :toDate and  a.enabled = true"),
         @NamedQuery(name = "scoreEntryEntity.countEnabledByPeriod", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.postedTime > :fromDate and a.postedTime < :toDate and a.enabled = true"),
         @NamedQuery(name = "scoreEntryEntity.countPromotersByPeriod", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId  and a.score >= 9 and a.postedTime > :fromDate and a.postedTime < :toDate and  a.enabled = true"),
         @NamedQuery(name = "scoreEntryEntity.countDetractorsByPeriod", query = "SELECT count(a.id) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.score <= 6 and a.postedTime > :fromDate and a.postedTime < :toDate and  a.enabled = true"),
-        @NamedQuery(name = "scoreEntryEntity.avgEnabled", query = "SELECT avg(a.score) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.enabled = true"),
+        @NamedQuery(name = "scoreEntryEntity.avgEnabled", query = "SELECT avg(a.score) FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.enabled = true and a.postedTime > :startDate and a.postedTime < :endDate"),
         @NamedQuery(name = "scoreEntryEntity.findByUserId", query = "SELECT a FROM NPSScoreEntryEntity a where a.typeId = :typeId and a.userId = :userId order by a.id desc"),
         @NamedQuery(name = "scoreEntryEntity.findById", query = "SELECT a FROM NPSScoreEntryEntity a where a.id = :id") })
 @Data
@@ -80,5 +80,10 @@ public class ScoreEntryEntity {
 
   @Column(name = "TYPE_ID")
   private long   typeId;
+
+
+  @Column(name = "RESPONDED")
+  private Boolean   responded;
+
 
 }

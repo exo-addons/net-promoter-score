@@ -85,4 +85,10 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="nps-addon" id="1.0.0-8">
+    <addColumn tableName="NPS_SCORE_ENTRY">
+      <column name="RESPONDED" type="BOOLEAN"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

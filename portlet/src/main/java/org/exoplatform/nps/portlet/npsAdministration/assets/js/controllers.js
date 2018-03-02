@@ -18,6 +18,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.weeklyNpScore = [];
         $scope.chartTypes = [];
         $scope.selectedChartType = {};
+		$scope.startDate=0;
+		$scope.endDate=(new Date()).getTime();
 
 
               var lessThan3Day = new Date();
@@ -107,6 +109,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             "curveType": "function",
             "tooltip": {isHtml: true},
             "focusTarget": 'category',
+			"width": 900,
+            "height": 350,
             "vAxis": {
                 "title": "",
                 "gridlines": {
@@ -129,7 +133,6 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 
         $scope.ColumnChartObject.type = "ColumnChart";
 
-
         $scope.ColumnChartObject.options = {
             width:817,height:500,
             colors: ['#476a9c']
@@ -151,8 +154,11 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             $scope.resultMessage = text;
         }
 
-        $scope.hello = function (dates) {
-alert('hey, selectedTemplateName has changed!');
+        $scope.setRange = function (dates) {
+			$scope.startDate=dates[0].getTime();
+			$scope.endDate=dates[dates.length-1].getTime();
+			$scope.loadData($scope.typeId);
+			$scope.loadScores($scope.typeId, $scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage, $scope.respCat);
         }
 
         $scope.openTab = function (tabName) {
@@ -237,7 +243,7 @@ alert('hey, selectedTemplateName has changed!');
         $scope.loadScores = function (typeId, offset, limit, respCat) {
             $http({
                 method: 'GET',
-                url: npsAdminContainer.jzURL('NPSAdministrationController.getScores') + "&typeId=" + typeId + "&respCat=" + respCat + "&offset=" + offset + "&limit=" + limit
+                url: npsAdminContainer.jzURL('NPSAdministrationController.getScores') + "&typeId=" + typeId + "&respCat=" + respCat + "&offset=" + offset + "&limit=" + limit + "&startDate=" + $scope.startDate + "&endDate=" + $scope.endDate
             }).then(function successCallback(data) {
                 $scope.scores = data.data;
                 $scope.showAlert = false;
@@ -251,7 +257,7 @@ alert('hey, selectedTemplateName has changed!');
         $scope.loadData = function (typeId) {
             $http({
                 method: 'GET',
-                url: npsAdminContainer.jzURL('NPSAdministrationController.getData') + "&typeId=" + typeId
+                url: npsAdminContainer.jzURL('NPSAdministrationController.getData') + "&typeId=" + typeId + "&startDate=" + $scope.startDate + "&endDate=" + $scope.endDate
             }).then(function successCallback(data) {
                 $scope.scorsnbr = data.data.scorsnbr;
                 $scope.detractorsNbr = data.data.detractorsNbr;
@@ -266,6 +272,7 @@ alert('hey, selectedTemplateName has changed!');
                 $scope.npScore = data.data.npScore;
                 $scope.scorstoShownbr = $scope.scorsnbr;
                 $scope.meanScore = data.data.meanScore;
+				$scope.startDate = data.data.startDate;
 
                 if(data.data.meanScore < 7){
                     $scope.classMeanScore = "detractor";
@@ -340,10 +347,7 @@ alert('hey, selectedTemplateName has changed!');
                     NPSArray.push({c: [{v: obj.npsDate}, {v: obj.score, f: obj.npsDetails}, {v: 70}, {v: 25}]});
                 }
 
-                $scope.lineChartObject.options = {
-                    width: 900,
-                    height: 350,
-                }
+
                 $scope.lineChartObject.data = {
                     "cols": [{
                             id: "day",
@@ -376,12 +380,12 @@ alert('hey, selectedTemplateName has changed!');
         $scope.getResponsesByScoreChart = function () {
             $http({
                 method: 'GET',
-                url: npsAdminContainer.jzURL('NPSAdministrationController.getRespCountByScore') + "&typeId=" + $scope.typeId
+                url: npsAdminContainer.jzURL('NPSAdministrationController.getRespCountByScore') + "&typeId=" + $scope.typeId + "&startDate=" + $scope.startDate + "&endDate=" + $scope.endDate
             }).then(function successCallback(data) {
                 $scope.statNpScore = data.data;
+                $scope.statColumnScore = data.data;
                 var NPSArray = [];
-
-
+                var color = "#476a9c";
                 for (var i = 0; i < $scope.statNpScore.length; i++) {
                     var obj = $scope.statNpScore[i];
                     NPSArray.push({c: [{v: obj.score}, {v: obj.count}, {v: color}]});
@@ -389,8 +393,8 @@ alert('hey, selectedTemplateName has changed!');
 
                 $scope.ColumnChartObject.data =
                     {"cols": [
-                        {id: "t", label: "", type: "number"},
-                        {id: "s", label: "", type: "number"}
+                        {id: "t", label: "", type: "string", color: ""},
+                        {id: "s", label: "", type: "number", color: ""}
                     ], "rows": NPSArray};
 
                 deferred.resolve(data);

@@ -278,7 +278,7 @@
                 </li>
 
 
-                <li class="span4 timerangPicker"><md-date-range ng-model="pickerModel" md-on-select="hello($dates)" auto-confirm="true"> </md-date-range></li>
+                <li class="span4 timerangPicker"><md-date-range ng-model="pickerModel" md-on-select="setRange($dates)" auto-confirm="true"> </md-date-range></li>
 
 
 
@@ -311,38 +311,87 @@
                 <div class="row-fluid" style="margin: auto; height: auto" ng-show="showGraphs">
                     <!--<div google-chart class="span4" chart="gaugeChartObject" style="height:450px"></div>-->
                     <div class="span5 npsScore">
-                    <div class="nps-circle-container">
-                    <div class="brand-circle-large brand-circle-large-positive" value="{{npScore}}">
-                    <h2>NPS</h2>
-                    <!--<img class="circle-background" src="/nps-addon-portlet/skin/images/circle-bg-white.png">-->
-                    <!--<img class="dotted-circle" src="/nps-addon-portlet/skin/images/new-dotted-line-dark.svg">-->
+                        <div class="nps-circle-container">
+                            <div class="brand-circle-large brand-circle-large-positive" value="{{npScore}}">
+                                <h2>NPS</h2>
+                                <!--<img class="circle-background" src="/nps-addon-portlet/skin/images/circle-bg-white.png">-->
+                                <!--<img class="dotted-circle" src="/nps-addon-portlet/skin/images/new-dotted-line-dark.svg">-->
 
-                    <svg viewBox="0 0 100 100" style="display: block; width: 100%;">
-                    <path d="M 50,50 m 0,-48 a 48,48 0 1 1 0,96 a 48,48 0 1 1 0,-96" stroke="#d0d0d0" stroke-width="1" fill-opacity="0"></path>
-                    <path id="shape" d="M 50,50 m 0,-48 a 48,48 0 1 1 0,96 a 48,48 0 1 1 0,-96" stroke="{{npsColor}}" stroke-width="4" fill-opacity="0" style="stroke-dasharray: 301.635, 301.635; stroke-dashoffset: {{dashoffset}};" stroke-linecap="round"></path></svg>
-                    <div class="progressbar-text" style="position: absolute; left: 50%; top: 50%; padding: 0px; margin: 0px; transform: translate(-50%, -50%); color: #476a9c; font-family: &quot;Proxima Nova&quot;, Helvetica, sans-serif; font-size: 50px;">{{npScore}}</div>
+                                <svg viewBox="0 0 100 100" style="display: block; width: 100%;">
+                                    <path d="M 50,50 m 0,-48 a 48,48 0 1 1 0,96 a 48,48 0 1 1 0,-96" stroke="#d0d0d0" stroke-width="1" fill-opacity="0"></path>
+                                    <path id="shape" d="M 50,50 m 0,-48 a 48,48 0 1 1 0,96 a 48,48 0 1 1 0,-96" stroke="{{npsColor}}" stroke-width="4" fill-opacity="0" style="stroke-dasharray: 301.635, 301.635; stroke-dashoffset: {{dashoffset}};" stroke-linecap="round"></path></svg>
+                                <div class="progressbar-text" style="position: absolute; left: 50%; top: 50%; padding: 0px; margin: 0px; transform: translate(-50%, -50%); color: #476a9c; font-family: &quot;Proxima Nova&quot;, Helvetica, sans-serif; font-size: 50px;">{{npScore}}</div>
+                            </div>
+                        </div>
                     </div>
+                    <!--
+                                        <div google-chart class="span5" chart="pieChartObject" width="370" height="450" style="height:450px;width:370px;float: right"></div>
+                    -->
+                    <div class="span7" style="height:450px,padding: 50px;float: right" >
+                        <div class="charts" >
+                            <div class="chart chart--dev">
+                                <ul class="chart--horiz">
+                                    <li class="chart__bar chart__promoter" style="width: {{promotersPrc}}%;">
+          <span class="chart__label">
+            {{promotersNbr}} Promoters : {{promotersPrc}}%
+          </span>
+                                    </li>
+                                    <li class="chart__bar chart__passive" style="width: {{passivesPrc}}%;">
+          <span class="chart__label">
+            {{passivesNbr}} Passives : {{passivesPrc}}%
+          </span>
+                                    </li>
+                                    <li class="chart__bar chart__detractor" style="width: {{detractorsPrc}}%;">
+          <span class="chart__label">
+            {{detractorsNbr}} Detractors : {{detractorsPrc}}%
+          </span>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
                     </div>
+                    <div class="row-fluid">
+
+                        <div class="metric span3">
+                            <h2 class="value nps {{classMeanScore}}">
+                                {{meanScore}}
+                            </h2>
+                            <h5 class="description">NPS Mean Score</h5>
+                            <div class="separator {{classMeanScore}}"></div>
+                        </div>
+
+                        <!--
+                                            <div google-chart class="span9" chart="ColumnChartObject" style="width:74.35897436%!important;height:500px"></div>
+                        -->
+                        <div  class="span9"  style="width:74.35897436%!important;height:500px">
+
+                            <div class="verticalChart">
+
+                                <div class="singleBar" ng-repeat="score in statColumnScore">
+
+                                    <div class="bar-{{score.category}}">
+
+                                        <div class="value-{{score.category}}" style="height: {{score.percent}}%;">
+                                            <span class="value-span" style="color: rgb(45, 137, 239); display: inline;">{{score.count}}</span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="title">{{score.score}}</div>
+
+                                </div>
+
+
+                                <div class="clearfix"></div>
+
+                            </div>
+                        </div>
                     </div>
-                    <div google-chart class="span5" chart="pieChartObject" width="370" height="450" style="height:450px;width:370px;float: right"></div>
+                    <div class="span12" style="float: none; margin: auto; height: auto" ng-show="!showGraphs">
+                        <h3 class="scoresDiv no-graph">{{i18n.noScore}}</h3>
+                    </div>
                 </div>
-                <div class="row-fluid">
-
-                    <div class="metric span3">
-                        <h2 class="value nps {{classMeanScore}}">
-                            {{meanScore}}
-                        </h2>
-                        <h5 class="description">NPS Mean Score</h5>
-                        <div class="separator {{classMeanScore}}"></div>
-                    </div>
-
-                    <div google-chart class="span9" chart="ColumnChartObject" style="width:74.35897436%!important;height:500px"></div>
-
-                </div>
-                <div class="span12" style="float: none; margin: auto; height: auto" ng-show="!showGraphs">
-                    <h3 class="scoresDiv no-graph">{{i18n.noScore}}</h3>
-                </div>
-
             </div>
             <!--end Dashbord tab-->
 
