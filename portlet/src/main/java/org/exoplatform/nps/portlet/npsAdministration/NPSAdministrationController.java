@@ -172,6 +172,7 @@ public class NPSAdministrationController {
         data.set("allDetractorsNbr",allDetractorsNbr);
         data.set("allPromotersNbr",allPromotersNbr);
         data.set("allPassivesNbr",allPassivesNbr);
+        data.set("disablesScoresNbr",allScorsnbr-scorsnbr);
         float dashoffset = 300-(3*npScore);
         data.set("dashoffset",String.format("%.2f", dashoffset));
 
@@ -334,7 +335,12 @@ public class NPSAdministrationController {
         JSONObject data = new JSONObject();
         data.put("score",key);
         data.put("count",scores.get(key));
-        data.put("percent",(((Long)scores.get(key)).longValue()*100)/total);
+        if(total!=0){
+          data.put("percent",(((Long)scores.get(key)).longValue()*100)/total);
+        }else{
+          data.put("percent",0);
+        }
+
         if(Integer.parseInt(key)>8){
           data.put("category","promoter");
         }else if(Integer.parseInt(key)<7){

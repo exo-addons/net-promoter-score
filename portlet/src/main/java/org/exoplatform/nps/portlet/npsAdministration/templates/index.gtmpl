@@ -373,8 +373,17 @@
                         </div>
                     </div>
                     <div class="span12 meanings">
+                        <div class="span3">
+                            <div class="metric">
+                                <h2 class="value nps {{classMeanScore}}">
+                                    {{scorsnbr}}
+                                </h2>
+                                <h5 class="description">Total Responses</h5>
+                                <div class="separator {{classMeanScore}}"></div>
+                            </div>
+                        </div>
                     <div class="span3">
-                        <div class="metric">
+                         <div class="metric">
                             <h2 class="value nps {{classMeanScore}}">
                                 {{meanScore}}
                             </h2>
@@ -383,9 +392,24 @@
                         </div>
                     </div>
 
-                    <div class="span3"></div>
-                    <div class="span3"></div>
-                    <div class="span3"></div>
+                    <div class="span3">
+                        <div class="metric">
+                            <h2 class="value nps {{classMeanScore}}">
+                                {{meanScore}}
+                            </h2>
+                            <h5 class="description">Responses Rate</h5>
+                            <div class="separator {{classMeanScore}}"></div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="metric">
+                            <h2 class="value nps {{classMeanScore}}">
+                                {{disablesScoresNbr}}
+                            </h2>
+                            <h5 class="description">Disabled Resposes</h5>
+                            <div class="separator {{classMeanScore}}"></div>
+                        </div>
+                    </div>
                         <!--
                                             <div google-chart class="span9" chart="ColumnChartObject" style="width:74.35897436%!important;height:500px"></div>
                         -->
@@ -446,8 +470,12 @@
             <!--begin feedbacks tab-->
             <div id="feedbacks" class="tabcontent" style="display: none;">
 
+<!--                <div class="btn-group" style="width:10%">
+                    <button class="responses-btn"  ng-click="setFilter('all')">All</button>
+                    <button class="responses-btn"  ng-click="setFilter('enables')">Enabled</button>
 
-                <div class="btn-group" style="width:100%">
+                </div>-->
+                <div class="btn-group" style="width:90%">
                     <button class="responses-btn"  ng-click="setCategory('all')">{{scorsnbr}} Responses</button>
                     <button class="responses-btn promoter"  ng-click="setCategory('promoters')">{{allPromotersNbr}} Promoters</button>
                     <button class="responses-btn detractor"  ng-click="setCategory('detractors')">{{allDetractorsNbr}} Detractors</button>

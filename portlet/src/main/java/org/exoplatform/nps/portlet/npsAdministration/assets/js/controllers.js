@@ -9,6 +9,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.meanScore = 0;
         $scope.classMeanScore = "promoter";
         $scope.respCat = "all";
+        $scope.repFilter = "all";
         $scope.selectModel = {};
         $scope.showForm = false;
         $scope.showGraphs = false;
@@ -187,6 +188,11 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             $scope.setPage(0);
         }
 
+         $scope.setFilter = function (repFilter) {
+            $scope.repFilter = repFilter;
+            $scope.setPage(0);
+         }
+
         $scope.loadScoreTypes = function (isDefault, question = null) {
             $http({
                 method: 'GET',
@@ -271,8 +277,10 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 $scope.allPassivesNbr = data.data.allPassivesNbr;
                 $scope.npScore = data.data.npScore;
                 $scope.scorstoShownbr = $scope.scorsnbr;
+                $scope.disablesScoresNbr = data.data.disablesScoresNbr;
                 $scope.meanScore = data.data.meanScore;
 				$scope.startDate = data.data.startDate;
+
 
                 if(data.data.meanScore < 7){
                     $scope.classMeanScore = "detractor";
