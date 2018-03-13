@@ -91,4 +91,11 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="nps-addon" id="1.0.0-9">
+    <update tableName="NPS_SCORE_ENTRY">
+      <column name="RESPONDED" valueBoolean="true" />
+      <where>RESPONDED IS NULL</where>
+    </update>
+  </changeSet>
+
 </databaseChangeLog>

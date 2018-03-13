@@ -375,39 +375,39 @@
                     <div class="span12 meanings">
                         <div class="span3">
                             <div class="metric">
-                                <h2 class="value nps {{classMeanScore}}">
-                                    {{scorsnbr}}
+                                <h2 class="value nps">
+                                    {{enabledScorsNbr}}
                                 </h2>
-                                <h5 class="description">Total Responses</h5>
-                                <div class="separator {{classMeanScore}}"></div>
+                                <h5 class="description">Enabled Responses</h5>
+                                <div class="separator"></div>
                             </div>
                         </div>
                     <div class="span3">
                          <div class="metric">
-                            <h2 class="value nps {{classMeanScore}}">
+                            <h2 class="value nps">
                                 {{meanScore}}
                             </h2>
                             <h5 class="description">NPS Mean Score</h5>
-                            <div class="separator {{classMeanScore}}"></div>
+                            <div class="separator"></div>
                         </div>
                     </div>
 
                     <div class="span3">
                         <div class="metric">
-                            <h2 class="value nps {{classMeanScore}}">
-                                {{meanScore}}
+                            <h2 class="value nps">
+                                {{responseRate}} %
                             </h2>
                             <h5 class="description">Responses Rate</h5>
-                            <div class="separator {{classMeanScore}}"></div>
+                            <div class="separator"></div>
                         </div>
                     </div>
                     <div class="span3">
                         <div class="metric">
-                            <h2 class="value nps {{classMeanScore}}">
+                            <h2 class="value nps">
                                 {{disablesScoresNbr}}
                             </h2>
-                            <h5 class="description">Disabled Resposes</h5>
-                            <div class="separator {{classMeanScore}}"></div>
+                            <h5 class="description">Disabled Responses</h5>
+                            <div class="separator"></div>
                         </div>
                     </div>
                         <!--
@@ -475,7 +475,7 @@
                     <button class="responses-btn"  ng-click="setFilter('enables')">Enabled</button>
 
                 </div>-->
-                <div class="btn-group" style="width:90%">
+                <div class="btn-group" style="width:100%">
                     <button class="responses-btn"  ng-click="setCategory('all')">{{scorsnbr}} Responses</button>
                     <button class="responses-btn promoter"  ng-click="setCategory('promoters')">{{allPromotersNbr}} Promoters</button>
                     <button class="responses-btn detractor"  ng-click="setCategory('detractors')">{{allDetractorsNbr}} Detractors</button>

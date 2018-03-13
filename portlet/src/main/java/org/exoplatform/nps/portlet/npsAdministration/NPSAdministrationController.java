@@ -154,6 +154,7 @@ public class NPSAdministrationController {
       float promotersPrc=((float)promotersNbr/(float)scorsnbr)*100;
       float passivesPrc=((float)passivesNbr/(float)scorsnbr)*100;
       float npScore= promotersPrc-detractorsPrc;
+      data.set("enabledScorsNbr",scorsnbr);
       data.set("startDate",startDate);
       data.set("detractorsNbr",detractorsNbr);
       data.set("promotersNbr",promotersNbr);
@@ -168,6 +169,11 @@ public class NPSAdministrationController {
         long allDetractorsNbr= npsService.getDetractorsCount(typeId, false, startDate, endDate);
         long allPromotersNbr= npsService.getPromotersCount(typeId, false, startDate, endDate);
         long allPassivesNbr= allScorsnbr-(allDetractorsNbr+allPromotersNbr);
+        long allCount=npsService.getAllCount(typeId, startDate, endDate);
+        double responseRate=0;
+            if(allCount>0){
+                responseRate= (allScorsnbr*100)/allCount;
+        }
         data.set("scorsnbr",allScorsnbr);
         data.set("allDetractorsNbr",allDetractorsNbr);
         data.set("allPromotersNbr",allPromotersNbr);
@@ -177,6 +183,7 @@ public class NPSAdministrationController {
         data.set("dashoffset",String.format("%.2f", dashoffset));
 
       data.set("meanScore",String.format("%.2f",npsService.getMeanScore(typeId, startDate, endDate)));
+      data.set("responseRate",responseRate);
 
       return Response.ok(data.toString());
     } catch (Throwable e) {
@@ -190,6 +197,9 @@ public class NPSAdministrationController {
   @MimeType.JSON
   @Jackson
   public Response getNPSLineChart(Long typeId, String chartType, Long startDate, Long endDate) {
+    if(startDate==0){
+      startDate =npsService.getFirstScoreEntries(typeId).getPostedTime();
+    }
     if(chartType.equals("global")){
       return  getWeeklyNPS(typeId, startDate, endDate);
     }else if(chartType.equals("weeklyOver")){
@@ -212,7 +222,7 @@ public class NPSAdministrationController {
     try {
       SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
       JSONArray npsList = new JSONArray();
-      List <NPSDetailsDTO> npsDetails = Utils.getWeeklyNPS(typeId);
+      List <NPSDetailsDTO> npsDetails = Utils.getWeeklyNPS(typeId, startDate, endDate);
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
         Calendar c=Calendar.getInstance();
@@ -239,7 +249,7 @@ public class NPSAdministrationController {
     try {
 
       JSONArray npsList = new JSONArray();
-      List <NPSDetailsDTO> npsDetails = Utils.getNPSByWeek(typeId);
+      List <NPSDetailsDTO> npsDetails = Utils.getNPSByWeek(typeId, startDate, endDate);
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
         nps_.put("npsDate",sdf.format(nps.getNpsToDate()));
@@ -263,7 +273,7 @@ public class NPSAdministrationController {
     try {
 
       JSONArray npsList = new JSONArray();
-      List <NPSDetailsDTO> npsDetails = Utils.getNPSByMonth(typeId);
+      List <NPSDetailsDTO> npsDetails = Utils.getNPSByMonth(typeId, startDate, endDate);
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
         nps_.put("npsDate",sdf.format(nps.getNpsToDate()));
@@ -287,7 +297,7 @@ public class NPSAdministrationController {
     try {
 
       JSONArray npsList = new JSONArray();
-      List <NPSDetailsDTO> npsDetails = Utils.getRollingAvg(typeId, period);
+      List <NPSDetailsDTO> npsDetails = Utils.getRollingAvg(typeId, period, startDate, endDate);
       for(NPSDetailsDTO nps : npsDetails){
         JSONObject nps_ = new JSONObject();
         nps_.put("npsDate",sdf.format(nps.getNpsToDate()));

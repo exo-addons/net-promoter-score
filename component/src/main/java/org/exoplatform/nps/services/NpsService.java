@@ -79,7 +79,7 @@ public class NpsService {
     if (offset < 0) {
       throw new IllegalArgumentException("Method getScores - Parameter 'offset' must be positive");
     }
-    List<ScoreEntryEntity> entities = scoreEntryDAO.getScoreEntries(typeId, offset, limit, startDate, endDate);
+    List<ScoreEntryEntity> entities = scoreEntryDAO.getAllScoreEntries(typeId, offset, limit, startDate, endDate);
     List<ScoreEntryDTO> dtos = new ArrayList<ScoreEntryDTO>();
     for (ScoreEntryEntity entity : entities) {
       if(entity.getEnabled()==null) entity.setEnabled(true);
@@ -93,7 +93,7 @@ public class NpsService {
     if (offset < 0) {
       throw new IllegalArgumentException("Method getScores - Parameter 'offset' must be positive");
     }
-    List<ScoreEntryEntity> entities = scoreEntryDAO.getPromoterScoreEntries(typeId, offset, limit, startDate, endDate);
+    List<ScoreEntryEntity> entities = scoreEntryDAO.getAllPromoterScoreEntries(typeId, offset, limit, startDate, endDate);
     List<ScoreEntryDTO> dtos = new ArrayList<ScoreEntryDTO>();
     for (ScoreEntryEntity entity : entities) {
       if(entity.getEnabled()==null) entity.setEnabled(true);
@@ -108,7 +108,7 @@ public class NpsService {
     if (offset < 0) {
       throw new IllegalArgumentException("Method getScores - Parameter 'offset' must be positive");
     }
-    List<ScoreEntryEntity> entities = scoreEntryDAO.getDetractorScoreEntries(typeId, offset, limit, startDate, endDate);
+    List<ScoreEntryEntity> entities = scoreEntryDAO.getAllDetractorScoreEntries(typeId, offset, limit, startDate, endDate);
     List<ScoreEntryDTO> dtos = new ArrayList<ScoreEntryDTO>();
     for (ScoreEntryEntity entity : entities) {
       if(entity.getEnabled()==null) entity.setEnabled(true);
@@ -123,7 +123,7 @@ public class NpsService {
     if (offset < 0) {
       throw new IllegalArgumentException("Method getScores - Parameter 'offset' must be positive");
     }
-    List<ScoreEntryEntity> entities = scoreEntryDAO.getPassiveScoreEntries(typeId, offset, limit, startDate, endDate);
+    List<ScoreEntryEntity> entities = scoreEntryDAO.getAllPassiveScoreEntries(typeId, offset, limit, startDate, endDate);
     List<ScoreEntryDTO> dtos = new ArrayList<ScoreEntryDTO>();
     for (ScoreEntryEntity entity : entities) {
       if(entity.getEnabled()==null) entity.setEnabled(true);
@@ -165,7 +165,7 @@ public class NpsService {
 
   public List<Object[]>  countGroupdByScores(long typeId, long startDate, long endDate) {
 
-    return scoreEntryDAO.countGroupdByScores(typeId, startDate, endDate);
+    return scoreEntryDAO.countEnabledGroupdByScores(typeId, startDate, endDate);
 
   }
 
@@ -192,40 +192,44 @@ public class NpsService {
 
   public long getPromotersCountByDate(long typeId, long toDate) {
 
-    return scoreEntryDAO.getPromotersCountByDate(typeId, toDate);
+    return scoreEntryDAO.getEnabledPromotersCountByDate(typeId, toDate);
   }
 
 
   public long getDetractorsCountByDate(long typeId, long toDate) {
 
-    return scoreEntryDAO.getDetractorsCountByDate(typeId, toDate);
+    return scoreEntryDAO.getEnabledDetractorsCountByDate(typeId, toDate);
   }
 
 
 
   public long getScoreCountByDate(long typeId, long toDate) {
-    return scoreEntryDAO.getScoreEntriesCountByDate(typeId, toDate);
+    return scoreEntryDAO.getEnabledScoreEntriesCountByDate(typeId, toDate);
   }
 
   public long getPromotersCountByPeriod(long typeId, long fromDate, long toDate) {
 
-    return scoreEntryDAO.getPromotersCountByPeriod(typeId,fromDate , toDate);
+    return scoreEntryDAO.getEnabledPromotersCountByPeriod(typeId,fromDate , toDate);
   }
 
 
   public long getDetractorsCountByPeriod(long typeId, long fromDate, long toDate) {
 
-    return scoreEntryDAO.getDetractorsCountByPeriod(typeId,fromDate , toDate);
+    return scoreEntryDAO.getEnabledDetractorsCountByPeriod(typeId,fromDate , toDate);
   }
 
 
 
   public long getScoreCountByPeriod(long typeId, long fromDate, long toDate) {
-    return scoreEntryDAO.getScoreEntriesCountByPeriod(typeId,fromDate , toDate);
+    return scoreEntryDAO.getEnabledScoreEntriesCountByPeriod(typeId,fromDate , toDate);
   }
 
   public double getMeanScore(long typeId, long startDate, long endDate) {
-    return scoreEntryDAO.getScoresAvg(typeId, startDate, endDate);
+    return scoreEntryDAO.getEnabledScoresAvg(typeId, startDate, endDate);
+  }
+
+  public long getAllCount(long typeId, long fromDate, long toDate) {
+    return scoreEntryDAO.getAllCount(typeId,fromDate , toDate);
   }
 
 

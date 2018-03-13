@@ -63,32 +63,6 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             {name: "By month", value: "mounthly"}
         ];
         $scope.selectedChartType = {name: "30-Days rolling Avg", value: "rolling30"};
-        $scope.pieChartObject = {};
-        $scope.pieChartObject.options = {
-            backgroundColor: 'transparent',
-            legend: {position: 'bottom'},
-            width: '370', height: '450',
-            chartArea: {top: 0, width: '80%', height: '80%'},
-            pieSliceText: 'label',
-            slices: {
-                0: {color: '#6ccbae'},
-                1: {color: '#ffca7a'},
-                2: {color: '#dea2a2'}
-            }
-        };
-        $scope.pieChartObject.type = "PieChart";
-        $scope.gaugeChartObject = {};
-        $scope.gaugeChartObject.type = "Gauge";
-        $scope.gaugeChartObject.options = {
-            majorTicks: [-100, -50, 0, 50, 100],
-            min: -100,
-            redFrom: -100,
-            redTo: -30,
-            yellowFrom: -30,
-            yellowTo: 30,
-            greenFrom: 30,
-            greenTo: 100,
-        };
 
 
         $scope.lineChartObject = {};
@@ -265,7 +239,9 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 method: 'GET',
                 url: npsAdminContainer.jzURL('NPSAdministrationController.getData') + "&typeId=" + typeId + "&startDate=" + $scope.startDate + "&endDate=" + $scope.endDate
             }).then(function successCallback(data) {
+
                 $scope.scorsnbr = data.data.scorsnbr;
+                $scope.enabledScorsNbr = data.data.enabledScorsNbr;
                 $scope.detractorsNbr = data.data.detractorsNbr;
                 $scope.promotersNbr = data.data.promotersNbr;
                 $scope.passivesNbr = data.data.passivesNbr;
@@ -280,6 +256,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 $scope.disablesScoresNbr = data.data.disablesScoresNbr;
                 $scope.meanScore = data.data.meanScore;
 				$scope.startDate = data.data.startDate;
+				$scope.responseRate = Math.floor(data.data.responseRate);
 
 
                 if(data.data.meanScore < 7){
@@ -292,11 +269,6 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                     $scope.showGraphs = false;
                 } else {
                     $scope.showGraphs = true;
-                    $scope.gaugeChartObject.data = [
-                        ['Label', 'Value'],
-                        ['NPS', parseFloat($scope.npScore)]
-                    ];
-
                     $scope.npScore = parseFloat($scope.npScore);
                             $scope.dashoffset = data.data.dashoffset;
                             $scope.npsColor = "#f5ba7f";
@@ -313,23 +285,6 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                     else if($scope.npScore >= 8){$scope.npsColor = "rgba(60, 175, 140, 0.7)"}
 
 
-                    $scope.pieChartObject.data = {"cols": [
-                            {id: "t", label: "Topping", type: "string"},
-                            {id: "s", label: "Slices", type: "number"}
-                        ], "rows": [
-                            {c: [
-                                    {v: $scope.i18n.Promoters},
-                                    {v: $scope.promotersNbr},
-                                ]},
-                            {c: [
-                                    {v: $scope.i18n.Passives},
-                                    {v: $scope.passivesNbr}
-                                ]},
-                            {c: [
-                                    {v: $scope.i18n.Detractor},
-                                    {v: $scope.detractorsNbr}
-                                ]}
-                        ]};
                 }
                 $scope.getNPSLineChart();
                 $scope.getResponsesByScoreChart();
@@ -346,7 +301,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.getNPSLineChart = function () {
             $http({
                 method: 'GET',
-                url: npsAdminContainer.jzURL('NPSAdministrationController.getNPSLineChart') + "&typeId=" + $scope.typeId + "&chartType=" + $scope.selectedChartType.value
+                url: npsAdminContainer.jzURL('NPSAdministrationController.getNPSLineChart') + "&typeId=" + $scope.typeId + "&chartType=" + $scope.selectedChartType.value+ "&startDate=" + $scope.startDate + "&endDate=" + $scope.endDate
             }).then(function successCallback(data) {
                 $scope.statNpScore = data.data;
                 var NPSArray = [];

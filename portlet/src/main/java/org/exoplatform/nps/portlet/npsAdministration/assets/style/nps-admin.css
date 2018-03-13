@@ -536,6 +536,7 @@ a.actionIconde {
 /* MEAN SCORE */
 .metric {
     padding-left: 4%;
+    border-bottom-color: #476a9c;
 }
 .metric .value {
     color: #7f7c7d;
@@ -549,9 +550,10 @@ a.actionIconde {
     float: left;
     display: block;
     margin-right: 2.35765%;
-    width: 35.23176%;
+    width: 75.23176%;
     border-bottom: 2px solid #ddd9db;
     margin: 5px 0;
+    border-bottom-color: #476a9c;
 }
 
 .metric .value.detractor { color: rgba(144, 19, 21, 0.7);}

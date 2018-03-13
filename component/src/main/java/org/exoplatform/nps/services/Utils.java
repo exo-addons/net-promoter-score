@@ -163,6 +163,100 @@ public class Utils
 
     }
 
+
+    public static List<NPSDetailsDTO> getWeeklyNPS(long typeId, Long startDate, Long endDate){
+        List<NPSDetailsDTO> NPSScors=new ArrayList<NPSDetailsDTO>();
+        Calendar fromDate=Calendar.getInstance();
+        fromDate.setTimeInMillis(startDate);
+        int diff= Calendar.SATURDAY-fromDate.get(Calendar.DAY_OF_WEEK);
+        fromDate.add(Calendar.DATE, diff);
+        fromDate.set(Calendar.HOUR_OF_DAY, 0);
+        fromDate.set(Calendar.MINUTE, 0);
+        fromDate.set(Calendar.SECOND, 0);
+        Calendar toDate=Calendar.getInstance();
+        toDate.setTimeInMillis(endDate);
+        while(fromDate.before(toDate)){
+            NPSScors.add(calculateNpsByDate (typeId,fromDate.getTimeInMillis()));
+            fromDate.add(Calendar.DATE, 7);
+        }
+        if(fromDate.after(toDate)){
+            NPSScors.add(calculateNpsByDate (typeId,fromDate.getTimeInMillis()));
+        }
+        return NPSScors;
+    }
+
+
+    public static List<NPSDetailsDTO> getNPSByWeek(long typeId, Long startDate, Long endDate){
+        List<NPSDetailsDTO> NPSScors=new ArrayList<NPSDetailsDTO>();
+        Calendar fromDate=Calendar.getInstance();
+        fromDate.setTimeInMillis(startDate);
+        fromDate.set(Calendar.HOUR_OF_DAY, 0);
+        fromDate.set(Calendar.MINUTE, 0);
+        fromDate.set(Calendar.SECOND, 0);
+        Calendar toDate=Calendar.getInstance();
+        toDate.setTimeInMillis(endDate);
+        int diff= Calendar.SATURDAY-fromDate.get(Calendar.DAY_OF_WEEK)+2;
+        Calendar to_=Calendar.getInstance();
+        to_.setTime(fromDate.getTime());
+        to_.add(Calendar.DATE, diff);
+        while(fromDate.before(toDate)){
+            NPSScors.add(calculateNpsByPeriod (typeId,fromDate.getTimeInMillis(), to_.getTimeInMillis()));
+            fromDate.setTime(to_.getTime());
+            to_.add(Calendar.DATE, 7);
+        }
+
+        return NPSScors;
+    }
+
+
+
+    public static List<NPSDetailsDTO> getNPSByMonth(long typeId, Long startDate, Long endDate){
+        List<NPSDetailsDTO> NPSScors=new ArrayList<NPSDetailsDTO>();
+        Calendar fromDate=Calendar.getInstance();
+        fromDate.setTimeInMillis(startDate);
+        fromDate.set(Calendar.HOUR_OF_DAY, 0);
+        fromDate.set(Calendar.MINUTE, 0);
+        Calendar toDate=Calendar.getInstance();
+        toDate.setTimeInMillis(endDate);
+        Calendar to_=Calendar.getInstance();
+        to_.setTime(fromDate.getTime());
+        to_.set(Calendar.DAY_OF_MONTH, fromDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+        while(fromDate.before(toDate)){
+            NPSScors.add(calculateNpsByPeriod (typeId,fromDate.getTimeInMillis(), to_.getTimeInMillis()));
+            fromDate.set(Calendar.MONTH,fromDate.get(Calendar.MONTH)+1);
+            fromDate.set(Calendar.DAY_OF_MONTH,1);
+            to_.setTime(fromDate.getTime());
+            to_.set(Calendar.DAY_OF_MONTH, fromDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+        }
+
+        return NPSScors;
+    }
+
+
+    public static List<NPSDetailsDTO> getRollingAvg(long typeId, int period, Long startDate, Long endDate){
+        NpsService npsService= CommonsUtils.getService(NpsService.class);
+        List<NPSDetailsDTO> NPSScors=new ArrayList<NPSDetailsDTO>();
+
+        Calendar fromDate=Calendar.getInstance();
+        fromDate.setTimeInMillis(startDate);
+        fromDate.set(Calendar.HOUR_OF_DAY, 0);
+        fromDate.set(Calendar.MINUTE, 0);
+        fromDate.set(Calendar.SECOND, 0);
+        Calendar toDate=Calendar.getInstance();
+        toDate.setTimeInMillis(endDate);
+        Calendar from_=Calendar.getInstance();
+        from_.add(Calendar.DATE, - period);
+        while(toDate.after(fromDate)){
+            NPSScors.add(calculateNpsByPeriod (typeId,from_.getTimeInMillis(), toDate.getTimeInMillis()));
+            from_.add(Calendar.DATE, -7);
+            toDate.add(Calendar.DATE, -7);
+        }
+
+        List<NPSDetailsDTO> reverseNPSScors = Lists.reverse(NPSScors);
+        return reverseNPSScors;
+    }
+
+
     public static List<NPSDetailsDTO> getWeeklyNPS(long typeId){
         NpsService npsService= CommonsUtils.getService(NpsService.class);
         List<NPSDetailsDTO> NPSScors=new ArrayList<NPSDetailsDTO>();
