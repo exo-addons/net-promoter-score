@@ -25,7 +25,7 @@
                             <div class="scoreManagement">
                                 <select name="types" id="types"
                                         ng-options="type.typeName for type in scoreTypes track by type.id"
-                                        ng-model="selectModel" ng-change="getScoresbyType(selectModel.id)"></select>
+                                        ng-model="selectModel" ng-change="getScoresbyType(selectModel.id);getNPSLineChart()"></select>
 
                                 <a class="actionIcon" ng-click="getScoreType(typeId)" rel="tooltip" data-toggle="tooltip" data-original-title="{{i18n.editScoreType}}"> <i
                                         class="uiIconEdit uiIconLightGray" style=" font-size: 24px;"></i> </a>
@@ -292,7 +292,7 @@
                     </a>
                 </li>
                 <li class="item span1" id="trendsTab">
-                    <a class="" ng-click="openTab('trends')">
+                    <a class="" ng-click="openTab('trends'); getNPSLineChart()">
                         <i class="uiIconViewByChart"></i>
                         <span class="tabName show-calender">{{i18n.trends}}</span>
                     </a>
@@ -311,7 +311,7 @@
             <div id="dashboard" class="tabcontent active" style="display: block;">
 
 
-                <div class="row-fluid" style="margin: auto; height: auto" ng-show="showGraphs">
+                <div class="row-fluid" style="margin: auto; height: auto" ng-show="showDashGraphs">
                     <!--<div google-chart class="span4" chart="gaugeChartObject" style="height:450px"></div>-->
                     <div class="span5 npsScore">
                         <div class="nps-circle-container">
@@ -438,7 +438,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="span12" style="float: none; margin: auto; height: auto" ng-show="!showGraphs">
+                    <div class="span12" style="float: none; margin: auto; height: auto" ng-show="!showDashGraphs">
                         <h3 class="scoresDiv no-graph">{{i18n.noScore}}</h3>
                     </div>
                 </div>
@@ -446,8 +446,10 @@
             <!--end Dashbord tab-->
 
             <!--begin trends tab-->
+
             <div id="trends" class="tabcontent" style="display: none;">
-                <div ng-show="showGraphs" class="row-fluid trends_page">
+
+                <div  class="row-fluid trends_page">
                     <!--
                                     <h4 class="titleWithBorder pull-left" style="width: 100%">NPS Line Charts</h4>
                     -->
@@ -457,7 +459,8 @@
                                 ng-model="selectedChartType" ng-change="getNPSLineChart()"></select>
 
                     </div>
-                    <div  class="nps_week_graph" ng-show="showGraphs">
+                    <div id="npsChartLoadingBar" class="LoadingBar" ng-show="!showTrGraphs"></div>
+                    <div  class="nps_week_graph" ng-show="showTrGraphs">
                         <div google-chart chart="lineChartObject" agc-on-select="hideSeries(selectedItem)" width="800" height="350"></div>
                     </div>
 
@@ -482,7 +485,7 @@
                     <button class="responses-btn passive"  ng-click="setCategory('passives')">{{allPassivesNbr}} Passives</button>
                 </div>
 
-                <div class="scoresDiv" ng-show="showGraphs">
+                <div class="scoresDiv" >
 
                     <div  ng-repeat="score in scores| orderBy:orderByField:reverseSort" class="score_detail {{score.category}}">
                         <div class="container-fluid score_detail_head">

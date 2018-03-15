@@ -12,7 +12,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.repFilter = "all";
         $scope.selectModel = {};
         $scope.showForm = false;
-        $scope.showGraphs = false;
+        $scope.showTrGraphs = false;
+        $scope.showDashGraphs = false;
         $scope.scores = [];
         $scope.scoreTypes = [];
         $scope.scoresSum = 0;
@@ -84,17 +85,9 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             "curveType": "function",
             "tooltip": {isHtml: true},
             "focusTarget": 'category',
-			"width": 900,
-            "height": 350,
+            "height": 450,
             "vAxis": {
                 "title": "",
-                "gridlines": {
-                    "count": 10
-                }
-            },
-            "hAxis": {
-                "title": "",
-
                 "gridlines": {
                     "count": 10
                 }
@@ -133,6 +126,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 			$scope.startDate=dates[0].getTime();
 			$scope.endDate=dates[dates.length-1].getTime();
 			$scope.loadData($scope.typeId);
+			$scope.getNPSLineChart();
 			$scope.loadScores($scope.typeId, $scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage, $scope.respCat);
         }
 
@@ -266,9 +260,10 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 }
 
                 if ($scope.npScore == "NaN") {
-                    $scope.showGraphs = false;
+                    $scope.showDashGraphs = false;
+                    $scope.showTrGraphs = false;
                 } else {
-                    $scope.showGraphs = true;
+                    $scope.showDashGraphs = true;
                     $scope.npScore = parseFloat($scope.npScore);
                             $scope.dashoffset = data.data.dashoffset;
                             $scope.npsColor = "#f5ba7f";
@@ -286,7 +281,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 
 
                 }
-                $scope.getNPSLineChart();
+               // $scope.getNPSLineChart();
                 $scope.getResponsesByScoreChart();
                 $scope.pages = $scope.range();
                 // $scope.getScoresbyType(typeId);
@@ -299,6 +294,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         }
 
         $scope.getNPSLineChart = function () {
+        $scope.showTrGraphs = false;
             $http({
                 method: 'GET',
                 url: npsAdminContainer.jzURL('NPSAdministrationController.getNPSLineChart') + "&typeId=" + $scope.typeId + "&chartType=" + $scope.selectedChartType.value+ "&startDate=" + $scope.startDate + "&endDate=" + $scope.endDate
@@ -331,7 +327,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                         }],
                     "rows": NPSArray
                 };
-
+            $scope.showTrGraphs = true;
                 deferred.resolve(data);
                 //                $scope.setResultMessage(data, "success");
             }, function errorCallback(data) {
@@ -592,6 +588,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.getScoresbyType = function (typeId) {
             $scope.typeId = typeId;
             $scope.loadData(typeId);
+	//		$scope.getNPSLineChart();
             $scope.loadScores(typeId, 0, $scope.itemsPerPage, $scope.respCat);
 
             $scope.showGraphs = true;
