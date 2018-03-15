@@ -42,7 +42,15 @@ public class ScoreEntryDTO {
 
   private long        typeId;
 
+  private Boolean           responded;
+
   private Boolean        isAnonymous;
+
+  private String        category;
+
+  private String         posterAvatar;
+
+    private String           userProfile;
 
   /*  public boolean verifySaveConditions() {
     if (StringUtils.isBlank(vacationRequestId) || StringUtils.isBlank(userId) ) {

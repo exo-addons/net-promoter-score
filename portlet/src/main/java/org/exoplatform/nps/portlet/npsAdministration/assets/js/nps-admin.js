@@ -2,7 +2,7 @@ require( ["SHARED/jquery", "npsAdminControllers"], function ( $,  npsAdminContro
 {
     $( document ).ready(function() {
         var npsAdminAppRoot = $('#npsAdmin');
-        var npsAdminApp = angular.module('npsAdminApp', ['googlechart']);
+        var npsAdminApp = angular.module('npsAdminApp', ['googlechart', 'ngMaterial', 'ngMaterialDateRangePicker']);
         try {
             npsAdminApp.controller('npsAdminCtrl', npsAdminControllers);
             angular.bootstrap(npsAdminAppRoot, ['npsAdminApp']);

@@ -126,6 +126,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
         $scope.saveScore = function() {
             $scope.showAlert = false;
             $scope.newScore.typeId=$scope.scoreTypeId;
+            $scope.newScore.responded=true;
                 $http({
                     data : $scope.newScore,
                     method : 'POST',
@@ -148,19 +149,45 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
         }
 
         $scope.cancel = function() {
-                var today = new Date();
-                var expiresValue = new Date(today);
-                expiresValue.setDate(today.getDate() + parseInt($scope.i18n.reportedCookiesExpiration));
-                $cookies.put("nps_status-"+$scope.portletId,"enabled" , {'expires' : expiresValue});
+            var today = new Date();
+            var expiresValue = new Date(today);
+            expiresValue.setDate(today.getDate() + parseInt($scope.i18n.reportedCookiesExpiration));
+            $cookies.put("nps_status-" + $scope.portletId, "enabled", {
+                'expires': expiresValue
+            });
             $('#npsForm').css('display', 'none');
             $scope.showForm = false;
+            $scope.newScore.typeId = $scope.scoreTypeId;
+            $scope.newScore.responded = false;
+            $http({
+                data: $scope.newScore,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                url: npsFormContainer.jzURL('NPSFormController.saveScore')
+            }).then(function successCallback(data) {}, function errorCallback(data) {});
+
         }
 
         $scope.disableUser = function() {
-                var now = new Date();
-                var expiresValue  = new Date(now.getFullYear()+20, now.getMonth(), now.getDate());
-                $cookies.put("nps_status-"+$scope.portletId,"disabled" , {'expires' : expiresValue});
-               $('#npsForm').css('display', 'none');
+            var now = new Date();
+            var expiresValue = new Date(now.getFullYear() + 20, now.getMonth(), now.getDate());
+            $cookies.put("nps_status-" + $scope.portletId, "disabled", {
+                'expires': expiresValue
+            });
+            $('#npsForm').css('display', 'none');
+            $scope.showForm = false;
+            $scope.newScore.typeId = $scope.scoreTypeId;
+            $scope.newScore.responded = false;
+            $http({
+                data: $scope.newScore,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                url: npsFormContainer.jzURL('NPSFormController.saveScore')
+            }).then(function successCallback(data) {}, function errorCallback(data) {});
         }
 
 

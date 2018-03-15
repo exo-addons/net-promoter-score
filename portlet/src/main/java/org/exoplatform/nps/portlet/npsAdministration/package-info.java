@@ -9,11 +9,18 @@
     @Script(id = "angularjs", value = "js/lib/angular.min.js"),
     @Script(id = "ngSanitize", value = "js/lib/angular-sanitize.js", depends = "angularjs"),
     @Script(id = "ng-google-chart", value = "js/lib/ng-google-chart.js", depends = "angularjs"),
+        @Script(id = "angular-animate", value = "js/lib/angular-animate.min.js", depends = "angularjs"),
+        @Script(id = "angular-aria", value = "js/lib/angular-aria.min.js", depends = "angularjs"),
+        @Script(id = "angular-messages", value = "js/lib/angular-messages.min.js", depends = "angularjs"),
+        @Script(id = "angular-material", value = "js/lib/angular-material.min.js", depends = { "angularjs" , "angular-animate", "angular-messages", "angular-aria"}),
+        @Script(id = "md-date-range-picker", value = "js/lib/md-date-range-picker.js", depends = { "angularjs" , "angular-material"}),
     // services and controllers js are AMD modules, required by controllers.js
-    @Script(id = "controllers", value = "js/controllers.js", depends = { "angularjs" , "ng-google-chart"}),
+    @Script(id = "controllers", value = "js/controllers.js", depends = { "angularjs" , "ng-google-chart", "md-date-range-picker"}),
     @Script(id = "npsAdminAddon", value = "js/nps-admin.js", depends = { "controllers","jQueryUI" }) })
 
 @Stylesheets({
+        @Stylesheet(id = "rangeDatePickerSkin", value = "style/md-date-range-picker.css") ,
+        @Stylesheet(id = "materialSkin", value = "style/angular-material.min.css") ,
         @Stylesheet(id = "jQueryUISkin", value = "style/jquery-ui.css") ,
         @Stylesheet(id = "nps-admin", value = "style/nps-admin.css") })
 
