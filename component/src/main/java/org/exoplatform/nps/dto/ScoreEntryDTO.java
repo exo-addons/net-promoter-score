@@ -34,6 +34,8 @@ public class ScoreEntryDTO {
 
   private String              comment;
 
+  private String           activityId;
+
   private long                lastAppereance;
 
   private String                userFullName;
@@ -50,7 +52,7 @@ public class ScoreEntryDTO {
 
   private String         posterAvatar;
 
-    private String           userProfile;
+  private String           userProfile;
 
   /*  public boolean verifySaveConditions() {
     if (StringUtils.isBlank(vacationRequestId) || StringUtils.isBlank(userId) ) {

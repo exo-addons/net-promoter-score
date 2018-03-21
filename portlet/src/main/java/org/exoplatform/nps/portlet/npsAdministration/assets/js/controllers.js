@@ -1,7 +1,10 @@
 define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($, jz) {
-    var npsAdminCtrl = function ($scope, $q, $timeout, $http, $filter) {
+    var npsAdminCtrl = function ($scope,$sce, $q, $timeout, $http, $filter) {
         var npsAdminContainer = $('#npsAdmin');
         var deferred = $q.defer();
+        $scope.currentUser = "";
+        $scope.currentUserAvatar = "";
+        $scope.currentUserName = "";
         $scope.newScoreType = null;
         $scope.scoreTypeToEdit = null;
         $scope.showEditForm = false;
@@ -22,6 +25,9 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         $scope.selectedChartType = {};
 		$scope.startDate=0;
 		$scope.endDate=(new Date()).getTime();
+		$scope.newNote = {id: null};
+		$scope.newSubNote = {id: null};
+
 
 
               var lessThan3Day = new Date();
@@ -202,7 +208,9 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                     {name: data.data.monthlyOver, value: "monthlyOver"},
                     {name: data.data.weeklyOver, value: "weeklyOver"},
                 ];
-
+                $scope.currentUser = data.data.currentUser;
+                $scope.currentUserAvatar = data.data.currentUserAvatar;
+                $scope.currentUserName = data.data.currentUserName;
                 $scope.selectedChartType = {name: data.data.rolling30, value: "rolling30"};
                 deferred.resolve(data);
                 /*$scope.setResultMessage(data, "success");*/
@@ -506,6 +514,32 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 
         }
 
+
+        $scope.saveNote = function (note, activityId, notes, commentId) {
+            note.posterId = $scope.currentUser;
+            note.posterAvatar = $scope.currentUserAvatar;
+            note.posterName = $scope.currentUserName;
+            note.activityId=activityId;
+            note.commentId=commentId;
+            $http({
+                data: note,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                url: npsAdminContainer.jzURL('NPSAdministrationController.saveNote')
+            }).then(function successCallback(data) {
+            notes.push(note)
+			$scope.newNote = {id: null};
+			$scope.newSubNote = {id: null};
+			$('.commForm').css("display", "none");
+               // $scope.setResultMessage($scope.i18n.scoreEnabled, "success");
+            }, function errorCallback(data) {
+               // $scope.setResultMessage($scope.i18n.defaultError, "error");
+            });
+          return notes;
+        }
+
         $scope.enableScore = function (score) {
             $scope.showAlert = false;
             // $scope.setResultMessage($scope.i18n.savingScore, "info");
@@ -686,6 +720,40 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             });
         }
 
+
+        $scope.getLocaleDate = function(date) {
+            if($scope.i18n&&$scope.i18n.offset){
+                return date+$scope.i18n.offset;
+            }else{
+                return  date;
+            }
+
+        };
+
+        $scope.renderHtml = function(html_code)
+        {
+            return $sce.trustAsHtml(html_code);
+        };
+
+		$scope.showCommentForm = function (score) {
+            $("#commetfrom_"+score).css("display", "block");
+        }
+
+        $scope.showSubCommentForm= function (score) {
+            $("#subcommetfrom_"+score).css("display", "block");
+        }
+
+                $scope.showCommentList= function (score) {
+                    $("#commentList_"+score).css("display", "block");
+                    $("#showComments_"+score).css("display", "none");
+                    $("#hideComments_"+score).css("display", "block");
+                }
+
+                $scope.hideCommentList= function (score) {
+                    $("#commentList_"+score).css("display", "none");
+                    $("#hideComments_"+score).css("display", "none");
+                    $("#showComments_"+score).css("display", "block");
+                  }
 
         $scope.loadBundle();
         $('#npsAdmin').css('visibility', 'visible');

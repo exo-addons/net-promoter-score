@@ -48,7 +48,7 @@ public class NpsService {
     this.scoreEntryDAO = new ScoreEntryDAO();
   }
 
-  public Boolean save(ScoreEntryDTO entity, boolean newEntry) {
+/*  public Boolean save(ScoreEntryDTO entity, boolean newEntry) {
     try {
       if (entity == null) {
         throw new IllegalStateException("Parameter 'entity' is null");
@@ -66,6 +66,25 @@ public class NpsService {
       return false;
     }
     return true;
+  }*/
+
+  public ScoreEntryDTO save(ScoreEntryDTO entity, boolean newEntry) {
+    try {
+      if (entity == null) {
+        throw new IllegalStateException("Parameter 'entity' is null");
+      }
+
+      ScoreEntryEntity  scoreEntryEntity = null;
+      if (newEntry) {
+        entity.setPostedTime(System.currentTimeMillis());
+        return convert(scoreEntryDAO.create(convert(entity)));
+      } else {
+        return convert(scoreEntryDAO.update(convert(entity)));
+      }
+    } catch (IllegalStateException e) {
+      LOG.error("Cannot save the score", e.getMessage());
+    }
+    return null;
   }
 
   public void remove(ScoreEntryDTO entity) {
@@ -245,6 +264,7 @@ public class NpsService {
     entity.setEnabled(dto.getEnabled());
     entity.setTypeId(dto.getTypeId());
     entity.setResponded(dto.getResponded());
+    entity.setActivityId(dto.getActivityId());
 
     return entity;
   }
@@ -260,6 +280,7 @@ public class NpsService {
     dto.setEnabled(entity.getEnabled());
     dto.setTypeId(entity.getTypeId());
     dto.setResponded(entity.getResponded());
+    dto.setActivityId(entity.getActivityId());
 
     return dto;
   }

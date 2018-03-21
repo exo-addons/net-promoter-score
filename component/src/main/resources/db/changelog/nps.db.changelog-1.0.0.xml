@@ -98,4 +98,10 @@
     </update>
   </changeSet>
 
+  <changeSet author="nps-addon" id="1.0.0-10">
+    <addColumn tableName="NPS_SCORE_ENTRY">
+      <column name="ACTIVITY_ID" type="NVARCHAR(50)"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

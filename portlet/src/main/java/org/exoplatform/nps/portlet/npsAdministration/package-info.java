@@ -2,6 +2,7 @@
 @Application(name = "NPSAdministrationController")
 @Bindings({
         @Binding(value = IdentityManager.class),
+        @Binding(value = ActivityManager.class),
         @Binding(value = NpsService.class)})
 @Scripts({
     @Script(id = "jQueryUI", value = "js/lib/jquery-ui.js"),
@@ -39,6 +40,7 @@ import juzu.plugin.portlet.Portlet;
 
 
 import org.exoplatform.nps.services.NpsService;
+import org.exoplatform.social.core.manager.ActivityManager;
 import org.exoplatform.social.core.manager.IdentityManager;
 
 

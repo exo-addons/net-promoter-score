@@ -77,7 +77,7 @@ public class Utils
         return Days.daysBetween(start, stop).getDays();
     }
 
-    public static void createActivity (ScoreEntryDTO score){
+    public static ExoSocialActivity createActivity (ScoreEntryDTO score){
         NpsTypeService npsTypeService= CommonsUtils.getService(NpsTypeService.class);
         ScoreTypeDTO scoreType = npsTypeService.getScoreType(score.getTypeId());
         if(scoreType!=null){
@@ -87,7 +87,7 @@ public class Utils
                 ActivityManager activityManager= CommonsUtils.getService(ActivityManager.class);
                 Space space = spaceService.getSpaceByPrettyName(scoreType.getSpaceId());
                 if(space==null){
-                    log.warn("Space bot found");
+                    log.warn("Space not found");
                 }else{
                     Identity spaceIdentity = identityManager.getOrCreateIdentity(SpaceIdentityProvider.NAME, space.getPrettyName(), false);
                     Identity posterIdentity = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, scoreType.getUserId(), false);
@@ -111,7 +111,7 @@ public class Utils
                                         comment
                                  );
                         activity.setUserId(posterIdentity.getId());
-                        activityManager.saveActivityNoReturn(spaceIdentity, activity);
+                       return  activityManager.saveActivity(spaceIdentity, activity);
                     }else{
                         log.warn("Not able to create the activity, the Poster or Space Identity is missing");
                     }
@@ -119,7 +119,7 @@ public class Utils
 
             }
         }
-
+        return null;
     }
 
     public static NPSDetailsDTO calculateNpsByDate (long typeId,long date){

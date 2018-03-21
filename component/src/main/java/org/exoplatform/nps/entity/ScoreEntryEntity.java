@@ -90,5 +90,7 @@ public class ScoreEntryEntity {
   @Column(name = "RESPONDED")
   private Boolean   responded;
 
+  @Column(name = "ACTIVITY_ID")
+  private String   activityId;
 
 }

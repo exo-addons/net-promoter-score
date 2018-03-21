@@ -5,10 +5,9 @@ import juzu.impl.common.JSON;
 import juzu.plugin.jackson.Jackson;
 import juzu.template.Template;
 import org.exoplatform.commons.juzu.ajax.Ajax;
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.commons.utils.PropertyManager;
-import org.exoplatform.nps.dto.NPSDetailsDTO;
-import org.exoplatform.nps.dto.ScoreEntryDTO;
-import org.exoplatform.nps.dto.ScoreTypeDTO;
+import org.exoplatform.nps.dto.*;
 import org.exoplatform.nps.services.NpsService;
 import org.exoplatform.nps.services.NpsTypeService;
 import org.exoplatform.nps.services.Utils;
@@ -16,8 +15,13 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.social.common.RealtimeListAccess;
+import org.exoplatform.social.core.activity.model.ExoSocialActivity;
+import org.exoplatform.social.core.activity.model.ExoSocialActivityImpl;
+import org.exoplatform.social.core.identity.model.Identity;
 import org.exoplatform.social.core.identity.model.Profile;
 import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvider;
+import org.exoplatform.social.core.manager.ActivityManager;
 import org.exoplatform.social.core.manager.IdentityManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,6 +49,9 @@ public class NPSAdministrationController {
   @Inject
   IdentityManager identityManager;
 
+  @Inject
+  ActivityManager activityManager;
+
 
   @Inject
   @Path("index.gtmpl")
@@ -62,9 +69,10 @@ public class NPSAdministrationController {
   @juzu.Resource
   @MimeType.JSON
   @Jackson
-  public List<ScoreEntryDTO> getScores(Long typeId, String respCat, int offset, int limit, Long startDate, Long endDate) {
+  public List<ScoreEntryWithNotesDTO> getScores(Long typeId, String respCat, int offset, int limit, Long startDate, Long endDate) {
     try {
       List<ScoreEntryDTO> scores= new ArrayList<>();
+      List<ScoreEntryWithNotesDTO> scoresWithNotes= new ArrayList<>();
        if(respCat.equals("detractors")){
          scores=npsService.getDetractorScores(typeId,offset,limit,startDate,endDate);
        } else if(respCat.equals("passives")){
@@ -96,8 +104,52 @@ public class NPSAdministrationController {
         }else {
           score.setCategory("passive");
         }
+
+        ArrayList<NoteDTO> notes= new ArrayList<>();
+        if(null!=score.getActivityId()){
+          ExoSocialActivity activity = activityManager.getActivity(score.getActivityId()) ;
+          if (activity!=null){
+            RealtimeListAccess<ExoSocialActivity> comments =  activityManager.getCommentsWithListAccess(activity);
+            if(comments.getSize()>0){
+              for(ExoSocialActivity comment : comments.load(0,10)) {
+                Identity identity = identityManager.getIdentity(comment.getPosterId(), false);
+                NoteDTO note = new NoteDTO(comment.getId(), identity.getRemoteId(), comment.getPostedTime(), score.getActivityId(), comment.getTitle(), "", "", null);
+                Profile profile = identity.getProfile();
+                note.setPosterName(profile.getFullName());
+                if (profile.getAvatarUrl() != null) {
+                  note.setPosterAvatar(profile.getAvatarUrl());
+                } else {
+                  note.setPosterAvatar("/eXoSkin/skin/images/system/UserAvtDefault.png");
+                }
+                List<ExoSocialActivity> subComments = activityManager.getSubComments(comment);
+                if (subComments.size()>0){
+                  ArrayList<NoteDTO> subNotes = new ArrayList<>();
+                for (ExoSocialActivity subComment : subComments) {
+                  identity = identityManager.getIdentity(subComment.getPosterId(), false);
+                  NoteDTO subNote = new NoteDTO(subComment.getId(), identity.getRemoteId(), subComment.getPostedTime(), comment.getId(), subComment.getTitle(), "", "", null);
+                  profile = identity.getProfile();
+                  subNote.setPosterName(profile.getFullName());
+                  if (profile.getAvatarUrl() != null) {
+                    subNote.setPosterAvatar(profile.getAvatarUrl());
+                  } else {
+                    subNote.setPosterAvatar("/eXoSkin/skin/images/system/UserAvtDefault.png");
+                  }
+                  subNotes.add(subNote);
+                }
+                note.setNotes(subNotes);
+              }
+                notes.add(note);
+              }
+            }
+
+          }
+
+        }
+
+        scoresWithNotes.add(new ScoreEntryWithNotesDTO(score, notes));
       }
-      return scores;
+
+      return scoresWithNotes;
     } catch (Throwable e) {
       LOG.error(e);
       return null;
@@ -126,6 +178,13 @@ public class NPSAdministrationController {
         }
       }
       data.set("currentUser",currentUser);
+        Profile profile=identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, currentUser, false).getProfile();
+        if(profile.getAvatarUrl()!=null){
+            data.set("currentUserAvatar",profile.getAvatarUrl());
+        }else{
+            data.set("currentUserAvatar","/eXoSkin/skin/images/system/UserAvtDefault.png");
+        }
+        data.set("currentUserName",profile.getFullName());
       bundleString = data.toString();
       return Response.ok(bundleString);
     } catch (Throwable e) {
@@ -415,9 +474,7 @@ public class NPSAdministrationController {
   @MimeType.JSON
   @Jackson
   public void deleteScore(@Jackson ScoreEntryDTO obj) {
-
     npsService.remove(obj);
-
   }
 
   @Ajax
@@ -427,7 +484,6 @@ public class NPSAdministrationController {
   public void disableScore(@Jackson ScoreEntryDTO obj) {
     obj.setEnabled(false);
     npsService.save(obj,false);
-
   }
 
 
@@ -440,6 +496,24 @@ public class NPSAdministrationController {
     npsService.save(obj,false);
 
   }
+
+
+  @Ajax
+  @Resource(method = HttpMethod.POST)
+  @MimeType.JSON
+  @Jackson
+  public void saveNote (@Jackson NoteDTO obj) {
+    ExoSocialActivity activity=activityManager.getActivity(obj.getActivityId());
+    ExoSocialActivity comment = new ExoSocialActivityImpl();
+    comment.setTitle(obj.getNoteText());
+    comment.setUserId(identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, obj.getPosterId(), false).getId());
+    if(obj.getCommentId()!=null){
+      comment.setParentCommentId(obj.getCommentId());
+    }
+
+    activityManager.saveComment(activity,comment);
+  }
+
 
 
 

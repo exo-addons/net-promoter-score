@@ -17,6 +17,7 @@ import org.exoplatform.nps.services.*;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.social.core.activity.model.ExoSocialActivity;
 import org.exoplatform.social.core.identity.model.Profile;
 import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvider;
 import org.exoplatform.social.core.manager.IdentityManager;
@@ -133,9 +134,11 @@ public class NPSFormController {
         if(obj.getIsAnonymous()){
             obj.setUserId("");
         }else obj.setUserId(currentUser);
-        if(npsService.save(obj, true)){
-           Utils.createActivity(obj);
-
+        obj = npsService.save(obj, true);
+        if(obj!=null){
+            ExoSocialActivity activity = Utils.createActivity(obj);
+            obj.setActivityId(activity.getId());
+            npsService.save(obj, false);
         }
 
         /**
