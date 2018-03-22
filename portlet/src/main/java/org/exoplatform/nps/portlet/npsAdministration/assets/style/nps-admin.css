@@ -119,7 +119,12 @@ input:checked + .slider:before {
     color: #578dc9;
     font-weight: bold;
 }
-.scoreManagement > a{margin: -15px -8px -13px 0;border-bottom: solid 2px #578dc9;}
+.scoreManagement > a{
+margin: -15px -8px -13px 0;
+/*
+border-bottom: solid 2px #578dc9;
+*/
+}
 .scoreManagement > a:hover{
     margin: -15px -8px -13px 0!important;
     border-bottom: solid 2px #578dc9!important;
@@ -263,7 +268,7 @@ ul#addonMenu > .active> a > i{
 	background: #fff;
     margin: 10px;
     border-radius: 5px;
-    padding: 0;
+    padding: 2px;
     margin-bottom: 25px;
     box-shadow: 0 3px 2px -2px rgba(0,0,0,0.1);
 }
@@ -279,6 +284,10 @@ ul#addonMenu > .active> a > i{
 
 .score_detail.promoter {
     border-left: solid 5px rgba(60, 175, 140,  0.7);
+}
+
+.score_detail.disabled {
+    border-left: solid 5px rgba(192, 192, 192, 0.7);
 }
 
 .score_detail .container-fluid {
@@ -381,6 +390,11 @@ font-family: "Helvetica Neue Bold",Helvetica,Lucida,Arial,sans-serif;
 .score_value.pull-left.promoter {
     color: rgba(60, 175, 140,  0.7);
 }
+
+.score_value.pull-left.disabled {
+    color: rgba(192, 192, 192, 0.7);
+}
+
 
 
 .score_comment.pull-right {
@@ -1034,9 +1048,11 @@ color: #efefef; }
 
  .subCommentItem {
         margin: 5px;
-        background-color: #f1f1f1;
+        background-color: #fff;
         border-radius: 5px;
+/*
         border: 2px solid #fff;
+*/
  }
 
  .commentActionBar {
@@ -1044,3 +1060,22 @@ color: #efefef; }
      overflow-x: auto;
      margin: 5px;
  }
+
+  .typeName {
+     color: #578dc9;
+     font-size: 40px;
+     font-weight: bold;
+     margin-right: 20px;
+     float: left;
+ }
+
+ .scoreType {
+     margin: auto;
+     padding: 30px 0 0 30px;
+     position: relative;
+ }
+
+ .actionbtn{
+     cursor: pointer;
+ }
+

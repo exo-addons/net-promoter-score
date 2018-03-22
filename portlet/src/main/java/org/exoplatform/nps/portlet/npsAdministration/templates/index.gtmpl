@@ -21,7 +21,7 @@
                         <!--                <div class="scoresDiv">
                                             <h4 class="titleWithBorder pull-left" style="width: 100%">{{i18n.npsChart}}</h4>
                                         </div>-->
-                        <div class="scoresDiv">
+                        <div class="scoresDiv" ng-show="npsAdminApp">
                             <div class="scoreManagement">
                                 <select name="types" id="types"
                                         ng-options="type.typeName for type in scoreTypes track by type.id"
@@ -31,6 +31,15 @@
                                         class="uiIconEdit uiIconLightGray" style=" font-size: 24px;"></i> </a>
                                 <a class="actionIcon" ng-click="showForm=true" rel="tooltip" data-toggle="tooltip" data-original-title="{{i18n.addScoreType}}"> <i
                                         class="uiIconPlus uiIconLightGray" style=" font-size: 24px;"></i> </a>
+                            </div>
+                        </div>
+
+                        <div class="" ng-show="!npsAdminApp">
+
+                            <div class="scoreType">
+                                <span class="typeName">{{typeName}}</span>
+                                <a class="actionIcon" ng-click="getScoreType(typeId)" rel="tooltip" data-toggle="tooltip" data-original-title="{{i18n.editScoreType}}" ng-show="canManage"> <i
+                                        class="uiIconEdit uiIconLightGray" style=" font-size: 24px;"></i> </a>
                             </div>
                         </div>
 
@@ -341,7 +350,7 @@
                                           </span>
                                         </div>
                                         <span style="display: inline-block; color:#3caf8c">
-                                            {{promotersNbr}} Promoters <br/>
+                                            {{promotersNbr}} {{i18n.promoters}}<br/>
                                             <b style="font-size: 16px;">{{promotersPrc}}%</b>
                                         </span>
                                     </div>
@@ -352,7 +361,7 @@
                                       </span>
                                         </div>
                                         <span style="display: inline-block; color:#ef950d">
-                                        {{passivesNbr}} Passives <br/>
+                                        {{passivesNbr}} {{i18n.passives}}<br/>
                                         <b style="font-size: 16px;">{{passivesPrc}}%</b>
                                     </span>
                                     </div>
@@ -364,7 +373,7 @@
                                       </span>
                                         </div>
                                         <span style="display: inline-block; color:#901315">
-                                        {{detractorsNbr}} Detractors <br/>
+                                        {{detractorsNbr}} {{i18n.detractors}}<br/>
                                         <b style="font-size: 16px;">{{detractorsPrc}}%</b>
                                     </span>
                                     </div>
@@ -378,7 +387,7 @@
                                 <h2 class="value nps">
                                     {{enabledScorsNbr}}
                                 </h2>
-                                <h5 class="description">Enabled Responses</h5>
+                                <h5 class="description">{{i18n.enabledResponses}}</h5>
                                 <div class="separator"></div>
                             </div>
                         </div>
@@ -397,7 +406,7 @@
                                 <h2 class="value nps">
                                     {{responseRate}} %
                                 </h2>
-                                <h5 class="description">Responses Rate</h5>
+                                <h5 class="description">{{i18n.responsesRate}}</h5>
                                 <div class="separator"></div>
                             </div>
                         </div>
@@ -406,7 +415,7 @@
                                 <h2 class="value nps">
                                     {{disablesScoresNbr}}
                                 </h2>
-                                <h5 class="description">Disabled Responses</h5>
+                                <h5 class="description">{{i18n.disabledResponses}}</h5>
                                 <div class="separator"></div>
                             </div>
                         </div>
@@ -479,10 +488,10 @@
 
                             </div>-->
             <div class="btn-group" style="width:100%">
-                <button class="responses-btn"  ng-click="setCategory('all')">{{scorsnbr}} Responses</button>
-                <button class="responses-btn promoter"  ng-click="setCategory('promoters')">{{allPromotersNbr}} Promoters</button>
-                <button class="responses-btn detractor"  ng-click="setCategory('detractors')">{{allDetractorsNbr}} Detractors</button>
-                <button class="responses-btn passive"  ng-click="setCategory('passives')">{{allPassivesNbr}} Passives</button>
+                <button class="responses-btn"  ng-click="setCategory('all')">{{scorsnbr}} {{i18n.rates}}</button>
+                <button class="responses-btn promoter"  ng-click="setCategory('promoters')">{{allPromotersNbr}} {{i18n.promoters}}</button>
+                <button class="responses-btn detractor"  ng-click="setCategory('detractors')">{{allDetractorsNbr}} {{i18n.detractors}}</button>
+                <button class="responses-btn passive"  ng-click="setCategory('passives')">{{allPassivesNbr}} {{i18n.passives}}</button>
             </div>
 
             <div class="scoresDiv" >
@@ -505,15 +514,16 @@
 
                             <label class="switch">
                                 <input type="checkbox" ng-model="scoreWithNotes.score.enabled" data-placement="right"
-                                       data-original-title="Enable / Disable"
+                                       ng-disabled="!canManage"
+                                       rel="tooltip" data-toggle="tooltip" data-original-title="{{i18n.enable}} / {{i18n.disable}}"
                                        ng-click="checkState(scoreWithNotes.score, scoreWithNotes.score.enabled)">
                                 <span class="slider round"></span>
                             </label>
 
 
-                            <a class="actionIconde" data-placement="right"
-                               data-original-title="Delete "
-                               ng-click="deleteScore(scoreWithNotes.score)">
+                            <a  ng-show="canManage" class="actionIconde actionbtn" data-placement="right"
+                                rel="tooltip" data-toggle="tooltip" data-original-title="{{i18n.delete}}"
+                                ng-click="deleteScore(scoreWithNotes.score)">
                                 <i class="uiIconDeleteUser uiIconLightGray"></i>
                             </a>
 
@@ -532,22 +542,24 @@
                     <div id="act-comments" ng-show="scoreWithNotes.score.activityId!=null">
 
                         <div class="commentActionBar">
-                            <a class="actionIconde" data-placement="right"
-                               data-original-title="Comment"
+                            <a class="actionIconde actionbtn" data-placement="right"
+                               rel="tooltip" data-toggle="tooltip" data-original-title="{{i18n.addNote}}"
                                ng-click="showCommentForm(scoreWithNotes.score.id)">
                                 <i class="uiIconComment uiIconLightGray"> {{scoreWithNotes.notes.length}} </i>
                             </a>
-                            <a class="pull-right" id="hideComments_{{scoreWithNotes.score.id}}" data-placement="right" style="padding-right: 20px;"
-                               data-original-title="Comment"
-                               ng-click="hideCommentList(scoreWithNotes.score.id)">
-                                <i>Hide Comments</i>
-                            </a>
-                            <a class="pull-right" id="showComments_{{scoreWithNotes.score.id}}"  data-placement="right" style="display: none; padding-right: 20px;"
-                               data-original-title="Comment"
-                               ng-click="showCommentList(scoreWithNotes.score.id)">
-                                <i >Show Comments</i>
-                            </a>
-                        </div>
+                            <div ng-show="scoreWithNotes.notes.length>0">
+                                <a class="pull-right actionbtn" id="hideComments_{{scoreWithNotes.score.id}}" data-placement="right" style="padding-right: 20px;"
+                                   data-original-title="Comment"
+                                   ng-click="hideCommentList(scoreWithNotes.score.id)">
+                                    <i>{{i18n.hideNotes}}</i>
+                                </a>
+                                <a class="pull-right actionbtn" id="showComments_{{scoreWithNotes.score.id}}"  data-placement="right" style="display: none; padding-right: 20px;"
+                                   data-original-title="Comment"
+                                   ng-click="showCommentList(scoreWithNotes.score.id)">
+                                    <i >{{i18n.showNotes}}</i>
+                                </a>
+
+                            </div></div>
                         <div id="commentList_{{scoreWithNotes.score.id}}" class="commentList">
                             <div ng-repeat="note in scoreWithNotes.notes" class="commentItem" data-commentid="note.id">
                                 <div class="commmentLeft">
@@ -592,10 +604,10 @@
                                         <!--begin subcomment-->
                                     </div>
                                     <div class="commentActionBar">
-                                        <a class="pull-right" data-placement="right"
+                                        <a class="pull-right actionbtn" data-placement="right"
                                            data-original-title="Comment"
                                            ng-click="showSubCommentForm(note.id)">
-                                            <i >Reply</i>
+                                            <i >{{i18n.replyNote}}</i>
                                         </a>
                                     </div>
                                     <div id="subcommetfrom_{{note.id}}" class="commForm"  style="display: none;>
@@ -621,7 +633,7 @@
                                     <div class="clearfix">
                                         <div class="pull-right">
                                             <button id="noteButton" type="button" class="btn pull-right btn-primary"
-                                                    ng-click="note.notes=saveNote(newSubNote,scoreWithNotes.score.activityId,note.notes,note.id)">Add Note
+                                                    ng-click="note.notes=saveNote(newSubNote,scoreWithNotes.score.activityId,note.notes,note.id)">{{i18n.addNote}}
                                             </button>
                                         </div>
                                     </div>
@@ -643,7 +655,7 @@
                         <div class="commentRight">
                             <div class="commentInputBox ">
                                 <div class="commentInput">
-<textarea title="Add your note..." name="note" cols="30" rows="10" class="textarea"
+<textarea title="{{i18n.addYourNote}}..." name="note" cols="30" rows="10" class="textarea"
           ng-model="newNote.noteText" required>
 </textarea>
                                 </div>
@@ -654,7 +666,7 @@
                     <div class="clearfix">
                         <div class="pull-right">
                             <button id="noteButton" type="button" class="btn pull-right btn-primary"
-                                    ng-click="scoreWithNotes.notes=saveNote(newNote,scoreWithNotes.score.activityId,scoreWithNotes.notes,null)">Add Note
+                                    ng-click="scoreWithNotes.notes=saveNote(newNote,scoreWithNotes.score.activityId,scoreWithNotes.notes,null)">{{i18n.addNote}}
                             </button>
                         </div>
                     </div>
@@ -676,9 +688,9 @@
                     </p>
                     <div class="uiAction uiActionBorder">
                         <button class="btn" ng-click="validatedDeleteScore(scoreToDelete)"
-                                type="button">Save
+                                type="button">{{i18n.save}}
                         </button>
-                        <button class="btn" ng-click='showDeletePopup = false' type="button">Cancel
+                        <button class="btn" ng-click='showDeletePopup = false' type="button">{{i18n.cancel}}
                         </button>
                     </div>
                 </div>
@@ -691,13 +703,13 @@
         <div class="pagination pull-left">
             <ul>
                 <li ng-class="prevPageDisabled()">
-                    <a href ng-click="prevPage()"><i class="uiIconArrowLeft"></i> Prev</a>
+                    <a href ng-click="prevPage()"><i class="uiIconArrowLeft"></i> {{i18n.prev}}</a>
                 </li>
                 <li ng-repeat="n in pages" ng-class="{active: n == currentPage}" ng-click="setPage(n)">
                     <a href="#">{{n+1}}</a>
                 </li>
                 <li ng-class="nextPageDisabled()">
-                    <a href ng-click="nextPage()">Next <i class="uiIconArrowRight"></i></a>
+                    <a href ng-click="nextPage()">{{i18n.next}}<i class="uiIconArrowRight"></i></a>
                 </li>
             </ul>
         </div>

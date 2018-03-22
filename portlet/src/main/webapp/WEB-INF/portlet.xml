@@ -60,12 +60,24 @@
 			<value>${juzu.run_mode:prod}</value>
 		</init-param>
 		<supports>
-			<mime-type>text/html</mime-type>
-		</supports>
+		<mime-type>text/html</mime-type>
+		<portlet-mode>edit</portlet-mode>
+		<portlet-mode>help</portlet-mode>
+		<portlet-mode>view</portlet-mode>
+	</supports>
 		<portlet-info>
 			<title>NPS Administration</title>
 			<keywords>nps-addon</keywords>
 		</portlet-info>
+		<portlet-preferences>
+
+			<preference>
+				<name>exo.nps.addon.selectedType</name>
+				<value></value>
+				<read-only>false</read-only>
+			</preference>
+
+		</portlet-preferences>
 	</portlet>
 
 	<portlet>

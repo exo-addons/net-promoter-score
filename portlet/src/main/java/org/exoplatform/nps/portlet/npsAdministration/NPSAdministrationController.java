@@ -1,8 +1,12 @@
 package org.exoplatform.nps.portlet.npsAdministration;
 
 import juzu.*;
+import juzu.bridge.portlet.JuzuPortlet;
+import juzu.impl.bridge.spi.portlet.PortletRequestBridge;
 import juzu.impl.common.JSON;
+import juzu.impl.request.Request;
 import juzu.plugin.jackson.Jackson;
+import juzu.request.RequestContext;
 import juzu.template.Template;
 import org.exoplatform.commons.juzu.ajax.Ajax;
 import org.exoplatform.commons.utils.ListAccess;
@@ -27,6 +31,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.inject.Inject;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -38,6 +44,7 @@ public class NPSAdministrationController {
   private static Log  LOG = ExoLogger.getLogger(NPSAdministrationController.class);
   private String     bundleString;
   ResourceBundle     bundle;
+  private static String SCORE_TYPE = "exo.nps.addon.selectedType";
 
 
   @Inject
@@ -57,13 +64,48 @@ public class NPSAdministrationController {
   @Path("index.gtmpl")
   Template            indexTmpl;
 
+  @Inject
+  @Path("edit.gtmpl")
+  Template editTmpl;
+
+
   @View
-  public Response.Content index() {
-    return indexTmpl.ok();
+  public Response.Content index(RequestContext requestContext) {
+
+    PortletMode mode = requestContext.getProperty(JuzuPortlet.PORTLET_MODE);
+
+    if (PortletMode.EDIT.equals(mode)) {
+      Request request = Request.getCurrent();
+      PortletRequestBridge bridge = (PortletRequestBridge) request.getBridge();
+      PortletPreferences prefs = bridge.getPortletRequest().getPreferences();
+      String selectedType = prefs.getValue(SCORE_TYPE, "");
+      List<ScoreTypeDTO> scoreTypes=npsTypeService.getScoreTypes(0,0);
+      Map<String, Object> parameters = new HashMap<>();
+      parameters.put("scoreTypes", scoreTypes);
+      parameters.put("selectedType", selectedType);
+
+      return editTmpl.with(parameters).ok();
+    } else {
+      return indexTmpl.ok();
+    }
   }
 
   private final String currentUser = ConversationState.getCurrent().getIdentity().getUserId();
   SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
+
+  @Action
+  @Route("updateSettings")
+  public Response.Content updateSettings(String typeId) throws Exception {
+    Request request = Request.getCurrent();
+    PortletRequestBridge bridge = (PortletRequestBridge) request.getBridge();
+    PortletPreferences prefs = bridge.getPortletRequest().getPreferences();
+    prefs.setValue(SCORE_TYPE, typeId);
+    prefs.store();
+    return indexTmpl.ok();
+  }
+
+
 
   @Ajax
   @juzu.Resource
@@ -103,6 +145,10 @@ public class NPSAdministrationController {
           score.setCategory("detractor");
         }else {
           score.setCategory("passive");
+        }
+
+        if(!score.getEnabled()){
+          score.setCategory("disabled");
         }
 
         ArrayList<NoteDTO> notes= new ArrayList<>();
@@ -185,6 +231,19 @@ public class NPSAdministrationController {
             data.set("currentUserAvatar","/eXoSkin/skin/images/system/UserAvtDefault.png");
         }
         data.set("currentUserName",profile.getFullName());
+
+      Request request = Request.getCurrent();
+      PortletRequestBridge bridge = (PortletRequestBridge) request.getBridge();
+      PortletPreferences prefs = bridge.getPortletRequest().getPreferences();
+      String scoreTypeId = prefs.getValue(SCORE_TYPE, "");
+      if(scoreTypeId!=null&&!scoreTypeId.equals("")){
+        ScoreTypeDTO  sType = npsTypeService.getScoreType(Long.parseLong(scoreTypeId));
+        data.set("scoreTypeId",scoreTypeId);
+        data.set("typeName",sType.getTypeName());
+        data.set("canManage", ConversationState.getCurrent().getIdentity().isMemberOf("/platform/administrators"));
+      }
+
+
       bundleString = data.toString();
       return Response.ok(bundleString);
     } catch (Throwable e) {

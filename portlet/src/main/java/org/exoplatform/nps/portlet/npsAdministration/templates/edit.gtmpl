@@ -1,0 +1,31 @@
+<div class="settingsContainer">
+    <form name="updateSettingsForm" class="form-horizontal" action="@{updateSettings()}" method="post">
+
+
+        <div class="control-group">
+            <label class="control-label" for="typeId">NPS Score</label>
+            <div class="controls">
+                <select id="typeId" name="typeId">
+                    <option value="">Admin Portlet (*)</option>
+                    <% if (scoreTypes != null) {
+                    scoreTypes.each { scoreType ->
+                    def typeName= scoreType.typeName;
+                    def typeId= scoreType.id;
+                    def selected = selectedType != null &&
+                    typeId.toString().equals(selectedType.toString())?'selected':'';
+                    %>
+                    <option value="${typeId}" ${selected}>${typeName}</option>
+                    <% }
+                    }
+                    %>
+                </select>
+            </div>
+        </div>
+        <em>(*) Admin Portlet = The portlet will be used for NPS adminstaration </em>
+
+        <div class="uiAction">
+            <button type="submit" class="btn btn-primary input-large">Save</button>
+        </div>
+    </form>
+
+</div>

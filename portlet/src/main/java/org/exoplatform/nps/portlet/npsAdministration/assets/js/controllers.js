@@ -27,6 +27,8 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 		$scope.endDate=(new Date()).getTime();
 		$scope.newNote = {id: null};
 		$scope.newSubNote = {id: null};
+		$scope.npsAdminApp = true;
+		$scope.canManage = true;
 
 
 
@@ -215,7 +217,17 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 deferred.resolve(data);
                 /*$scope.setResultMessage(data, "success");*/
                 $scope.showAlert = false;
+                if(data.data.scoreTypeId!=null){
+                $scope.typeId = data.data.scoreTypeId;
+                $scope.getScoresbyType($scope.typeId);
+                $scope.typeName = data.data.typeName;
+                $scope.npsAdminApp=false;
+                $scope.canManage=data.data.canManage;
+                }else{
+                $scope.canManage=true;
                 $scope.loadScoreTypes(true);
+                }
+
             }, function errorCallback(data) {
                 $scope.setResultMessage($scope.i18n.defaultError, "error");
             });
