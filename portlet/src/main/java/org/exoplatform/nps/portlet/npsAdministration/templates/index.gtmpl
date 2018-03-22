@@ -37,9 +37,8 @@
                         <div class="" ng-show="!npsAdminApp">
 
                             <div class="scoreType">
-                                <span class="typeName">{{typeName}}</span>
-                                <a class="actionIcon" ng-click="getScoreType(typeId)" rel="tooltip" data-toggle="tooltip" data-original-title="{{i18n.editScoreType}}" ng-show="canManage"> <i
-                                        class="uiIconEdit uiIconLightGray" style=" font-size: 24px;"></i> </a>
+                                <span class="typeName" ng-show="!canManage">{{typeName}}</span>
+                                <span class="typeName"  ng-click="getScoreType(typeId)" rel="tooltip" data-toggle="tooltip" data-original-title="{{i18n.editScoreType}}" ng-show="canManage">{{typeName}}</span>
                             </div>
                         </div>
 
@@ -288,8 +287,8 @@
 
 
                 <li class="span4 timerangPicker">
-                    <md-date-range ng-model="pickerModel" md-on-select="setRange($dates)" auto-confirm="true"> </md-date-range>
-                    <!--<i class="uiIconAppCalendarPortlet uiIconDefaultApp"></i>-->
+                    <md-date-range ng-model="pickerModel" md-on-select="setRange($dates)" auto-confirm="true"  style="float:  left; width: 85%;"> </md-date-range>
+                    <button type="button" class="btn btn-primary" id="saveType" ng-click="getAll()" style="float: left; text-align: center; height: 34px;" ng-show="showGetAll">All</button>
                 </li>
 
 
@@ -344,38 +343,41 @@
                             <div class="chart chart--dev">
                                 <div class="chart--horiz">
                                     <div>
+									    <span style="text-align: right;display: inline-block; width: 100px; color:#3caf8c">
+                                            {{promotersNbr}} {{i18n.promoters}}<br/>
+                                            <b style="font-size: 16px;">{{promotersPrc}}%</b>
+                                        </span>
                                         <div class="chart__bar chart__promoter" style="width: {{promotersPrc}}%;display: inline-block;">
                                           <span class="chart__label">
 
                                           </span>
                                         </div>
-                                        <span style="display: inline-block; color:#3caf8c">
-                                            {{promotersNbr}} {{i18n.promoters}}<br/>
-                                            <b style="font-size: 16px;">{{promotersPrc}}%</b>
-                                        </span>
+
                                     </div>
                                     <div>
-                                        <div class="chart__bar chart__passive" style="width: {{passivesPrc}}%;display: inline-block;">
-                                      <span class="chart__label">
-
-                                      </span>
-                                        </div>
-                                        <span style="display: inline-block; color:#ef950d">
+										<span style="text-align: right; display: inline-block; width: 100px; color:#ef950d">
                                         {{passivesNbr}} {{i18n.passives}}<br/>
                                         <b style="font-size: 16px;">{{passivesPrc}}%</b>
-                                    </span>
+										</span>
+                                        <div class="chart__bar chart__passive" style="width: {{passivesPrc}}%;display: inline-block;">
+										<span class="chart__label">
+
+										</span>
+                                        </div>
+
                                     </div>
 
                                     <div>
+									<span style="text-align: right;display: inline-block; width: 100px; color:#901315">
+                                        {{detractorsNbr}} {{i18n.detractors}}<br/>
+                                        <b style="font-size: 16px;">{{detractorsPrc}}%</b>
+                                    </span>
                                         <div class="chart__bar chart__detractor" style="width: {{detractorsPrc}}%;display: inline-block;">
                                       <span class="chart__label">
 
                                       </span>
                                         </div>
-                                        <span style="display: inline-block; color:#901315">
-                                        {{detractorsNbr}} {{i18n.detractors}}<br/>
-                                        <b style="font-size: 16px;">{{detractorsPrc}}%</b>
-                                    </span>
+
                                     </div>
                                 </div>
                             </div>
@@ -443,6 +445,7 @@
 
 
                             <div class="clearfix"></div>
+                            <div class="chartTitle">{{i18n.numberResponsesByScore}}</div>
 
                         </div>
                     </div>

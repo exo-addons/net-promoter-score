@@ -29,7 +29,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 		$scope.newSubNote = {id: null};
 		$scope.npsAdminApp = true;
 		$scope.canManage = true;
-
+		$scope.showGetAll=false;
 
 
               var lessThan3Day = new Date();
@@ -131,6 +131,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
         }
 
         $scope.setRange = function (dates) {
+            $scope.showGetAll=true;
 			$scope.startDate=dates[0].getTime();
 			$scope.endDate=dates[dates.length-1].getTime();
 			$scope.loadData($scope.typeId);
@@ -272,6 +273,9 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 				$scope.startDate = data.data.startDate;
 				$scope.responseRate = Math.floor(data.data.responseRate);
 
+          		$scope.pickerModel = {
+                    selectedTemplateName:$scope.getDateText(),
+                };
 
                 if(data.data.meanScore < 7){
                     $scope.classMeanScore = "detractor";
@@ -741,6 +745,13 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             }
 
         };
+        $scope.getAll = function() {
+            $scope.showGetAll=false;
+        	$scope.startDate=0;
+        	$scope.endDate=(new Date()).getTime();
+            $scope.loadData($scope.typeId);
+            $scope.loadScores($scope.typeId, $scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage, $scope.respCat);
+        };
 
         $scope.renderHtml = function(html_code)
         {
@@ -755,17 +766,39 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             $("#subcommetfrom_"+score).css("display", "block");
         }
 
-                $scope.showCommentList= function (score) {
-                    $("#commentList_"+score).css("display", "block");
-                    $("#showComments_"+score).css("display", "none");
-                    $("#hideComments_"+score).css("display", "block");
-                }
+        $scope.showCommentList= function (score) {
+             $("#commentList_"+score).css("display", "block");
+             $("#showComments_"+score).css("display", "none");
+             $("#hideComments_"+score).css("display", "block");
+        }
 
-                $scope.hideCommentList= function (score) {
-                    $("#commentList_"+score).css("display", "none");
-                    $("#hideComments_"+score).css("display", "none");
-                    $("#showComments_"+score).css("display", "block");
-                  }
+        $scope.hideCommentList= function (score) {
+             $("#commentList_"+score).css("display", "none");
+             $("#hideComments_"+score).css("display", "none");
+             $("#showComments_"+score).css("display", "block");
+        }
+
+		 $scope.getDateText = function() {
+			 var dateStart = new Date();
+			 var dateEnd = new Date();
+			 dateStart.setTime($scope.startDate);
+			 dateEnd.setTime($scope.endDate);
+			 if (getDateDiff(dateStart, dateEnd) === 0) {
+				 return $filter('date')(dateStart, 'dd MMM yyyy');
+			 } else {
+				 return $filter('date')(dateStart, 'dd' + (dateStart.getMonth() !== dateEnd.getMonth() || dateStart.getFullYear() !== dateEnd.getFullYear() ? ' MMM' :
+					 '') + (dateStart.getFullYear() !== dateEnd.getFullYear() ? ' yyyy' : '')) + ' - ' + $filter('date')(dateEnd, 'dd MMM yyyy');
+			 }
+		 }
+
+		 function getDateDiff(date1, date2) {
+			 if (!date1 || !date2) return;
+			 var _d1 = new Date(date1.getFullYear(), date1.getMonth(),
+					 date1.getDate()),
+				 _d2 = new Date(date2.getFullYear(), date2.getMonth(), date2.getDate());
+			 return _d2 - _d1;
+		 }
+
 
         $scope.loadBundle();
         $('#npsAdmin').css('visibility', 'visible');
