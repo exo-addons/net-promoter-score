@@ -148,6 +148,7 @@ public class NPSFormController {
         /**/
         /* SET LEAD REVIEW */
         /**/
+        log.info("================ MARKETO INTEGRATION BEGIN =============================");
 
         try {
 
@@ -196,10 +197,11 @@ public class NPSFormController {
 
             conn.disconnect();
 
+            log.info("================ MARKETO INTEGRATION Done with "+result+" =============================");
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            log.error("Problem when trying to synchronize the NPS score in marketo",e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Problem when trying to synchronize the NPS score in marketo",e.getMessage());
         }
 
     }

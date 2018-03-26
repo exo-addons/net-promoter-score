@@ -250,6 +250,9 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
 
 
         $scope.loadData = function (typeId) {
+			if ($scope.showGetAll==false){
+				$scope.startDate=0;
+			}
             $http({
                 method: 'GET',
                 url: npsAdminContainer.jzURL('NPSAdministrationController.getData') + "&typeId=" + typeId + "&startDate=" + $scope.startDate + "&endDate=" + $scope.endDate

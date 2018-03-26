@@ -499,7 +499,7 @@
 
             <div class="scoresDiv" >
 
-                <div  ng-repeat="scoreWithNotes in scores| orderBy:orderByField:reverseSort" class="score_detail {{scoreWithNotes.score.category}}">
+                <div  ng-repeat="scoreWithNotes in scores| orderBy : '-postedTime'" class="score_detail {{scoreWithNotes.score.category}}">
                     <div class="container-fluid score_detail_head">
                         <div class="pull-left score_author">
                             <div class="score_authorImg pull-left">
@@ -564,7 +564,7 @@
 
                             </div></div>
                         <div id="commentList_{{scoreWithNotes.score.id}}" class="commentList">
-                            <div ng-repeat="note in scoreWithNotes.notes" class="commentItem" data-commentid="note.id">
+                            <div ng-repeat="note in scoreWithNotes.notes | orderBy : '-postedTime'" class="commentItem" data-commentid="note.id">
                                 <div class="commmentLeft">
                                     <a class="avatarXSmall" href="/portal/intranet/profile/{{note.posterId}}">
                                         <img src="{{note.posterAvatar}}" alt="{{note.posterName}}">
@@ -586,7 +586,7 @@
                                 <!--end commentRight-->
                                 <!--begin subcomment-->
                                 <div class="subCommentList">
-                                    <div ng-repeat="subNote in note.notes" class="subCommentItem" data-commentid="subNote.id">
+                                    <div ng-repeat="subNote in note.notes | orderBy : '-postedTime'" class="subCommentItem" data-commentid="subNote.id">
                                         <div class="commmentLeft">
                                             <a class="avatarXSmall" href="/portal/intranet/profile/{{subNote.posterId}}">
                                                 <img src="{{subNote.posterAvatar}}" alt="{{subNote.posterName}}">

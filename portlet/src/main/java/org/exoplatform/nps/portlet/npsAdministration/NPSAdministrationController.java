@@ -243,7 +243,12 @@ public class NPSAdministrationController {
         data.set("canManage", ConversationState.getCurrent().getIdentity().isMemberOf("/platform/administrators"));
       }
 
-
+      TimeZone userTimeZone=Utils.getUserTimezone(currentUser);
+      data.set("userTimeZone",userTimeZone.toString());
+      data.set("offset",userTimeZone.getOffset(new Date().getTime()));
+      int offset = userTimeZone.getOffset(new Date().getTime()) / 3600000;
+      String timeZone = ((offset < 0) ? "-" : "") + String.format("%02d", Math.abs(offset))+ "00";
+      data.set("timeZone", timeZone);
       bundleString = data.toString();
       return Response.ok(bundleString);
     } catch (Throwable e) {
@@ -316,7 +321,10 @@ public class NPSAdministrationController {
   @Jackson
   public Response getNPSLineChart(Long typeId, String chartType, Long startDate, Long endDate) {
     if(startDate==0){
-      startDate =npsService.getFirstScoreEntries(typeId).getPostedTime();
+      ScoreEntryDTO score_ = npsService.getFirstScoreEntries(typeId);
+      if(score_!=null) {
+        startDate =score_.getPostedTime();
+      } else return Response.notFound();
     }
     if(chartType.equals("global")){
       return  getWeeklyNPS(typeId, startDate, endDate);

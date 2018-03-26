@@ -1,6 +1,8 @@
 package org.exoplatform.nps.services;
 
 import com.google.common.collect.Lists;
+import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.commons.utils.CommonsUtils;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.nps.dto.NPSDetailsDTO;
@@ -15,6 +17,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -401,5 +404,18 @@ public class Utils
                 "Detractors: "+nps.getDetractorsNbr()+ "\n"+
                 "Passives: "+nps.getPassivesNb()+ "\n"+
                 "Promoters: "+nps.getPromotersNbr()+ "\n";
+    }
+
+
+
+    public static TimeZone getUserTimezone(String username) {
+        try {
+            CalendarService calService=CommonsUtils.getService(CalendarService.class);
+            CalendarSetting setting = calService.getCalendarSetting(username);
+            return TimeZone.getTimeZone(setting.getTimeZone());
+        } catch (Exception e) {
+            log.error("Can't retrieve timezone", e);
+        }
+        return null;
     }
 }
