@@ -1,4 +1,4 @@
-= rh-requests-management
+= net-promoter-score
 // GitHub/AsciiDoc Configuration
 ifdef::env-github[]
 :note-caption: :information_source:
@@ -7,9 +7,9 @@ endif::[]
 // eXo CI informations
 :ci-url: https://ci.exoplatform.org/job/addons-community/job/
 :project-branch: master
-:ci-job-name: addons-community/addon-rh-requests-management-{project-branch}-ci
+:ci-job-name: addons-community/addon-exo-net-promoter-score-{project-branch}-ci
 
-Simplify human resource requests (Holidays, sick and leave requests) management
+Calculate NPS score for exo.
 
 [NOTE]
 --
