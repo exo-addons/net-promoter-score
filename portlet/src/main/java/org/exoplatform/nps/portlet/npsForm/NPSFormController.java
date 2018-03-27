@@ -81,6 +81,11 @@ public class NPSFormController {
     private static String DISPLAY_POPUP= "exo.nps.addon.displayPopup";
     private static String DISPLAY_POPUP_DEFAULT_VALUE = "";
 
+    private final static String MARKETO_WS_INTEGRATION_ENABLED = "exo.marketo.ws.integration.enabled";
+    private final static String MARKETO_WS_INTEGRATION_CLIENT_ID = "exo.marketo.ws.integration.clientId";
+    private final static String MARKETO_WS_INTEGRATION_CLIENT_SECRET = "exo.marketo.ws.integration.clientSecret";
+    private final static String MARKETO_WS_INTEGRATION_BASE_URL = "exo.marketo.ws.integration.baseUrl";
+
     private String mktToken;
     private String mktLead;
 
@@ -124,6 +129,9 @@ public class NPSFormController {
     }
 
 
+
+
+
     @Ajax
     @Resource(method = HttpMethod.POST)
     @MimeType.JSON
@@ -141,6 +149,12 @@ public class NPSFormController {
             npsService.save(obj, false);
         }
 
+        String mkWsIntegartionEnabled = System.getProperty(MARKETO_WS_INTEGRATION_ENABLED);
+        if(mkWsIntegartionEnabled==null || !mkWsIntegartionEnabled.equals("true")){
+            log.info("=== MARKETO INTEGRATION Disabled ===");
+        }else{
+
+
         /**
          * MARKETO INTEGRATION
          */
@@ -150,58 +164,61 @@ public class NPSFormController {
         /**/
         log.info("================ MARKETO INTEGRATION BEGIN =============================");
 
-        try {
-
-            URL url = new URL("https://577-PCT-880.mktorest.com/rest/v1/leads.json?access_token=" + mktToken);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setDoOutput(true);
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
-
-            /* JSON INPUT*/
             try {
+                String mkWsIntegartionBaseUrl = System.getProperty(MARKETO_WS_INTEGRATION_BASE_URL);
+                URL url = new URL(mkWsIntegartionBaseUrl+"/rest/v1/leads.json?access_token=" + mktToken);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setDoOutput(true);
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json");
 
-                JSONArray inputArray = new JSONArray();
-                JSONObject inputObject = new JSONObject();
+                /* JSON INPUT*/
+                try {
 
-                inputObject.put("id", mktLead);
-                inputObject.put("NPS_Note__c", obj.getScore());
+                    JSONArray inputArray = new JSONArray();
+                    JSONObject inputObject = new JSONObject();
 
-                inputArray.put(inputObject);
+                    inputObject.put("id", mktLead);
+                    inputObject.put("NPS_Note__c", obj.getScore());
 
-            /* END JSON INPUT*/
+                    inputArray.put(inputObject);
 
-            /* JSON OBJECT FOR POST CALL*/
-                JSONObject requestBody = new JSONObject();
+                    /* END JSON INPUT*/
 
-                requestBody.put("action", "updateOnly");
-                requestBody.put("lookupField", "id");
-                requestBody.put("input", inputArray);
+                    /* JSON OBJECT FOR POST CALL*/
+                    JSONObject requestBody = new JSONObject();
 
-            /* END JSON OBJECT FOR POST CALL*/
+                    requestBody.put("action", "updateOnly");
+                    requestBody.put("lookupField", "id");
+                    requestBody.put("input", inputArray);
 
-                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-                wr.write(requestBody.toString());
-                wr.flush();
-            } catch (Exception e) {
+                    /* END JSON OBJECT FOR POST CALL*/
+
+                    OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+                    wr.write(requestBody.toString());
+                    wr.flush();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode == 200) {
+                    InputStream inStream = conn.getInputStream();
+                    result = convertStreamToString(inStream);
+                } else {
+                    result = "Status Code: " + responseCode;
+                }
+
+                conn.disconnect();
+                log.info("================ MARKETO INTEGRATION Done with "+result+" =============================");
+            } catch (MalformedURLException e) {
                 e.printStackTrace();
+                javax.ws.rs.core.Response.status(javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR).entity(result).build();
+            } catch (IOException e) {
+                e.printStackTrace();
+                javax.ws.rs.core.Response.status(javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR).entity(result).build();
             }
 
-            int responseCode = conn.getResponseCode();
-            if (responseCode == 200) {
-                InputStream inStream = conn.getInputStream();
-                result = convertStreamToString(inStream);
-            } else {
-                result = "Status Code: " + responseCode;
-            }
-
-            conn.disconnect();
-
-            log.info("================ MARKETO INTEGRATION Done with "+result+" =============================");
-        } catch (MalformedURLException e) {
-            log.error("Problem when trying to synchronize the NPS score in marketo",e.getMessage());
-        } catch (IOException e) {
-            log.error("Problem when trying to synchronize the NPS score in marketo",e.getMessage());
         }
 
     }
@@ -212,11 +229,18 @@ public class NPSFormController {
      * @return token
      */
     public String getToken() {
+        String mkWsIntegartionEnabled = System.getProperty(MARKETO_WS_INTEGRATION_ENABLED);
+        if(mkWsIntegartionEnabled==null || !mkWsIntegartionEnabled.equals("true")){
+            return  "";
+        }
         // GET MARKETO ACCESS TOKEN
+        String mkWsIntegartionClientId = System.getProperty(MARKETO_WS_INTEGRATION_CLIENT_ID);
+        String mkWsIntegartionClientSecret = System.getProperty(MARKETO_WS_INTEGRATION_CLIENT_SECRET);
         String[] token = new String[5];
         String output = null;
+        String mkWsIntegartionBaseUrl = System.getProperty(MARKETO_WS_INTEGRATION_BASE_URL);
         try {
-            URL url = new URL("https://577-pct-880.mktorest.com/identity/oauth/token?client_id=d6668084-2fb7-46c9-ac39-179674816bb2&client_secret=rouGwDNRYCypqM56NhSYuetjhs0KAJ4m&grant_type=client_credentials");
+            URL url = new URL(mkWsIntegartionBaseUrl+"/identity/oauth/token?client_id="+mkWsIntegartionClientId+"&client_secret="+mkWsIntegartionClientSecret+"&grant_type=client_credentials");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -246,13 +270,17 @@ public class NPSFormController {
 
 
     public String getMktLead(String cookie) {
+        String mkWsIntegartionEnabled = System.getProperty(MARKETO_WS_INTEGRATION_ENABLED);
+        if(mkWsIntegartionEnabled==null || !mkWsIntegartionEnabled.equals("true")){
+            return  "";
+        }
         // GET MARKETO ACCESS TOKEN
         String output = null;
         String[] leadID = new String[5];
-
+        String mkWsIntegartionBaseUrl = System.getProperty(MARKETO_WS_INTEGRATION_BASE_URL);
 
         try {
-            URL url = new URL("https://577-pct-880.mktorest.com/rest/v1/leads.json?access_token=" + mktToken + "&filterType=cookie&filterValues=" + cookie + "&fields=id,email");
+            URL url = new URL(mkWsIntegartionBaseUrl+"/rest/v1/leads.json?access_token=" + mktToken + "&filterType=cookie&filterValues=" + cookie + "&fields=id,email");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -351,9 +379,12 @@ public class NPSFormController {
             data.set("displayPopup", displayPopup);
             data.set("firstLogDiff", Utils.getDiffinDays(Utils.getFirstLoginDate(currentUser),Calendar.getInstance()));
             bundleString = data.toString();
-            mktToken = getToken();
-            mktLead = getMktLead(mktCookie);
 
+            String mkWsIntegartionEnabled = System.getProperty(MARKETO_WS_INTEGRATION_ENABLED);
+            if(mkWsIntegartionEnabled!=null && mkWsIntegartionEnabled.equals("true")) {
+                mktToken = getToken();
+                mktLead = getMktLead(mktCookie);
+            }
             return Response.ok(bundleString);
         } catch (Exception e) {
             log.error("error while getting context", e);
