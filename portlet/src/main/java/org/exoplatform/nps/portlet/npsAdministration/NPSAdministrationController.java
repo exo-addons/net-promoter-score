@@ -153,43 +153,7 @@ public class NPSAdministrationController {
 
         ArrayList<NoteDTO> notes= new ArrayList<>();
         if(null!=score.getActivityId()){
-          ExoSocialActivity activity = activityManager.getActivity(score.getActivityId()) ;
-          if (activity!=null){
-            RealtimeListAccess<ExoSocialActivity> comments =  activityManager.getCommentsWithListAccess(activity);
-            if(comments.getSize()>0){
-              for(ExoSocialActivity comment : comments.load(0,10)) {
-                Identity identity = identityManager.getIdentity(comment.getPosterId(), false);
-                NoteDTO note = new NoteDTO(comment.getId(), identity.getRemoteId(), comment.getPostedTime(), score.getActivityId(), comment.getTitle(), "", "", null);
-                Profile profile = identity.getProfile();
-                note.setPosterName(profile.getFullName());
-                if (profile.getAvatarUrl() != null) {
-                  note.setPosterAvatar(profile.getAvatarUrl());
-                } else {
-                  note.setPosterAvatar("/eXoSkin/skin/images/system/UserAvtDefault.png");
-                }
-                List<ExoSocialActivity> subComments = activityManager.getSubComments(comment);
-                if (subComments.size()>0){
-                  ArrayList<NoteDTO> subNotes = new ArrayList<>();
-                for (ExoSocialActivity subComment : subComments) {
-                  identity = identityManager.getIdentity(subComment.getPosterId(), false);
-                  NoteDTO subNote = new NoteDTO(subComment.getId(), identity.getRemoteId(), subComment.getPostedTime(), comment.getId(), subComment.getTitle(), "", "", null);
-                  profile = identity.getProfile();
-                  subNote.setPosterName(profile.getFullName());
-                  if (profile.getAvatarUrl() != null) {
-                    subNote.setPosterAvatar(profile.getAvatarUrl());
-                  } else {
-                    subNote.setPosterAvatar("/eXoSkin/skin/images/system/UserAvtDefault.png");
-                  }
-                  subNotes.add(subNote);
-                }
-                note.setNotes(subNotes);
-              }
-                notes.add(note);
-              }
-            }
-
-          }
-
+          notes = getNotes(score.getActivityId());
         }
 
         scoresWithNotes.add(new ScoreEntryWithNotesDTO(score, notes));
@@ -569,7 +533,7 @@ public class NPSAdministrationController {
   @Resource(method = HttpMethod.POST)
   @MimeType.JSON
   @Jackson
-  public void saveNote (@Jackson NoteDTO obj) {
+  public ArrayList<NoteDTO>  saveNote (@Jackson NoteDTO obj) {
     ExoSocialActivity activity=activityManager.getActivity(obj.getActivityId());
     ExoSocialActivity comment = new ExoSocialActivityImpl();
     comment.setTitle(obj.getNoteText());
@@ -577,11 +541,53 @@ public class NPSAdministrationController {
     if(obj.getCommentId()!=null){
       comment.setParentCommentId(obj.getCommentId());
     }
-
     activityManager.saveComment(activity,comment);
+    return getNotes(obj.getActivityId());
   }
 
 
+  public ArrayList<NoteDTO> getNotes(String activityId){
+    ArrayList<NoteDTO> notes= new ArrayList<>();
+
+      ExoSocialActivity activity = activityManager.getActivity(activityId) ;
+      if (activity!=null){
+        RealtimeListAccess<ExoSocialActivity> comments =  activityManager.getCommentsWithListAccess(activity);
+        if(comments.getSize()>0){
+          for(ExoSocialActivity comment : comments.load(0,10)) {
+            Identity identity = identityManager.getIdentity(comment.getPosterId(), false);
+            NoteDTO note = new NoteDTO(comment.getId(), identity.getRemoteId(), comment.getPostedTime(), activityId, comment.getTitle(), "", "", null);
+            Profile profile = identity.getProfile();
+            note.setPosterName(profile.getFullName());
+            if (profile.getAvatarUrl() != null) {
+              note.setPosterAvatar(profile.getAvatarUrl());
+            } else {
+              note.setPosterAvatar("/eXoSkin/skin/images/system/UserAvtDefault.png");
+            }
+            List<ExoSocialActivity> subComments = activityManager.getSubComments(comment);
+            if (subComments.size()>0){
+              ArrayList<NoteDTO> subNotes = new ArrayList<>();
+              for (ExoSocialActivity subComment : subComments) {
+                identity = identityManager.getIdentity(subComment.getPosterId(), false);
+                NoteDTO subNote = new NoteDTO(subComment.getId(), identity.getRemoteId(), subComment.getPostedTime(), comment.getId(), subComment.getTitle(), "", "", null);
+                profile = identity.getProfile();
+                subNote.setPosterName(profile.getFullName());
+                if (profile.getAvatarUrl() != null) {
+                  subNote.setPosterAvatar(profile.getAvatarUrl());
+                } else {
+                  subNote.setPosterAvatar("/eXoSkin/skin/images/system/UserAvtDefault.png");
+                }
+                subNotes.add(subNote);
+              }
+              note.setNotes(subNotes);
+            }
+            notes.add(note);
+          }
+        }
+
+      }
+
+    return notes;
+  }
 
 
   private ResourceBundle getResourceBundle(Locale locale) {

@@ -548,15 +548,16 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 },
                 url: npsAdminContainer.jzURL('NPSAdministrationController.saveNote')
             }).then(function successCallback(data) {
-            notes.push(note)
+            //notes.push(note)
 			$scope.newNote = {id: null};
 			$scope.newSubNote = {id: null};
+			$scope.loadScores($scope.typeId, $scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage, $scope.respCat);
 			$('.commForm').css("display", "none");
                // $scope.setResultMessage($scope.i18n.scoreEnabled, "success");
             }, function errorCallback(data) {
                // $scope.setResultMessage($scope.i18n.defaultError, "error");
             });
-          return notes;
+
         }
 
         $scope.enableScore = function (score) {
