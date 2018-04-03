@@ -143,84 +143,81 @@ public class NPSFormController {
             obj.setUserId("");
         }else obj.setUserId(currentUser);
         obj = npsService.save(obj, true);
-        if(obj!=null){
+        if(obj!=null && obj.getResponded()==true){
             ExoSocialActivity activity = Utils.createActivity(obj);
             obj.setActivityId(activity.getId());
             npsService.save(obj, false);
-        }
 
-        String mkWsIntegartionEnabled = System.getProperty(MARKETO_WS_INTEGRATION_ENABLED);
-        if(mkWsIntegartionEnabled==null || !mkWsIntegartionEnabled.equals("true")){
-            log.info("=== MARKETO INTEGRATION Disabled ===");
-        }else{
+            String mkWsIntegartionEnabled = System.getProperty(MARKETO_WS_INTEGRATION_ENABLED);
+            if(mkWsIntegartionEnabled==null || !mkWsIntegartionEnabled.equals("true")){
+                log.info("=== MARKETO INTEGRATION Disabled ===");
+            }else{
+                /**
+                 * MARKETO INTEGRATION
+                 */
+                String result = null;
+                /**/
+                /* SET LEAD REVIEW */
+                /**/
+                log.info("================ MARKETO INTEGRATION BEGIN =============================");
 
-
-        /**
-         * MARKETO INTEGRATION
-         */
-        String result = null;
-        /**/
-        /* SET LEAD REVIEW */
-        /**/
-        log.info("================ MARKETO INTEGRATION BEGIN =============================");
-
-            try {
-                String mkWsIntegartionBaseUrl = System.getProperty(MARKETO_WS_INTEGRATION_BASE_URL);
-                URL url = new URL(mkWsIntegartionBaseUrl+"/rest/v1/leads.json?access_token=" + mktToken);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setDoOutput(true);
-                conn.setRequestMethod("POST");
-                conn.setRequestProperty("Content-Type", "application/json");
-
-                /* JSON INPUT*/
                 try {
+                    String mkWsIntegartionBaseUrl = System.getProperty(MARKETO_WS_INTEGRATION_BASE_URL);
+                    URL url = new URL(mkWsIntegartionBaseUrl+"/rest/v1/leads.json?access_token=" + mktToken);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setDoOutput(true);
+                    conn.setRequestMethod("POST");
+                    conn.setRequestProperty("Content-Type", "application/json");
 
-                    JSONArray inputArray = new JSONArray();
-                    JSONObject inputObject = new JSONObject();
+                    /* JSON INPUT*/
+                    try {
 
-                    inputObject.put("id", mktLead);
-                    inputObject.put("NPS_Note__c", obj.getScore());
+                        JSONArray inputArray = new JSONArray();
+                        JSONObject inputObject = new JSONObject();
 
-                    inputArray.put(inputObject);
+                        inputObject.put("id", mktLead);
+                        inputObject.put("NPS_Note__c", obj.getScore());
 
-                    /* END JSON INPUT*/
+                        inputArray.put(inputObject);
 
-                    /* JSON OBJECT FOR POST CALL*/
-                    JSONObject requestBody = new JSONObject();
+                        /* END JSON INPUT*/
 
-                    requestBody.put("action", "updateOnly");
-                    requestBody.put("lookupField", "id");
-                    requestBody.put("input", inputArray);
+                        /* JSON OBJECT FOR POST CALL*/
+                        JSONObject requestBody = new JSONObject();
 
-                    /* END JSON OBJECT FOR POST CALL*/
+                        requestBody.put("action", "updateOnly");
+                        requestBody.put("lookupField", "id");
+                        requestBody.put("input", inputArray);
 
-                    OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-                    wr.write(requestBody.toString());
-                    wr.flush();
-                } catch (Exception e) {
+                        /* END JSON OBJECT FOR POST CALL*/
+
+                        OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+                        wr.write(requestBody.toString());
+                        wr.flush();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    int responseCode = conn.getResponseCode();
+                    if (responseCode == 200) {
+                        InputStream inStream = conn.getInputStream();
+                        result = convertStreamToString(inStream);
+                    } else {
+                        result = "Status Code: " + responseCode;
+                    }
+
+                    conn.disconnect();
+                    log.info("================ MARKETO INTEGRATION Done with "+result+" =============================");
+                } catch (MalformedURLException e) {
                     e.printStackTrace();
+                    javax.ws.rs.core.Response.status(javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR).entity(result).build();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    javax.ws.rs.core.Response.status(javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR).entity(result).build();
                 }
 
-                int responseCode = conn.getResponseCode();
-                if (responseCode == 200) {
-                    InputStream inStream = conn.getInputStream();
-                    result = convertStreamToString(inStream);
-                } else {
-                    result = "Status Code: " + responseCode;
-                }
-
-                conn.disconnect();
-                log.info("================ MARKETO INTEGRATION Done with "+result+" =============================");
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                javax.ws.rs.core.Response.status(javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR).entity(result).build();
-            } catch (IOException e) {
-                e.printStackTrace();
-                javax.ws.rs.core.Response.status(javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR).entity(result).build();
             }
-
         }
-
     }
 
     /**
