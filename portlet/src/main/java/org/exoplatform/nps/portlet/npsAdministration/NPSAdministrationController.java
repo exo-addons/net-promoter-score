@@ -298,6 +298,8 @@ public class NPSAdministrationController {
       return  getNPSByMonth(typeId, startDate, endDate);
     }else if(chartType.equals("rolling30")){
       return  getRollingAvg(typeId,30, startDate, endDate);
+    }else if(chartType.equals("rolling90")){
+      return  getRollingAvg(typeId,90, startDate, endDate);
     }else if(chartType.equals("rolling7")){
       return  getRollingAvg(typeId,7, startDate, endDate);
     }else return Response.notFound();

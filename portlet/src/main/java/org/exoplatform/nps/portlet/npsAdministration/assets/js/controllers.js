@@ -71,7 +71,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             {name: "By week", value: "weekly"},
             {name: "By month", value: "mounthly"}
         ];
-        $scope.selectedChartType = {name: "30-Days rolling Avg", value: "rolling30"};
+        $scope.selectedChartType = {name: "90-Days rolling Avg", value: "rolling90"};
 
 
         $scope.lineChartObject = {};
@@ -206,6 +206,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
             }).then(function successCallback(data) {
                 $scope.i18n = data.data;
                 $scope.chartTypes = [
+                    {name: data.data.rolling90, value: "rolling90"},
                     {name: data.data.rolling30, value: "rolling30"},
                     {name: data.data.global, value: "global"},
                     {name: data.data.monthlyOver, value: "monthlyOver"},
@@ -214,7 +215,7 @@ define("npsAdminControllers", ["SHARED/jquery", "SHARED/juzu-ajax"], function ($
                 $scope.currentUser = data.data.currentUser;
                 $scope.currentUserAvatar = data.data.currentUserAvatar;
                 $scope.currentUserName = data.data.currentUserName;
-                $scope.selectedChartType = {name: data.data.rolling30, value: "rolling30"};
+                $scope.selectedChartType = {name: data.data.rolling90, value: "rolling90"};
                 deferred.resolve(data);
                 /*$scope.setResultMessage(data, "success");*/
                 $scope.showAlert = false;
