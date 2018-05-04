@@ -1,9 +1,12 @@
 package org.exoplatform.nps.services.rest;
 
 
+import org.exoplatform.commons.utils.CommonsUtils;
 import org.exoplatform.commons.utils.ListAccess;
 
 import org.exoplatform.nps.dto.NPSDetailsDTO;
+import org.exoplatform.nps.dto.ScoreEntryDTO;
+import org.exoplatform.nps.services.NpsService;
 import org.exoplatform.nps.services.Utils;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -16,6 +19,7 @@ import org.exoplatform.social.core.space.model.Space;
 import org.exoplatform.social.core.space.spi.SpaceService;
 import org.exoplatform.social.service.rest.RestChecker;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.annotation.security.RolesAllowed;
@@ -29,6 +33,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -164,6 +169,7 @@ public class NpsRestService implements ResourceContainer {
     @GET
     @Path("scores/weekly")
     @Consumes({MediaType.APPLICATION_JSON})
+    @RolesAllowed("administrators")
     public Response findspace(@Context HttpServletRequest request,
                               @Context UriInfo uriInfo,
                               @QueryParam("npsTypeId") long npsTypeId,
@@ -171,6 +177,7 @@ public class NpsRestService implements ResourceContainer {
                               @QueryParam("toDate") long toDate) throws Exception {
 
         MediaType mediaType = RestChecker.checkSupportedFormat("json", SUPPORTED_FORMATS);
+
         SimpleDateFormat dt1 = new SimpleDateFormat("yyyy-MM-dd");
 
         try {
@@ -183,6 +190,60 @@ public class NpsRestService implements ResourceContainer {
                 nps_.put("npsDate",dt1.format(nps.getNpsToDate()));
                 nps_.put("score",String.format("%.2f", nps.getNpScore()));
                 npsList.put(nps_);
+            }
+
+            return Response.ok(npsList.toString(), mediaType).build();
+        } catch (Exception e) {
+            LOG.error(e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("An internal error has occured").build();
+        }
+    }
+
+
+    @GET
+    @Path("scores/all/{npsTypeId}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @RolesAllowed("administrators")
+
+    public Response getAllScores(@Context HttpServletRequest request,
+                              @Context UriInfo uriInfo,
+                              @PathParam("npsTypeId") long npsTypeId,
+                              @QueryParam("fromDate") long fromDate,
+                              @QueryParam("toDate") long toDate) throws Exception {
+
+        MediaType mediaType = RestChecker.checkSupportedFormat("json", SUPPORTED_FORMATS);
+        SimpleDateFormat dt1 = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        NpsService npsService= CommonsUtils.getService(NpsService.class);
+
+
+        try {
+            JSONArray npsList = new JSONArray();
+
+            if(fromDate==0){
+                ScoreEntryDTO score = npsService.getFirstScoreEntries(npsTypeId);
+                fromDate=score.getPostedTime();
+            }
+
+
+            if(toDate==0){
+                toDate= Calendar.getInstance().getTimeInMillis();
+            }
+
+            List <ScoreEntryDTO> npsDetails = npsService.getScores(npsTypeId,0,0,fromDate,toDate);
+
+            for(ScoreEntryDTO nps : npsDetails){
+                try {
+                    JSONObject nps_ = new JSONObject();
+                    nps_.put("npsDate",dt1.format(nps.getPostedTime()));
+                    nps_.put("score",nps.getScore());
+                    nps_.put("userId", nps.getUserId());
+                    Profile profile = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, nps.getUserId(), false).getProfile();
+                    nps_.put("userFullName", profile.getFullName());
+                    nps_.put("userEmail", profile.getEmail());
+                    npsList.put(nps_);
+                } catch (Exception e) {
+                    LOG.error(e.getMessage());
+                }
             }
 
             return Response.ok(npsList.toString(), mediaType).build();
