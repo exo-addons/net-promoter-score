@@ -236,10 +236,16 @@ public class NpsRestService implements ResourceContainer {
                     JSONObject nps_ = new JSONObject();
                     nps_.put("npsDate",dt1.format(nps.getPostedTime()));
                     nps_.put("score",nps.getScore());
-                    nps_.put("userId", nps.getUserId());
-                    Profile profile = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, nps.getUserId(), false).getProfile();
-                    nps_.put("userFullName", profile.getFullName());
-                    nps_.put("userEmail", profile.getEmail());
+                    if(nps.getUserId()!=null&&!((String)nps.getUserId()).equals("")) {
+                        nps_.put("userId", nps.getUserId());
+                        Profile profile = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, nps.getUserId(), false).getProfile();
+                        nps_.put("userFullName", profile.getFullName());
+                        nps_.put("userEmail", profile.getEmail());
+                    }else{
+                        nps_.put("userId", "Anonymous");
+                        nps_.put("userFullName", "");
+                        nps_.put("userEmail", "");
+                    }
                     npsList.put(nps_);
                 } catch (Exception e) {
                     LOG.error(e.getMessage());

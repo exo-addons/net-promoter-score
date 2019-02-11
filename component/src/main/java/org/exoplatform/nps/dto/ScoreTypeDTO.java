@@ -44,4 +44,6 @@ public class ScoreTypeDTO {
 
   private String            userId;
 
+  private Boolean            gamified;
+
 }

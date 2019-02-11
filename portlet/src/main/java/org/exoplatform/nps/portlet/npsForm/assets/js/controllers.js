@@ -73,6 +73,7 @@ define("npsFormControllers", [ "SHARED/jquery", "SHARED/juzu-ajax"], function($,
                 $scope.scoreTypeName = data.data.scoreTypeName;
                 $scope.scoreTypeAnonymous=data.data.scoreTypeAnonymous;
                 $scope.newScore.isAnonymous=data.data.scoreTypeAnonymous;
+                $scope.newScore.gamified=data.data.gamified;
                 $scope.portletId = data.data.portletId;
                 $scope.firstDisplayDelay= data.data.firstDisplayDelay;
                 $scope.displayPopup = data.data.displayPopup;

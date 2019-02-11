@@ -14,6 +14,7 @@ import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.nps.dto.*;
 import org.exoplatform.nps.services.*;
+import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.ConversationState;
@@ -57,6 +58,9 @@ public class NPSFormController {
 
     @Inject
     IdentityManager identityManager;
+
+    @Inject
+    ListenerService listenerService;
 
     @Inject
     @Path("index.gtmpl")
@@ -142,12 +146,56 @@ public class NPSFormController {
         if(obj.getIsAnonymous()){
             obj.setUserId("");
         }else obj.setUserId(currentUser);
+        boolean gamified = false;
+        if(obj.getGamified()!=null){
+            gamified =obj.getGamified();
+        }
         obj = npsService.save(obj, true);
+
+        if(gamified) {
+            try {
+                Map<String, String> gam = new HashMap<>();
+                gam.put("ruleTitle", "addNPSScore");
+                gam.put("senderId", currentUser);
+                gam.put("receiverId", currentUser);
+                gam.put("object", "");
+                listenerService.broadcast("exo.gamification.generic.action", gam, "");
+            } catch (Exception e) {
+                log.error("Cannot broadcast gamification event");
+            }
+            if(obj.getComment()!=null&&!"".equals(obj.getComment())){
+                try {
+                    Map<String, String> gam = new HashMap<>();
+                    gam.put("ruleTitle", "commentedNPSScore");
+                    gam.put("senderId", currentUser);
+                    gam.put("receiverId", currentUser);
+                    gam.put("object", "");
+                    listenerService.broadcast("exo.gamification.generic.action", gam, "");
+                } catch (Exception e) {
+                    log.error("Cannot broadcast gamification event");
+                }
+            }
+           if(!obj.getUserId().equals("")){
+               try {
+                   Map<String, String> gam = new HashMap<>();
+                   gam.put("ruleTitle", "notAnonymousNPSScore");
+                   gam.put("senderId", currentUser);
+                   gam.put("receiverId", currentUser);
+                   gam.put("object", "");
+                   listenerService.broadcast("exo.gamification.generic.action", gam, "");
+               } catch (Exception e) {
+                   log.error("Cannot broadcast gamification event");
+               }
+           }
+
+        }
+
         if(obj!=null && obj.getResponded()==true){
             ExoSocialActivity activity = Utils.createActivity(obj);
-            obj.setActivityId(activity.getId());
-            npsService.save(obj, false);
-
+            if(activity!=null){
+                obj.setActivityId(activity.getId());
+                npsService.save(obj, false);
+            }
             String mkWsIntegartionEnabled = System.getProperty(MARKETO_WS_INTEGRATION_ENABLED);
             if(mkWsIntegartionEnabled==null || !mkWsIntegartionEnabled.equals("true")){
                 log.info("=== MARKETO INTEGRATION Disabled ===");
@@ -367,6 +415,7 @@ public class NPSFormController {
             data.set("followUpPassive", sType.getFollowUpPassive());
             data.set("followUpPromoter", sType.getFollowUpPromoter());
             data.set("followUpDetractor", sType.getFollowUpDetractor());
+            data.set("gamified", sType.getGamified());
             if(sType.getAnonymous()==null){
                 data.set("scoreTypeAnonymous", false);
             }else{
@@ -374,7 +423,7 @@ public class NPSFormController {
             }
             data.set("firstDisplayDelay", firstDisplayDelay);
             data.set("displayPopup", displayPopup);
-            data.set("firstLogDiff", Utils.getDiffinDays(Utils.getFirstLoginDate(currentUser),Calendar.getInstance()));
+            data.set("firstLogDiff", Utils.getDiffinDays(Utils.getFirstLoginDate(currentUser),Calendar.getInstance().getTimeInMillis()));
             bundleString = data.toString();
 
             String mkWsIntegartionEnabled = System.getProperty(MARKETO_WS_INTEGRATION_ENABLED);

@@ -86,11 +86,13 @@ public class ScoreEntryEntity {
   @Column(name = "TYPE_ID")
   private long   typeId;
 
-
   @Column(name = "RESPONDED")
   private Boolean   responded;
 
   @Column(name = "ACTIVITY_ID")
   private String   activityId;
+
+  @Column(name = "SPACE_ID")
+  private String   spaceId;
 
 }

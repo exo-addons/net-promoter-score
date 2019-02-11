@@ -54,6 +54,10 @@ public class ScoreEntryDTO {
 
   private String           userProfile;
 
+  private String           spaceId;
+
+  private Boolean           gamified;
+
   /*  public boolean verifySaveConditions() {
     if (StringUtils.isBlank(vacationRequestId) || StringUtils.isBlank(userId) ) {
       return false;

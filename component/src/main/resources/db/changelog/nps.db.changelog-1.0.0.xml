@@ -104,4 +104,18 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="nps-addon" id="1.0.0-11">
+    <addColumn tableName="NPS_SCORE_ENTRY">
+      <column name="SPACE_ID" type="NVARCHAR(50)"/>
+    </addColumn>
+  </changeSet>
+
+
+  <changeSet author="nps-addon" id="1.0.0-12">
+    <addColumn tableName="NPS_SCORE_TYPE">
+      <column defaultValueBoolean="false" name="GAMIFIED" type="BOOLEAN"/>
+    </addColumn>
+  </changeSet>
+
+
 </databaseChangeLog>

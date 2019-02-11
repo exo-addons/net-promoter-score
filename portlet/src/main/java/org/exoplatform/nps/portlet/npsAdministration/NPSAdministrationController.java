@@ -228,15 +228,20 @@ public class NPSAdministrationController {
   public Response getData(Long typeId, Long startDate, Long endDate) {
     try {
       JSON data = new JSON();
+      long scorsnbr= 0;
+      long detractorsNbr= 0;
+      long promotersNbr= 0;
+
       if(startDate==0){
-        startDate =npsService.getFirstScoreEntries(typeId).getPostedTime();
+        ScoreEntryDTO firstScore= npsService.getFirstScoreEntries(typeId);
+        if(firstScore!=null)
+        startDate =firstScore.getPostedTime();
+         scorsnbr= npsService.getScoreCount(typeId, true, startDate, endDate);
+         detractorsNbr= npsService.getDetractorsCount(typeId, true, startDate, endDate);
+         promotersNbr= npsService.getPromotersCount(typeId, true, startDate, endDate);
       }
 
-      long scorsnbr= npsService.getScoreCount(typeId, true, startDate, endDate);
-      long detractorsNbr= npsService.getDetractorsCount(typeId, true, startDate, endDate);
-      long promotersNbr= npsService.getPromotersCount(typeId, true, startDate, endDate);
       long passivesNbr= scorsnbr-(promotersNbr+detractorsNbr);
-
       float detractorsPrc=((float)detractorsNbr/(float)scorsnbr)*100;
       float promotersPrc=((float)promotersNbr/(float)scorsnbr)*100;
       float passivesPrc=((float)passivesNbr/(float)scorsnbr)*100;

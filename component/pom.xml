@@ -40,9 +40,14 @@
 			<version>1.16.8</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.exoplatform.platform</groupId>
+			<artifactId>platform-exo-gadget-pack-gadget-pack-services</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
 
-    </dependencies>
+	</dependencies>
 	<build>
 		<finalName>nps-addon-component</finalName>
 		<plugins>

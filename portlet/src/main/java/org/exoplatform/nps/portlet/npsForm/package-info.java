@@ -2,6 +2,7 @@
 @Application(name = "NPSFormController")
 @Bindings({ @Binding(value = NpsService.class),
         @Binding(value = NpsTypeService.class),
+        @Binding(value = ListenerService.class),
         @Binding(value = IdentityManager.class)
 })
 @Scripts({
@@ -35,6 +36,7 @@ import juzu.plugin.portlet.Portlet;
 import org.exoplatform.nps.services.NpsService;
 
 import org.exoplatform.nps.services.NpsTypeService;
+import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.social.core.manager.IdentityManager;
 
 

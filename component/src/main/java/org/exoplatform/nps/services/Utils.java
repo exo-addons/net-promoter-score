@@ -8,7 +8,8 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.nps.dto.NPSDetailsDTO;
 import org.exoplatform.nps.dto.ScoreEntryDTO;
 import org.exoplatform.nps.dto.ScoreTypeDTO;
-import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.platform.gadget.services.LoginHistory.LoginHistoryBean;
+import org.exoplatform.platform.gadget.services.LoginHistory.LoginHistoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import javax.jcr.Node;
 import javax.jcr.Session;
@@ -46,34 +47,17 @@ public class Utils
      * @return first login date
      * @throws Exception
      */
-    public static Calendar getFirstLoginDate(String userId) throws Exception {
+    public static long getFirstLoginDate(String userId) throws Exception {
 
-        RepositoryService repositoryService = CommonsUtils.getService(RepositoryService.class);
-        SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-        try {
-            Session session = sessionProvider.getSession("collaboration",repositoryService.getCurrentRepository());
-            String path="exo:LoginHistoryHome/"+userId;
-            Node rootNode = session.getRootNode();
-            if (rootNode.hasNode(path)) {
-                Node att= rootNode.getNode(path);
-                return(att.getProperty("exo:dateCreated").getDate());
-            }else{
-                return null;
-            }
-        } catch (Exception e) {
-            log.error("Error while getting the date: ", e.getMessage());
-        } finally {
-            sessionProvider.close();
-        }
-        return null;
+        LoginHistoryService loginHistoryService = CommonsUtils.getService(LoginHistoryService.class);
+
+        return loginHistoryService.getLoginHistory(userId,0,Calendar.getInstance().getTimeInMillis()).get(0).getLoginTime();
+
     }
 
 
-    public static int getDiffinDays(Calendar startCal, Calendar stopCal) throws Exception {
-
-        long startMillis = startCal.getTimeInMillis();
+    public static int getDiffinDays(long startMillis, long stopMillis) throws Exception {
         DateTime startDateTime = new DateTime(startMillis);
-        long stopMillis = stopCal.getTimeInMillis();
         DateTime stopDateTime = new DateTime(stopMillis);
         LocalDate start = startDateTime.toLocalDate();
         LocalDate stop = stopDateTime.toLocalDate();

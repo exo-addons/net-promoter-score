@@ -111,6 +111,7 @@ public class NpsTypeService {
     entity.setLinkedToSpace(dto.getLinkedToSpace());
     entity.setSpaceId(dto.getSpaceId());
     entity.setUserId(dto.getUserId());
+    entity.setGamified(dto.getGamified());
     return entity;
   }
 
@@ -127,6 +128,7 @@ public class NpsTypeService {
     dto.setLinkedToSpace(entity.getLinkedToSpace());
     dto.setSpaceId(entity.getSpaceId());
     dto.setUserId(entity.getUserId());
+    dto.setGamified(entity.getGamified());
     return dto;
   }
 

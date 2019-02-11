@@ -68,6 +68,9 @@ public class ScoreTypeEntity {
   @Column(name = "LINKED_TO_SPACE")
   private Boolean  linkedToSpace;
 
+  @Column(name = "GAMIFIED")
+  private Boolean  gamified;
+
   @Column(name = "SPACE_ID")
   private String spaceId;
 
