@@ -17,7 +17,7 @@ class="result-message alert {{resultMessageClass}}">
 <div ng-show="showForm" class="{{scoreTypeName}}_form">
     <div class="exoers">
         <div class="mask">
-            <img src="/eXoSkin/skin/images/themes/default/platform/skin/ToolbarContainer/HomeIcon.png" alt="eXo" class="exoLogo exo_employees_nps">
+            <img src="/rest/v1/platform/branding/logo" alt="eXo" class="exoLogo exo_employees_nps">
             <h4>{{i18n.exoer}}</h4>
         </div>
     </div>
